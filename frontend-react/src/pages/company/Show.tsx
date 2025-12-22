@@ -181,7 +181,7 @@ const Show = () => {
                     </Card>
                     <Card className="w-auto lg:w-1/2">
                         <Card.Header>
-                            <div>Firma - Zasoby w Platforma TS</div>
+                            <div>Firma - Zasoby</div>
                         </Card.Header>
                         <Card.Body>
                             <table className="table-auto w-full">
@@ -193,45 +193,15 @@ const Show = () => {
                                 </thead>
                                 <tbody>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Stanowiska Zrobotyzowane:</td>
+                                        <td className="p-2">?</td>
                                         <td className="p-2">?</td>
                                     </tr>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Roboty</td>
                                         <td className="p-2">?</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Certyfikaty Robotyka</td>
-                                        <td className="p-2">?</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Certyfikaty Ceia</td>
-                                        <td className="p-2">?</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Certyfikaty Ceia</td>
-                                        <td className="p-2">?</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Tematy sprzedażowe</td>
-                                        <td className="p-2">?</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Oferty</td>
                                         <td className="p-2">?</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </Card.Body>
-                    </Card>
-                </div>
-                <div>
-                    <Card>
-                        <Card.Header>
-                            <div>Firma - Tematy Sprzedażowe</div>
-                        </Card.Header>
-                        <Card.Body>
-                            <span></span>
                         </Card.Body>
                     </Card>
                 </div>

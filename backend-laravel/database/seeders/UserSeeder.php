@@ -56,12 +56,15 @@ class UserSeeder extends Seeder
             ->has(Car::factory()->count(3))
             ->create()
             ->each(function ($user) use ($types) {
-                foreach ($types->random(2) as $type) {
-                    UserPermission::create([
-                        'user_id' => $user->id,
-                        'permission_type_id' => $type->id,
-                        'level' => rand(1, 5),
-                    ]);
+                foreach ($types->random(3) as $key => $type) {
+                    if($key > 0)
+                    {
+                        UserPermission::create([
+                            'user_id' => $user->id,
+                            'permission_type_id' => $type->id,
+                            'level' => rand(0, 3),
+                        ]);
+                    }
                 }
             });
     }

@@ -33,7 +33,7 @@ class UserFactory extends Factory
         ];
 
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName(),
             'surname' => fake()->lastName(),
             'position' => fake()->randomElement($titles),
             'phone_mobile' => fake()->e164PhoneNumber(),

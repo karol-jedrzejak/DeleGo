@@ -10,7 +10,6 @@ import logo from "@/assets/logos/app_logo.svg"
 import NewsMenu from "./menus/NewsMenu";
 import CompaniesMenu from "./menus/CompaniesMenu";
 import UserMenu from "./menus/UserMenu";
-import AdminMenu from "./menus/AdminMenu";
 
 const Navbar = () => {
   const { darkTheme, changeTheme } = useContext(ThemeContext);
@@ -23,9 +22,6 @@ const Navbar = () => {
         <NewsMenu/>
         {authData.hasPermission('sales','companies') && (
           <CompaniesMenu/>
-        )}
-        {authData.hasPermission('admin','admin') && (
-          <AdminMenu/>
         )}
         <UserMenu/>
       </div>

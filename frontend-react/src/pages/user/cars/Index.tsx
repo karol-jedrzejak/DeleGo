@@ -132,7 +132,7 @@ const Index = () => {
                                             )}
                                     </td>
                                     {authData.hasPermission('admin','admin') && (
-                                        <td className="p-2">{item.user?.name}</td>
+                                        <td className="p-2">{item.user?.name} {item.user?.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                         <Link to={ROUTES.USER.CARS.EDIT.LINK(item.id)} className="ps-1">

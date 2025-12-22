@@ -43,10 +43,11 @@ export default function Login() {
         try {
             const response = await axiosLaravelBackend.post('login',formData);
             authData.login(response.data.token);
-        }  catch (error) {
+        }  catch (error: any) {
+            console.log(error)
             setLoading(false);
-            if (axios.isAxiosError(error)) {
-                setError({login: [error.response?.data?.message]});
+            if ((error.data as any)?.message) {
+                setError({login: [(error.data as any)?.message]});
             } else {
                 setError({login: ["Nieznany błąd."]});
             }
