@@ -8,6 +8,11 @@ const UserMenu = () => {
     title: "Użytkownik",
     options: [
       {
+        title: "Auta",
+        link: ROUTES.USER.CARS.INDEX.LINK,
+        sub_options: [],
+      },
+      {
         title: "Wyloguj",
         link: ROUTES.AUTH.LOGOUT.LINK,
         sub_options: [],

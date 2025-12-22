@@ -19,8 +19,8 @@ import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/mo
 
 import { useBackend } from "@/hooks/useLaravelBackend";
 
-import { companyService } from "@/api/services/backend/company.service";
-import { employeeService } from "@/api/services/backend/employee.service";
+import { companyService } from "@/api/services/backend/company/company.service";
+import { employeeService } from "@/api/services/backend/company/employee.service";
 
 import type { SearchType,SortType } from '@/api/queryParams/types'
 import type { PaginatedDataResponse,PaginationData } from "@/api/response/types";

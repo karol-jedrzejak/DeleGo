@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Company;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -83,6 +83,6 @@ class CompanyController extends Controller
             'text' => 'Poprawnie usunięto firmę '.$deleted_resource_name.'.',
             'type' => 'message',
             'status' => 'success',
-        ]);;
+        ]);
     }
 }

@@ -13,7 +13,7 @@ import type { ItemType,ItemsType } from "@/models/User";
 // API //
 
 import { useBackend } from '@/hooks/useLaravelBackend';
-import { userService } from "@/api/services/backend/user.service";
+import { userService } from "@/api/services/backend/user/user.service";
 
 const UserPermission = () => {
 

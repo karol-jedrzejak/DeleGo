@@ -15,8 +15,8 @@ import type { ItemType as ParentItemType } from '@/models/Company.tsx';
 
 // API //
 
-import { companyService } from "@/api/services/backend/company.service";
-import { employeeService } from "@/api/services/backend/employee.service";
+import { companyService } from "@/api/services/backend/company/company.service";
+import { employeeService } from "@/api/services/backend/company/employee.service";
 import { useBackend } from "@/hooks/useLaravelBackend";
 
 // Utilities //

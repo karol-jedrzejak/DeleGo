@@ -17,7 +17,7 @@ import Form from './Form.tsx';
 
 // API //
 
-import { companyService } from "@/api/services/backend/company.service.ts";
+import { companyService } from "@/api/services/backend/company/company.service.ts";
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 
 

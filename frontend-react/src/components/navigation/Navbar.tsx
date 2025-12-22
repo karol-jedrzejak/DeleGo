@@ -7,10 +7,10 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 
 import logo from "@/assets/logos/app_logo.svg"
 
-import NewsMenu from "./menus/NewsMenu.js";
-import CompaniesMenu from "./menus/CompaniesMenu.js";
-import UserMenu from "./menus/UserMenu.js";
-import AdminMenu from "./menus/AdminMenu.js";
+import NewsMenu from "./menus/NewsMenu";
+import CompaniesMenu from "./menus/CompaniesMenu";
+import UserMenu from "./menus/UserMenu";
+import AdminMenu from "./menus/AdminMenu";
 
 const Navbar = () => {
   const { darkTheme, changeTheme } = useContext(ThemeContext);
@@ -21,8 +21,12 @@ const Navbar = () => {
       <div className="flex items-center gap-2">
         <img src={logo} className="w-28 "/>
         <NewsMenu/>
-        {(authData.user?.permissions?.misc?.companies ?? 0) > 1 && (<CompaniesMenu/>)}
-        {(authData.user?.permissions?.admin?.admin ?? 0) > 1 && (<AdminMenu/>)}
+        {authData.hasPermission('sales','companies') && (
+          <CompaniesMenu/>
+        )}
+        {authData.hasPermission('admin','admin') && (
+          <AdminMenu/>
+        )}
         <UserMenu/>
       </div>
       <button

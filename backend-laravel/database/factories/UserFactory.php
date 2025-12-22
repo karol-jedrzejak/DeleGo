@@ -42,8 +42,9 @@ class UserFactory extends Factory
             'academic_titles_after' => fake()->randomElement(['(IWE)', '(EWE)', null]),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('pass'),
+            'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'active' => 1,
         ];
     }
 

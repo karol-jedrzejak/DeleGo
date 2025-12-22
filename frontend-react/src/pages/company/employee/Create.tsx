@@ -21,8 +21,8 @@ import Form from './Form.tsx';
 // API //
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
-import { employeeService } from '@/api/services/backend/employee.service.ts';
-import { companyService } from "@/api/services/backend/company.service.ts";
+import { employeeService } from '@/api/services/backend/company/employee.service.ts';
+import { companyService } from "@/api/services/backend/company/company.service.ts";
 
 // -------------------------------------------------------------------------- //
 // Funkcja komponentu Create

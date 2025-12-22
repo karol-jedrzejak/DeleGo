@@ -26,6 +26,7 @@ type AuthContextType = {
   loadingUser: boolean,
   login: (token: string) => void;
   logout: () => void;
+  hasPermission: (module: string, permission: string, requiredLevel?: number) => boolean;
 };
 
 // Create the Auth Context
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextType>({
     loadingUser: true,
     login: () => {},
     logout: () => {},
+    hasPermission: () => false,
 });
 
 type Props = {
@@ -79,6 +81,16 @@ const AuthProvider = ({ children }: Props) => {
         setLoadingUser(false);
     };
 
+    const hasPermission = (module: string, permission: string, requiredLevel: number = 1): boolean => {
+        if (!user || !user.permissions) return false;
+
+        const modulePermissions = user.permissions[module];
+        if (!modulePermissions) return false;
+
+        const level = modulePermissions[permission] || 0;
+        return level >= requiredLevel;
+    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -93,7 +105,7 @@ const AuthProvider = ({ children }: Props) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loadingUser, login, logout }}>
+        <AuthContext.Provider value={{ user, loadingUser, login, logout, hasPermission }}>
             {children}
         </AuthContext.Provider>
     );

@@ -4,7 +4,7 @@ academic_titles_before: string,
 email: string,
 id: string,
 name: string,
-permissions: {
+permissions?: {
     [department: string]: {        
     [resource: string]: string; 
     };

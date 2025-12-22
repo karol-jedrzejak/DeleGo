@@ -1,0 +1,92 @@
+import type { SearchType, SortType } from '@/api/queryParams/types'
+import type { ValidationErrorsType } from '@/api/response/types'
+
+import type { ItemType as UserType } from "@/models/User"
+
+// -------------------------------------------------------------------------- //
+// Typy danych formularza
+// -------------------------------------------------------------------------- //
+
+export const formDataKeys = [
+    'brand',
+    'model',
+    'registration_number',
+    'active',
+] as const;
+
+
+export type FormDataType = {
+  [K in typeof formDataKeys[number]]: 
+    K extends "active" ? boolean :
+    string; // domyślnie string
+};
+
+// -------------------------------------------------------------------------- //
+// Domyślne wartośći formularza
+// -------------------------------------------------------------------------- //
+
+export const DEFAULT_FORM_DATA = {
+    active: true,
+    brand: "",
+    model: "",
+    registration_number: "",
+};
+
+// -------------------------------------------------------------------------- //
+// Domyślne SORTOWANIE I WYSZUKIWANIE
+// -------------------------------------------------------------------------- //
+
+export const DEFAULT_SORT:SortType = [{
+    sortBy: 'registration_number',
+    sortDir: 'asc',
+}];
+
+export const DEFAULT_SEARCH:SearchType = {
+    search: null,
+    searchBy: null,
+};
+
+export const DEFAULT_PAGE:string = "1";
+
+export const DEFAULT_PER_PAGE:number = 10;
+
+// -------------------------------------------------------------------------- //
+// Typy danych Obektów i odpowiedzi z backendu
+// -------------------------------------------------------------------------- //
+
+export type ItemType = FormDataType &{
+    id: number,
+    user_id: number,
+    user?: UserType,
+};
+
+export type DataType = ItemType[];
+
+// -------------------------------------------------------------------------- //
+// GENEROWANE AUTOMATYCZNIE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// -------------------------------------------------------------------------- //
+
+// -------------------------------------------------------------------------- //
+// Typy błędów formularza
+// -------------------------------------------------------------------------- //
+
+export type FormErrorType = {
+  [K in keyof FormDataType]: string[] | null
+}
+
+// -------------------------------------------------------------------------- //
+// Props dla komponentu formularza
+// -------------------------------------------------------------------------- //
+
+export type FormPropsType = {
+  formData: FormDataType,
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>,
+  formError: ValidationErrorsType,
+};
+
+// -------------------------------------------------------------------------- //
+// Puste, inicjalne błędy formularza
+// -------------------------------------------------------------------------- //
+
+export const DEFAULT_FORM_ERRORS: FormErrorType =
+  Object.fromEntries(formDataKeys.map((key) => [key, null])) as FormErrorType;

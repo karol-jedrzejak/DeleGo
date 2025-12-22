@@ -15,7 +15,7 @@ import type { ItemType } from '@/models/Company.tsx';
 
 // API //
 
-import { companyService } from "@/api/services/backend/company.service";
+import { companyService } from "@/api/services/backend/company/company.service";
 import { useBackend } from "@/hooks/useLaravelBackend";
 
 // Utilities //

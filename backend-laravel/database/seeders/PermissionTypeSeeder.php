@@ -21,10 +21,14 @@ class PermissionTypeSeeder extends Seeder
             ],
             [
                 'resource' => 'companies',
-                'department' => 'misc'
+                'department' => 'sales'
             ],
             [
                 'resource' => 'employees',
+                'department' => 'sales'
+            ],
+            [
+                'resource' => 'cars',
                 'department' => 'misc'
             ]
         ];

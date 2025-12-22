@@ -1,32 +1,29 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import { Link } from "react-router-dom"
 
 import { ROUTES } from "@/routes/Routes.tsx";
+import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
-import { Search,SquarePlus,SquarePen,Map,Users } from "lucide-react";
+import { SquarePlus,SquarePen } from "lucide-react";
 import { Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading } from '@/components';
 
 // Model //
 
-import type { DataType } from '@/models/Company.tsx';
-import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/models/Company.tsx';
+import type { DataType } from '@/models/Car.tsx';
+import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/models/Car.tsx';
 
 // API //
 
 import { useBackend } from "@/hooks/useLaravelBackend";
-import { companyService } from "@/api/services/backend/company/company.service";
+import { carService } from "@/api/services/backend/car/car.service";
 
 import type { SearchType,SortType } from '@/api/queryParams/types'
 import type { PaginatedDataResponse,PaginationData } from "@/api/response/types";
 
 import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 
-// Utilities //
-
-import { buildCompanyGoogleMapsUrl } from "@/features/company/utilities/googleMaps";
-import { formatAddress } from "@/features/company/utilities/formatAddress";
 
 
 const Index = () => {
@@ -34,6 +31,7 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
+    const authData = useContext(AuthContext);
 
     const [items, setItems] = useState<DataType | null>(null);
 
@@ -50,7 +48,7 @@ const Index = () => {
 
     const { loading, error, mutate } = useBackend<PaginatedDataResponse<DataType>>(
         "get",
-        companyService.paths.getAll
+        carService.paths.getAll
     );
 
     useEffect(() => {
@@ -58,6 +56,7 @@ const Index = () => {
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
             setItems(data);
+            console.log(data);
             setPagination(pagination);
         });
     }, [page, perPage,search,sort]);
@@ -76,11 +75,11 @@ const Index = () => {
         <div className="flex-1 text-sm">
             <Card>
                 <Card.Header>
-                    <div>Firmy</div>
+                    <div>Auta Użytkownika</div>
                 </Card.Header>
                 <Card.Body>
                     <div className="pb-4 flex justify-end gap-2">
-                        <Link to={ROUTES.COMPANY.CREATE.LINK}>
+                        <Link to={ROUTES.USER.CARS.CREATE.LINK}>
                             <Button 
                                 color="green"
                                 className="flex items-center">
@@ -93,19 +92,21 @@ const Index = () => {
                     <table className="table-auto w-full">
                         <thead>
                             <tr className="font-normal">
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="name_short" text="Nazwa Skrócona" />                                
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="name_complete" text="Nazwa Pełna" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="country" text="Kraj" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="region" text="Region" />
-                                <HeaderSorting sort={sort} setSort={setSort} text="Adres" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="registration_number" text="Nr. Rejestracyjny" />                                
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="brand" text="Marka" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="model" text="Model" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="active" text="Aktywny" />
+                                {authData.hasPermission('admin','admin') && (
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="user" text="Użytkownik" />
+                                )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                             </tr>
                             <tr>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="name_short"/> 
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="name_complete"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="country"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="region"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} nosort={true} text="Wuszykaj po miejscowości" variable_name="city"/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="registration_number"/> 
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="brand"/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="model"/>
+                                <th></th>
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -120,31 +121,21 @@ const Index = () => {
                                             ? "bg-gray-100 dark:bg-neutral-900/50"
                                             : "bg-white dark:bg-neutral-800"
                                         }`}>
-                                    <td className="p-2">{item.name_short}</td>
-                                    <td className="p-2">{item.name_complete}</td>
-                                    <td className="p-2">{item.country}</td>
-                                    <td className="p-2">{item.region}</td>
+                                    <td className="p-2">{item.registration_number}</td>
+                                    <td className="p-2">{item.brand}</td>
+                                    <td className="p-2">{item.model}</td>
                                     <td className="p-2">
-                                        <Button
-                                        color="teal" size={2} className="flex flex-row items-center"
-                                        onClick={() => window.open(buildCompanyGoogleMapsUrl(item), "_blank")}
-                                        >
-                                            <Map size={16}/>
-                                            <div className="ps-1">{formatAddress(item)}</div>
-                                        </Button>
+                                        {item.active ? (
+                                            <span className="p-2 rounded-md bg-green-300 text-black">Tak</span>
+                                        ) : (
+                                            <span className="p-2 rounded-md bg-red-300 text-black">Nie</span>
+                                            )}
                                     </td>
+                                    {authData.hasPermission('admin','admin') && (
+                                        <td className="p-2">{item.user?.name}</td>
+                                    )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
-                                        <Link to={ROUTES.COMPANY.SHOW.LINK(item.id)}>
-                                            <Button color="sky">
-                                                <Search size={20}/>
-                                            </Button>
-                                        </Link>
-                                        <Link to={ROUTES.COMPANY.EMPLOYEE.INDEX.LINK(item.id)} className="ps-1">
-                                            <Button color="emerald">
-                                                <Users size={20}/>
-                                            </Button>
-                                        </Link>
-                                        <Link to={ROUTES.COMPANY.EDIT.LINK(item.id)} className="ps-1">
+                                        <Link to={ROUTES.USER.CARS.EDIT.LINK(item.id)} className="ps-1">
                                             <Button color="yellow">
                                                 <SquarePen size={20}/>
                                             </Button>
