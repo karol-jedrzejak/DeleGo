@@ -19,10 +19,7 @@ class CompanySeeder extends Seeder
             ->count(20)
             ->has(
                 Employee::factory()
-                    ->count(26)
-                    ->has(
-                        Car::factory()->count(2)
-                    )
+                    ->count(20),
             )
             ->create();
     }

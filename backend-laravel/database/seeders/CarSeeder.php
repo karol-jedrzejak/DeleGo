@@ -13,7 +13,7 @@ class CarSeeder extends Seeder
     public function run(): void
     {
         Car::factory()->count(20)->create([
-            'employee_id' => null,
+            'user_id' => null,
         ]);
     }
 }

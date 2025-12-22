@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('model');
             $table->string('registration_number');
             $table->boolean('active');
-            $table->foreignId('employee_id')->nullable()->constrained();
+            $table->foreignId('user_id')->nullable()->constrained('users');
 
             $table->timestamps();
 

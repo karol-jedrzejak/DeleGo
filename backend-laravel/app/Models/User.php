@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasMany(UserPermission::class);
     }
 
+    public function cars(): HasMany
+    {
+        return $this->hasMany(Car::class);
+    }
+
     public function getPermissionLevel(string $resource, string $department): ?int
     {
         $permission = $this->permissions

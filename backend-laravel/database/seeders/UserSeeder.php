@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Car;
 use App\Models\User;
 use App\Models\UserPermission;
 use App\Models\PermissionType;
@@ -20,20 +21,25 @@ class UserSeeder extends Seeder
     {
         $types = PermissionType::all();
 
-        $admin = User::create([
-            'name' => 'Karol',
-            'surname' => 'Jędrzejak',
-            'position' => "Kierownik działu programowania",
-            'phone_mobile' => '+48 693 462 163',
-            'phone_landline' => '+48 11 22 33 456',
-            'academic_titles_before' => 'mgr. inz.',
-            'academic_titles_after' => '',
-            'email' => 'karol.jedrzejak@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('admin123'),
-            'remember_token' => Str::random(10),
-            'active' => 1,
-        ]);
+        $admin = User::factory()
+            ->has(Car::factory()->count(1)->state([
+                'active' => 1,
+            ]))
+            ->has(Car::factory()->count(1))
+            ->create([
+                'name' => 'Karol',
+                'surname' => 'Jędrzejak',
+                'position' => "Kierownik działu programowania",
+                'phone_mobile' => '+48 693 462 163',
+                'phone_landline' => '+48 11 22 33 456',
+                'academic_titles_before' => 'mgr. inz.',
+                'academic_titles_after' => '',
+                'email' => 'karol.jedrzejak@gmail.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('admin123'),
+                'remember_token' => Str::random(10),
+                'active' => 1,
+            ]);
 
         foreach ($types as $type) {
             UserPermission::create([
@@ -43,14 +49,20 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        User::factory(10)->create()->each(function ($user) use ($types) {
-            foreach ($types->random(2) as $type) {
-                UserPermission::create([
-                    'user_id' => $user->id,
-                    'permission_type_id' => $type->id,
-                    'level' => rand(1, 5),
-                ]);
-            }
-        });
+        User::factory(10)
+            ->has(Car::factory()->count(1)->state([
+                'active' => 1,
+            ]))
+            ->has(Car::factory()->count(3))
+            ->create()
+            ->each(function ($user) use ($types) {
+                foreach ($types->random(2) as $type) {
+                    UserPermission::create([
+                        'user_id' => $user->id,
+                        'permission_type_id' => $type->id,
+                        'level' => rand(1, 5),
+                    ]);
+                }
+            });
     }
 }
