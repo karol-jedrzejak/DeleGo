@@ -24,14 +24,14 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
 
     return (
         <>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>
                 <Input
                     label="Marka:"   
                     type = "text"
                     name="brand"
                     value={formData.brand}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 xl:pe-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "marka"   
                     errors={formError?.brand ?? null}
@@ -43,14 +43,14 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="model"
                     value={formData.model}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 xl:ps-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "model"   
                     errors={formError?.model ?? null}
                     required
                 ></Input>
             </div>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full'>
                 <Input
                     label="Numer rejestracyjny:"   
                     type = "text"

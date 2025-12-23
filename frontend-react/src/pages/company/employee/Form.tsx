@@ -24,14 +24,14 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
 
     return (
         <>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full flex-wrap grid grid-cols-8 sm:gap-x-2 xl:gap-x-4'>
                 <Input
                     label="(opcja):"   
                     type = "text"
                     name="academic_titles_before"
                     value={formData.academic_titles_before ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 xl:w-1/8 pe-2'
+                    classNameContainer='col-span-8 sm:col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "np. mgr inż"   
                     errors={formError?.academic_titles_before ?? null}
@@ -42,7 +42,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    classNameContainer='w-2/3 xl:w-3/8 ps-2 xl:px-2'
+                    classNameContainer='col-span-8 sm:col-span-6 xl:col-span-3'
                     classNameInput="w-full"
                     placeholder = "imię"   
                     errors={formError?.name ?? null}
@@ -54,7 +54,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="surname"
                     value={formData.surname}
                     onChange={handleChange}
-                    classNameContainer='w-2/3 xl:w-3/8 pe-2 xl:px-2'
+                    classNameContainer='col-span-8 sm:col-span-6 xl:col-span-3'
                     classNameInput="w-full"
                     placeholder = "nazwisko"   
                     errors={formError?.surname ?? null}
@@ -66,13 +66,13 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="academic_titles_after"
                     value={formData.academic_titles_after ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 xl:w-1/8 ps-2'
+                    classNameContainer='col-span-8 sm:col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "np (IWE)"   
                     errors={formError?.academic_titles_after ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full'>
                 <Input
                     label="Stanowisko (opcja):"   
                     type = "text"
@@ -86,7 +86,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 ></Input>
             </div>
             <Line text="Dane Kontaktowe (Opcjonalne)"/>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full'>
                 <Input
                     label="E-mail:"   
                     type = "text"
@@ -99,14 +99,14 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     errors={formError?.email ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>
                 <Input
                     label="Telefon Komórkowy:"   
                     type = "text"
                     name="phone_mobile"
                     value={formData.phone_mobile ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/2 pe-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "numer telefonu"   
                     errors={formError?.phone_mobile ?? null}
@@ -117,21 +117,21 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="phone_landline"
                     value={formData.phone_landline ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/2 ps-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "numer telefonu"   
                     errors={formError?.phone_landline ?? null}
                 ></Input>
             </div>
             <Line text="Dane osobowe (Opcjonalne)"/>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full flex-wrap grid grid-cols-3 xl:gap-x-4'>
                 <Input
                     label="Pesel:"   
                     type = "text"
                     name="pesel"
                     value={formData.pesel ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 pe-2'
+                    classNameContainer='col-span-3 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "pesel"   
                     errors={formError?.pesel ?? null}
@@ -142,7 +142,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="birth_date"
                     value={formData.birth_date ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 px-2'
+                    classNameContainer='col-span-3 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "data urodzenia"   
                     errors={formError?.birth_date ?? null}
@@ -153,20 +153,20 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="birth_place"
                     value={formData.birth_place ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 ps-2'
+                    classNameContainer='col-span-3 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "miejsce urodzenia"   
                     errors={formError?.birth_place ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full flex-wrap'>
+            <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>
                 <Input
                     label="Nr paszportu:"   
                     type = "text"
                     name="passport"
                     value={formData.passport ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/2 pe-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "nr paszportu"   
                     errors={formError?.passport ?? null}
@@ -177,7 +177,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="id_card"
                     value={formData.id_card ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/2 ps-2'
+                    classNameContainer='col-span-2 xl:col-span-1'
                     classNameInput="w-full"
                     placeholder = "nr dowodu osobistego"   
                     errors={formError?.id_card ?? null}
