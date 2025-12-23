@@ -77,7 +77,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
 
     return (
         <>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Select
                     label="Aktywna:"   
                     name="active"
@@ -123,7 +123,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 </div>
             </div>
             <Line text="Obowiązkowe"/>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Nazwa Skórcona:"   
                     type = "text"
@@ -149,7 +149,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     required
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Ulica:"   
                     type = "text"
@@ -174,7 +174,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     required
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Miejscowość/Miasto:"   
                     type = "text"
@@ -213,7 +213,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 ></Input>
             </div>
 
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Region:"   
                     type = "text"
@@ -249,7 +249,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 </div>
             </div>
             <Line text="Opcjonalne - dane podatkowe"/>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="KRS (opcja):"   
                     type = "text"
@@ -276,7 +276,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
 
             <Line text="Opcjonalne - dane do map"/>
 
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Szerokość geograficzna:"   
                     type = "number"
@@ -307,7 +307,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 ></Input>
             </div>
 
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Odległość do firmy [km]:"   
                     type = "number"

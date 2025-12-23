@@ -2,7 +2,7 @@ import axios from "axios";
 import type { FormDataType as CompanyFormData } from "@/models/Company";
 import { capitalizePolish } from "@/features/company/utilities/capitalizePolish";
 import { parsePolishAddress } from "@/features/company/utilities/parsePolishAddress";
-import { rejestrWL } from "@/api/services/companyData/rejestrWL.Service";
+import { rejestrWL } from "@/api/services/companyData/rejestrWL.service";
 import { nominatim } from "@/api/services/geoCoding/nominatim.service";
 
 type ApiResponse = Promise<CompanyFormData>;

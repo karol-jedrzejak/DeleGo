@@ -1,4 +1,6 @@
 import Index from "@/pages/user/cars/Index";
+import Create from "@/pages/user/cars/Create";
+import Edit from "@/pages/user/cars/Edit";
 
 export const USER = {
     CARS:
@@ -14,14 +16,14 @@ export const USER = {
         {
             PATH:  '/user/cars/create',
             LINK:  '/user/cars/create',
-            COMPONENT: Index,
+            COMPONENT: Create,
             PERMISSIONS: {misc:{cars: 1}}
         },
         EDIT:
         {
             PATH:  '/user/cars/:id/edit',
             LINK:  (id: number) => `/user/cars/${id}/edit`,
-            COMPONENT: Index,
+            COMPONENT: Edit,
             PERMISSIONS: {misc:{cars: 1}}
         },
     }

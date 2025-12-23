@@ -17,6 +17,7 @@ class Car extends Model
         'brand',
         'model',
         'registration_number',
+        'user_id',
         'active',
     ];
 

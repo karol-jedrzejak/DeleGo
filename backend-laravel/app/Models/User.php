@@ -45,7 +45,8 @@ class User extends Authenticatable
         "active",
         "created_at",
         "updated_at",
-        "email_verified_at"
+        "email_verified_at",
+        "isAdmin"
     ];
 
     /**
@@ -74,6 +75,11 @@ class User extends Authenticatable
     public function cars(): HasMany
     {
         return $this->hasMany(Car::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->getPermissionLevel('admin', 'admin') > 0;
     }
 
     public function getPermissionLevel(string $resource, string $department): ?int

@@ -61,7 +61,7 @@ const UserPermission = () => {
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
       ) => {
       const { value } = e.target;
-      let found = items?.find(item => item.id == value);
+      let found = items?.find(item => item.id == Number(value));
       setItem(found ?? null)
   };
 
@@ -74,7 +74,10 @@ const UserPermission = () => {
       let new_item: ItemType = {...item};
       let department = name.split(".")[0];
       let resource = name.split(".")[1];
-      new_item.permissions[department][resource] = value;
+      
+      if (new_item.permissions) {
+        new_item.permissions[department][resource] = value;
+      }
 
       setItem(new_item);
   };

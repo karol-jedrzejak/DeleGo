@@ -8,7 +8,7 @@ use App\Models\Car;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Requests\Car\CarRequest;
+use App\Http\Requests\User\CarRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CarController extends Controller
@@ -19,11 +19,13 @@ class CarController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::with('permissions.type')->find(Auth::id());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         $query = Car::filter($request);
 
         // razem z modelem user jeśli admin
-        if ($user->getPermissionLevel('admin', 'admin') > 0) {
+        if ($user->isAdmin()) {
             $query->with('user');
         } else{
             $query->where('user_id', $user->id);
@@ -39,12 +41,19 @@ class CarController extends Controller
      */
     public function store(CarRequest $request)
     {
-        
         $request->validated();
         $data = $request->post();
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin() || !$data['user_id']) {
+            $data['user_id'] = $user->id;
+        }
+
         $newEntry = Car::create($data);
         return response()->json([
-            'text' => 'Poprawnie dodano firmę '.$newEntry->name_short.'.',
+            'text' => 'Poprawnie dodano auto '.$newEntry->brand.' '.$newEntry->model.' '.$newEntry->registration_number.'.',
             'type' => 'message',
             'status' => 'success',
             'id' => $newEntry->id,
@@ -56,7 +65,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-
+        $this->authorize('view', Car::class);
         return response()->json($car);
     }
 
@@ -68,9 +77,12 @@ class CarController extends Controller
         $this->authorize('view', Car::class);
         $request->validated();
         $data = $request->post();
+
+        // Tu jesli car był użyty w delegacji zablokuj dostep
+
         $car->update($data);
         return response()->json([
-            'text' => 'Poprawnie zmieniono dane firmy '.$car->name_short.'.',
+            'text' => 'Poprawnie zmieniono dane samochodu.',
             'type' => 'message',
             'status' => 'success',
         ]);
@@ -81,19 +93,14 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-/*         if($car->has_employees)
-        {
-            return response()->json([
-                'text' => 'Nie można usunąć auta '.$car->name_short.' jeśli zostało użyte przynajmniej raz w trakcie delegacji. Zmiast usuwać zarchiwizuj.',
-                'type' => 'page',
-                'status' => 'error',
-            ], 409);
-        } */
+        $this->authorize('view', Car::class);
+        $deleted_resource_name = $car->brand.' '.$car->model.' '.$car->registration_number;
 
-        $deleted_resource_name = $car->name_short;
+        // Tu jesli car był użyty w delegacji zablokuj dostep
+
         $car->delete();
         return response()->json([
-            'text' => 'Poprawnie usunięto firmę '.$deleted_resource_name.'.',
+            'text' => 'Poprawnie usunięto auto '.$deleted_resource_name.'.',
             'type' => 'message',
             'status' => 'success',
         ]);

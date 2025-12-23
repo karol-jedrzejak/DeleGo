@@ -31,7 +31,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="brand"
                     value={formData.brand}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 pe-2'
+                    classNameContainer='w-full xl:w-1/2 xl:pe-2'
                     classNameInput="w-full"
                     placeholder = "marka"   
                     errors={formError?.brand ?? null}
@@ -43,30 +43,30 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="model"
                     value={formData.model}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 ps-2'
+                    classNameContainer='w-full xl:w-1/2 xl:ps-2'
                     classNameInput="w-full"
                     placeholder = "model"   
                     errors={formError?.model ?? null}
                     required
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Numer rejestracyjny:"   
                     type = "text"
                     name="registration_number"
                     value={formData.registration_number}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 pe-2'
+                    classNameContainer='w-full xl:w-1/2 xl:pe-2'
                     classNameInput="w-full"
                     placeholder = "numer rejestracyjny"   
                     errors={formError?.registration_number ?? null}
                 ></Input>
                 <Select
-                    label="Aktywna:"   
+                    label="Aktywne:"   
                     name="active"
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 ps-2'
+                    classNameContainer='w-full xl:w-1/2 xl:ps-2'
                     classNameInput='w-full'
                     defaultValue={formData.active ? "1" : "0"}   
                     errors={formError?.active ?? null}>

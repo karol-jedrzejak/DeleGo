@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "@/providers/AuthProvider.js";
 
@@ -19,7 +19,9 @@ import Form from './Form.tsx';
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { carService } from '@/api/services/backend/car/car.service.ts';
 
-
+// USERS //
+import UserSelect from '@/features/user/components/userSelect.tsx';
+import getUsers from '@/features/user/hooks/getUsers.ts';
 
 export default function Create() {
 
@@ -32,6 +34,21 @@ export default function Create() {
     const navigate = useNavigate();   
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
     
+    // -------------------------------------------------------------------------- //
+    // Get Users For Admin
+    // -------------------------------------------------------------------------- //
+
+    const { users,loadingUsers,errorUsers } = getUsers(authData.hasPermission('admin','admin'));
+    const handleUserChange = (value:number) => {
+        setFormData((p) => ({ ...p, user_id: value }));
+    };
+
+    useEffect(() => {
+    if (users && users.length > 0) {
+        handleUserChange(users[0].id);
+    }
+    }, [users]);
+
     // -------------------------------------------------------------------------- //
     // Submit Handler
     // -------------------------------------------------------------------------- //
@@ -47,9 +64,10 @@ export default function Create() {
     };
 
     // -------------------------------------------------------------------------- //
-    // Wyświetlanie błędu
+    // Wyświetlanie błędów
     // -------------------------------------------------------------------------- //
 
+    if(errorUsers) { return <Error><Error.Text type={errorUsers.type}>{errorUsers.text}</Error.Text></Error>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
@@ -65,7 +83,7 @@ export default function Create() {
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>
                     {authData.hasPermission('admin','admin') && (
-                        <div>Admin</div>
+                        <UserSelect items={users} value={formData.user_id} loading={loadingUsers} onChange={value => handleUserChange(Number(value))} disabled={false}/>
                     )}
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>

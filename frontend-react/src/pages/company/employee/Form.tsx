@@ -72,7 +72,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     errors={formError?.academic_titles_after ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Stanowisko (opcja):"   
                     type = "text"
@@ -97,7 +97,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 </Select>
             </div>
             <Line text="Dane Kontaktowe (Opcjonalne)"/>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="E-mail:"   
                     type = "text"
@@ -110,7 +110,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     errors={formError?.email ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Telefon Komórkowy:"   
                     type = "text"
@@ -135,7 +135,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                 ></Input>
             </div>
             <Line text="Dane osobowe (Opcjonalne)"/>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Pesel:"   
                     type = "text"
@@ -170,7 +170,7 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     errors={formError?.birth_place ?? null}
                 ></Input>
             </div>
-            <div className='flex flex-row w-full'>
+            <div className='flex flex-row w-full flex-wrap'>
                 <Input
                     label="Nr paszportu:"   
                     type = "text"

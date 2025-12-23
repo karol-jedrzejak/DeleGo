@@ -61,6 +61,8 @@ export const useBackend = <T>(method: Method, url: string) => {
       setLoading(false);
       return res;
     } catch (err: any) {
+      
+      console.log(err);
 
       const validation_errors = (err.data as any)?.errors;
       if (validation_errors) 

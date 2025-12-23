@@ -22,7 +22,7 @@ class CarPolicy
     public function view(User $user, Car $car): bool
     {
         // ADMIN – pełny dostęp
-        if ($user->getPermissionLevel('admin', 'admin') >= 1) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -44,7 +44,7 @@ class CarPolicy
     public function update(User $user, Car $car): bool
     {
         // ADMIN – pełny dostęp
-        if ($user->getPermissionLevel('admin', 'admin') >= 1) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -58,7 +58,7 @@ class CarPolicy
     public function delete(User $user, Car $car): bool
     {
         // ADMIN – pełny dostęp
-        if ($user->getPermissionLevel('admin', 'admin') >= 1) {
+        if ($user->isAdmin()) {
             return true;
         }
 
