@@ -55,7 +55,7 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
 
     return (
         <>
-            <hr className="my-3 border-neutral-400 dark:border-neutral-600 bg-black" />
+            <hr className="my-3 border-neutral-500 dark:border-neutral-500 bg-black" />
             <div className="flex justify-between items-center">
                 <div className="text-neutral-600 dark:text-neutral-400">Strona {paginationData?.current_page} z {paginationData?.last_page}</div>
                 <div className="flex flex-row items-center">

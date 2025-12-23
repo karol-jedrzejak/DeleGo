@@ -145,7 +145,7 @@ const Index = () => {
                                 <TableDataLoading loading={loadingItems} items={items} colNumber={7}/>
 
                                 {items?.map( (item,key) => (
-                                    <tr key={key} className={`border-t border-neutral-600 `+(key % 2 === 0 ? "bg-gray-100 dark:bg-neutral-900/50" : "bg-white dark:bg-neutral-800")}>
+                                    <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 `+(key % 2 === 0 ? "bg-gray-100 dark:bg-neutral-900/50" : "bg-white dark:bg-neutral-800")}>
                                         <td className="p-2">{item.position}</td>
                                         <td className="p-2">{item.name}</td>
                                         <td className="p-2">{item.surname}</td>

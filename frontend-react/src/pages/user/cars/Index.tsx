@@ -116,7 +116,7 @@ const Index = () => {
 
                             {/*  Rekordy */}                     
                             {items?.map( (item,key) => (
-                                <tr key={key} className={`border-t border-neutral-600 ${
+                                <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
                                             key % 2 === 0
                                             ? "bg-gray-100 dark:bg-neutral-900/50"
                                             : "bg-white dark:bg-neutral-800"
