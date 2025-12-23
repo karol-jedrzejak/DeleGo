@@ -4,23 +4,40 @@ namespace App\Http\Controllers\API\Company;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 use App\Models\Company;
-
-
 use App\Http\Requests\Company\CompanyRequest;
-
 
 class CompanyController extends Controller
 {
+    use AuthorizesRequests;
+    // Dla crud bez policy. Policy tylko dla restore i forceDestroy
+    /*     
+    public function __construct()
+    {
+        $this->authorizeResource(Company::class,'company');
+    }*/
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Company::filter($request);
+
+        if ($user->isAdmin()) {
+            $query->withTrashed();
+        }
+
         return response()->json(
-            Company::filter($request)
-            ->paginate($request->query('perPage', 10))
-            ->withPath('')
+            $query
+                ->paginate($request->query('perPage', 10))
+                ->withPath('')
         );
     }
 
@@ -60,29 +77,61 @@ class CompanyController extends Controller
             'text' => 'Poprawnie zmieniono dane firmy '.$company->name_short.'.',
             'type' => 'message',
             'status' => 'success',
-        ]);
+        ],200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource from storage.
      */
     public function destroy(Company $company)
     {
+        $resource_name = $company->name_short;
+        $company->delete();
+        return response()->json([
+            'text' => 'Poprawnie zdeaktywowano firmę '.$resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
+    }
+
+    /**
+     * Restore the specified resource.
+     */
+    public function restore($id)
+    {
+        $company = Company::onlyTrashed()->findOrFail($id);
+        $this->authorize('restore', Company::class);
+        $company->restore();
+        $resource_name = $company->name_short;
+        return response()->json([
+            'text' => 'Poprawnie przywrócono firmę '.$resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
+    }
+
+    /**
+     * Permanently remove the specified resource from storage.
+     */
+    public function forceDelete($id)
+    {
+        $company = Company::onlyTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', Company::class);
         if($company->has_employees)
         {
             return response()->json([
-                'text' => 'Nie można usunąć firmy '.$company->name_short.' gdy przypisani są do niej pracownicy. Usuń pracowników lub zmień status firmy na nieaktywny.',
+                'text' => 'Nie można usunąć firmy '.$company->name_short.' gdy przypisani są do niej pracownicy.',
                 'type' => 'page',
                 'status' => 'error',
             ], 409);
         }
 
-        $deleted_resource_name = $company->name_short;
-        $company->delete();
+        $resource_name = $company->name_short;
+        $company->forceDelete();
         return response()->json([
-            'text' => 'Poprawnie usunięto firmę '.$deleted_resource_name.'.',
+            'text' => 'Poprawnie usunięto firmę '.$resource_name.'.',
             'type' => 'message',
             'status' => 'success',
-        ]);
+        ],200);
     }
 }

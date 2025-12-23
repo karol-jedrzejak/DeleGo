@@ -66,7 +66,6 @@ class EmployeeRequest extends FormRequest
                         $fail('Nieprawidłowy numer dowodu osobistego.');
                     }
                 },],
-            'active'  => ['boolean','required'],
         ];
     }
 

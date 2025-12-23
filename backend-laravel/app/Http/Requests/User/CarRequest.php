@@ -28,7 +28,6 @@ class CarRequest extends FormRequest
             'brand' => ['required','string','min:3'],
             'model' => ['required','string','min:3'],
             'registration_number' => ['required','string','min:4','max:12'],
-            'active' => ['required','boolean'],
             'user_id' => 'nullable|integer|exists:users,id',
         ];
     }

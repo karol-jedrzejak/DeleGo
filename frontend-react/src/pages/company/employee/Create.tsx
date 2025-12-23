@@ -83,12 +83,12 @@ export default function Create() {
                 <ParentButtons company={parent}/>
                 <form onSubmit={handleSubmit} className='w-full mt-2'>
                 <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
-                <div className='w-full flex justify-end items-center pt-4'>
+                <div className='w-full flex justify-end items-center pt-4 gap-2'>
                     {loadingItem && (
                         <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
                     )}
                     <Button
-                        className='mx-4 flex items-center'
+                        className='flex items-center'
                         disabled={loadingItem}
                         type="submit"
                         color="green"

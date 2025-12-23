@@ -5,7 +5,6 @@ import type { ValidationErrorsType } from '@/api/response/types'
 // -------------------------------------------------------------------------- //
 
 export const formDataKeys = [
-  "active",
   "nip",
   "krs",
   "regon",
@@ -28,7 +27,6 @@ export const formDataKeys = [
 export type FormDataType = {
   [K in typeof formDataKeys[number]]: 
     K extends "nip" | "krs" | "regon" | "street" ? string | null :
-    K extends "active" ? boolean :
     K extends "latitude" | "longitude" | "distance" | "distance_time" ? number | null :
     string; // domyślnie string
 };
@@ -38,7 +36,6 @@ export type FormDataType = {
 // -------------------------------------------------------------------------- //
 
 export const DEFAULT_FORM_DATA = {
-  active: true,
   nip: null,
   krs: null,
   regon: null,
@@ -81,6 +78,9 @@ export const DEFAULT_PER_PAGE:number = 10;
 
 export type ItemType = FormDataType &{
     id: number,
+    created_at: string,
+    updated_at: string,
+    deleted_at: string,
     has_employees: boolean,
 };
 

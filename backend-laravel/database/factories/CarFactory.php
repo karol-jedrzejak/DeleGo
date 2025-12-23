@@ -32,7 +32,6 @@ class CarFactory extends Factory
             'brand' => fake()->randomElement($brands),
             'model' => fake()->word(),
             'registration_number' => $numb,
-            'active' => fake()->numberBetween(0, 1),
         ];
     }
 }

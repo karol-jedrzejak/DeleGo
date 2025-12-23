@@ -11,14 +11,12 @@ export const formDataKeys = [
     'brand',
     'model',
     'registration_number',
-    'active',
     'user_id',
 ] as const;
 
 
 export type FormDataType = {
   [K in typeof formDataKeys[number]]: 
-    K extends "active" ? boolean :
     K extends "user_id" ? number | undefined :
     string; // domyślnie string
 };
@@ -28,7 +26,6 @@ export type FormDataType = {
 // -------------------------------------------------------------------------- //
 
 export const DEFAULT_FORM_DATA = {
-    active: true,
     brand: "",
     model: "",
     registration_number: "",
@@ -59,6 +56,9 @@ export const DEFAULT_PER_PAGE:number = 10;
 
 export type ItemType = FormDataType &{
     id: number,
+    created_at: string,
+    updated_at: string,
+    deleted_at: string,
     user?: UserType,
 };
 

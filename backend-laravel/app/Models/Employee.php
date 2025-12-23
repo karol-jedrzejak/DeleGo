@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\BaseModel;
 use App\Models\Traits\Filterable;
 
-class Employee extends Model
+class Employee extends BaseModel
 {
-    /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory;
-
+    use SoftDeletes;  
+    
     protected $fillable = [
         'company_id',
         'name',
@@ -28,7 +29,6 @@ class Employee extends Model
         'pesel',
         'passport',
         'id_card',
-        'active',
     ];
 
     protected $attributes = [
@@ -46,7 +46,6 @@ class Employee extends Model
         'pesel' => null,
         'passport' => null,
         'id_card' => null,
-        'active' => 1,
     ];
 
     // --------------------------------------------------------- //
@@ -79,7 +78,6 @@ class Employee extends Model
         'pesel',
         'passport',
         'id_card',
-        'active',
     ];
 
     public static array $searchable = [

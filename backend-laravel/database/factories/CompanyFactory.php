@@ -44,8 +44,6 @@ class CompanyFactory extends Factory
             'distance' => null,
             'distance_time' => null,
 
-            'active' => fake()->numberBetween(0, 1),
-
             'created_at' => now(),
             'updated_at' => now(),
         ];

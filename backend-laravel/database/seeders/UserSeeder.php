@@ -22,10 +22,7 @@ class UserSeeder extends Seeder
         $types = PermissionType::all();
 
         $admin = User::factory()
-            ->has(Car::factory()->count(1)->state([
-                'active' => 1,
-            ]))
-            ->has(Car::factory()->count(1))
+            ->has(Car::factory()->count(2))
             ->create([
                 'name' => 'Karol',
                 'surname' => 'Jędrzejak',
@@ -50,9 +47,6 @@ class UserSeeder extends Seeder
         }
 
         User::factory(10)
-            ->has(Car::factory()->count(1)->state([
-                'active' => 1,
-            ]))
             ->has(Car::factory()->count(3))
             ->create()
             ->each(function ($user) use ($types) {

@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\BaseModel;
 use App\Models\Traits\Filterable;
 
-class Company extends Model
+class Company extends BaseModel
 {
-    /** @use HasFactory<\Database\Factories\CompanyFactory> */
     use HasFactory;
-
+    use SoftDeletes;  
+    
     protected $fillable = [
         'nip',
         'krs',
@@ -30,7 +31,6 @@ class Company extends Model
         'longitude',
         'distance',
         'distance_time',
-        'active',
     ];
 
     protected $attributes = [
@@ -50,7 +50,6 @@ class Company extends Model
         'longitude' => null,
         'distance' => null,
         'distance_time' => null,
-        'active' => 1,
     ];
 
     // --------------------------------------------------------- //
@@ -86,7 +85,6 @@ class Company extends Model
         'longitude',
         'distance',
         'distance_time',
-        'active',
         'created_at',
         'updated_at'
     ];
@@ -108,39 +106,5 @@ class Company extends Model
     {
         return $this->employees()->exists();
     }
-
-/*  
-    protected $appends = [
-        'has_employees',
-        'address_formatted',
-        'address_google_maps',
-    ];
-
-    public function getAddressFormattedAttribute(): string
-    {
-        $postcode = substr($this->postal_code, 0, 2) . '-' . substr($this->postal_code, -3);
-
-        // Brak ulicy
-        if (empty($this->street)) {
-            return "{$this->city} {$this->house_number}; {$postcode} {$this->postal_city}, {$this->country}";
-        }
-
-        // Miasto i poczta to samo
-        if ($this->city === $this->postal_city) {
-            return "Ul. {$this->street} {$this->house_number}; {$postcode} {$this->postal_city}, {$this->country}";
-        }
-
-        // Miasto i poczta różne
-        return "Ul. {$this->street} {$this->house_number} {$this->city}; {$postcode} {$this->postal_city}, {$this->country}";
-    }
-
-    public function getAddressGoogleMapsAttribute(): string
-    {
-        $formatted = $this->address_formatted;
-
-        $addressGoogle = config('google.api.maps.route').str_replace(' ', '+', $formatted);
-
-        return $addressGoogle;
-    } */
 
 }

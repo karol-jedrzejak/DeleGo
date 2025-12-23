@@ -79,22 +79,11 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="position"
                     value={formData.position ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/2 pe-2'
+                    classNameContainer='w-full'
                     classNameInput="w-full"
                     placeholder = "stanowisko"   
                     errors={formError?.position ?? null}
                 ></Input>
-                <Select
-                    label="Aktywna:"   
-                    name="active"
-                    onChange={handleChange}
-                    classNameContainer='w-1/2 ps-2'
-                    classNameInput='w-full'
-                    defaultValue={formData.active ? "1" : "0"}   
-                    errors={formError?.active ?? null}>
-                        <option value="1">Tak</option>
-                        <option value="0">Nie</option>
-                </Select>
             </div>
             <Line text="Dane Kontaktowe (Opcjonalne)"/>
             <div className='flex flex-row w-full flex-wrap'>

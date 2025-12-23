@@ -20,14 +20,12 @@ export const formDataKeys = [
   'pesel',
   'passport',
   'id_card',
-  'active',
 ] as const;
 
 
 export type FormDataType = {
   [K in typeof formDataKeys[number]]: 
     K extends 'name' | 'surname' ? string :
-    K extends "active" ? boolean :
     string | null; // domyślnie string
 };
 
@@ -49,7 +47,6 @@ export const DEFAULT_FORM_DATA = {
     'pesel': null,
     'passport': null,
     'id_card': null,
-    'active': true,
 };
 
 // -------------------------------------------------------------------------- //
@@ -76,6 +73,9 @@ export const DEFAULT_PER_PAGE:number = 10;
 
 export type ItemType = FormDataType &{
     id: number,
+    created_at: string,
+    updated_at: string,
+    deleted_at: string,
     company_id: number,
 };
 

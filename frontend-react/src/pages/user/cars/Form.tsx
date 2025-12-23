@@ -57,22 +57,11 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
                     name="registration_number"
                     value={formData.registration_number}
                     onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 xl:pe-2'
+                    classNameContainer='w-full'
                     classNameInput="w-full"
                     placeholder = "numer rejestracyjny"   
                     errors={formError?.registration_number ?? null}
                 ></Input>
-                <Select
-                    label="Aktywne:"   
-                    name="active"
-                    onChange={handleChange}
-                    classNameContainer='w-full xl:w-1/2 xl:ps-2'
-                    classNameInput='w-full'
-                    defaultValue={formData.active ? "1" : "0"}   
-                    errors={formError?.active ?? null}>
-                        <option value="1">Tak</option>
-                        <option value="0">Nie</option>
-                </Select>
             </div>
         </>
     );

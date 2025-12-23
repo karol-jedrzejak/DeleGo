@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('brand');
             $table->string('model');
             $table->string('registration_number')->unique();
-            $table->boolean('active');
             $table->foreignId('user_id')->nullable()->constrained('users');
 
+            $table->softDeletes();
             $table->timestamps();
 
         });

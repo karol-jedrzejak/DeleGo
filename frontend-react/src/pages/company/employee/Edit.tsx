@@ -86,7 +86,7 @@ export default function Edit() {
     // Delete
     // -------------------------------------------------------------------------- //
     
-    const { loading:loadingDel, error:errorDel, mutate:mutateDel } = useBackend("delete", employeeService.paths.delete(id ?? ""));
+    const { loading:loadingDel, error:errorDel, mutate:mutateDel } = useBackend("delete", employeeService.paths.deactivate(id ?? ""));
 
     const handleDelete = async () => {
         try {
@@ -173,12 +173,12 @@ export default function Edit() {
                                     Usuń
                                 </Button>
                             </div>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex justify-between items-center gap-2'>
                                 {loadingPut && (
                                     <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
                                 )}
                                 <Button
-                                    className='mx-4 flex items-center'
+                                    className='flex items-center'
                                     disabled={loadingPut}
                                     type="submit"
                                     color="yellow"

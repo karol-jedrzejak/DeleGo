@@ -36,7 +36,7 @@ return new class extends Migration
             $table->integer('distance')->nullable();
             $table->float('distance_time')->nullable();
 
-            $table->boolean('active')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

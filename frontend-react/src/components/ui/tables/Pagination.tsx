@@ -53,6 +53,15 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
         setPage("1");
     };
 
+    function getRecordLabel(count:number | undefined) {
+        if(count)
+        {
+            if (count === 1) return 'rekord';
+            if (count >= 2 && count <= 4) return 'rekordy';
+            return 'rekordów';
+        }
+    }
+
     return (
         <>
             <hr className="my-3 border-neutral-500 dark:border-neutral-500 bg-black" />
@@ -69,7 +78,7 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
                         <option value="50">50   </option>
                         <option value="100">100   </option>
                     </select>
-                    <div>Rekordów na stronę</div>
+                    <div>Rekordów na stronę <span className="text-neutral-600 dark:text-neutral-400">(Znaleziono {paginationData?.total} {getRecordLabel(paginationData?.total)})</span></div>
                 </div>
                 <div className="flex flex-row">
                     <div

@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('passport')->nullable();
             $table->string('id_card')->nullable();
             
-            $table->boolean('active')->default(1);
+            $table->softDeletes();
 
             $table->timestamps();
         });

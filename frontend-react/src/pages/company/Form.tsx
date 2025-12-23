@@ -78,24 +78,13 @@ export default function Form({formData,setFormData,formError}:FormPropsType) {
     return (
         <>
             <div className='flex flex-row w-full flex-wrap'>
-                <Select
-                    label="Aktywna:"   
-                    name="active"
-                    onChange={handleChange}
-                    classNameContainer='w-1/3 pe-2'
-                    classNameInput='w-full'
-                    defaultValue={formData.active ? "1" : "0"}   
-                    errors={formError?.active ?? null}>
-                        <option value="1">Tak</option>
-                        <option value="0">Nie</option>
-                </Select>
                 <Input
                     label="NIP (opcja):"   
                     type = "text"
                     name="nip"
                     value={formData.nip ?? ""}
                     onChange={handleChange}
-                    classNameContainer='w-1/3 px-2'
+                    classNameContainer='w-1/3 pe-2'
                     classNameInput='w-full'
                     placeholder = "nip"   
                     errors={formError?.nip ?? null}

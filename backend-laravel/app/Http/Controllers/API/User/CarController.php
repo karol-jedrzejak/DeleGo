@@ -1,19 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\API\Car;
+namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Car;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
-use App\Http\Requests\User\CarRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+use App\Models\Car;
+use App\Http\Requests\User\CarRequest;
 
 class CarController extends Controller
 {
+    // Dla Policies (plus AuthService Provider w App/Providers)
     use AuthorizesRequests;
+    public function __construct()
+    {
+        $this->authorizeResource(Car::class,'car');
+    }
+    
+
     /**
      * Display a listing of the resource.
      */
@@ -65,7 +71,6 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        $this->authorize('view', Car::class);
         return response()->json($car);
     }
 
@@ -74,11 +79,10 @@ class CarController extends Controller
      */
     public function update(CarRequest $request, Car $car)
     {
-        $this->authorize('view', Car::class);
         $request->validated();
         $data = $request->post();
 
-        // Tu jesli car był użyty w delegacji zablokuj dostep
+        // Tu jesli car był użyty w delegacji zablokuj edycje
 
         $car->update($data);
         return response()->json([
@@ -89,20 +93,52 @@ class CarController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource from storage.
      */
     public function destroy(Car $car)
     {
-        $this->authorize('view', Car::class);
-        $deleted_resource_name = $car->brand.' '.$car->model.' '.$car->registration_number;
-
-        // Tu jesli car był użyty w delegacji zablokuj dostep
-
+        $resource_name = $car->brand.' '.$car->model.' '.$car->registration_number;
         $car->delete();
         return response()->json([
-            'text' => 'Poprawnie usunięto auto '.$deleted_resource_name.'.',
+            'text' => 'Poprawnie zdeaktywowano auto '.$resource_name.'.',
             'type' => 'message',
             'status' => 'success',
-        ]);
+        ],200);
+    }
+
+    /**
+     * Restore the specified resource.
+     */
+    public function restore($id)
+    {
+        $car = Car::onlyTrashed()->findOrFail($id);
+        $this->authorize('restore', Car::class);
+
+        $resource_name = $car->brand.' '.$car->model.' '.$car->registration_number;
+        $car->restore();
+        return response()->json([
+            'text' => 'Poprawnie przywrócono auto '. $resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
+    }
+
+    /**
+     * Permanently remove the specified resource from storage.
+     */
+    public function forceDelete($id)
+    {
+        $car = Car::onlyTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', Car::class);
+
+        // Tu jesli car był użyty w delegacji zablokuj usuwanie
+        $resource_name = $car->brand.' '.$car->model.' '.$car->registration_number;
+
+        $car->forceDelete();
+        return response()->json([
+            'text' => 'Poprawnie usunięto auto '.$resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
     }
 }

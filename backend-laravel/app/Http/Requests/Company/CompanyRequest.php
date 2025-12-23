@@ -53,7 +53,6 @@ class CompanyRequest extends FormRequest
             'longitude' => ['between:-180,180','nullable'],
             'distance' => ['min:1','nullable'],
             'distance_time' => ['min:0.5','nullable'],
-            'active' => ['required','boolean']
         ];
     }
 

@@ -2,16 +2,16 @@
 
 namespace App\Policies;
 
-use App\Models\Car;
+use App\Models\Company;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
-
-class CarPolicy
+class CompanyPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true;
     }
@@ -19,21 +19,15 @@ class CarPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Car $car): bool
+    public function view(): bool
     {
-        // ADMIN – pełny dostęp
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        // User widzi tylko swoje auta
-        return $car->user_id === $user->id;
+        return true;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(): bool
     {
         return true;
     }
@@ -41,29 +35,17 @@ class CarPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Car $car): bool
+    public function update(): bool
     {
-        // ADMIN – pełny dostęp
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        // User widzi tylko swoje auta
-        return $car->user_id === $user->id;
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Car $car): bool
+    public function delete(): bool
     {
-        // ADMIN – pełny dostęp
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        // User widzi tylko swoje auta
-        return $car->user_id === $user->id;
+        return true;
     }
 
     /**

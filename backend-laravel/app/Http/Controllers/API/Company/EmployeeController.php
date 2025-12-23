@@ -4,25 +4,42 @@ namespace App\Http\Controllers\API\Company;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 use App\Models\Company;
 use App\Models\Employee;
-
-
 use App\Http\Requests\Company\Employee\EmployeeRequest;
 
 
 class EmployeeController extends Controller
 {
+    use AuthorizesRequests;
+    // Dla crud bez policy. Policy tylko dla restore i forceDestroy
+    /*     
+    public function __construct()
+    {
+        $this->authorizeResource(Employee::class,'employee');
+    }*/
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request, Company $company)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Employee::where('company_id', $company->id)->filter($request);
+
+        if ($user->isAdmin()) {
+            $query->withTrashed();
+        }
+
         return response()->json(
-            Employee::where('company_id', $company->id)
-            ->filter($request)
-            ->paginate($request->query('perPage', 10))
-            ->withPath('')
+            $query
+                ->paginate($request->query('perPage', 10))
+                ->withPath('')
         );
     }
 
@@ -67,16 +84,48 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource from storage.
      */
     public function destroy(Employee $employee)
     {
-        $deleted_resource_name = $employee->name.' '.$employee->surname;
+        $resource_name = $employee->name.' '.$employee->surname;
         $employee->delete();
         return response()->json([
-            'text' => 'Poprawnie usunięto pracownika '. $deleted_resource_name.'.',
+            'text' => 'Poprawnie zdeaktywowano pracownika '. $resource_name.'.',
             'type' => 'message',
             'status' => 'success',
-        ]);
+        ],200);
+    }
+
+    /**
+     * Restore the specified resource.
+     */
+    public function restore($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $this->authorize('restore', Employee::class);
+        $resource_name = $employee->name.' '.$employee->surname;
+        $employee->restore();
+        return response()->json([
+            'text' => 'Poprawnie przywrócono pracownika '.$resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
+    }
+
+    /**
+     * Permanently remove the specified resource from storage.
+     */
+    public function forceDelete($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', Employee::class);
+        $resource_name = $employee->name.' '.$employee->surname;
+        $employee->forceDelete();
+        return response()->json([
+            'text' => 'Poprawnie usunięto pracownika '. $resource_name.'.',
+            'type' => 'message',
+            'status' => 'success',
+        ],200);
     }
 }

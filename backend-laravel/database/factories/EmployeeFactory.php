@@ -58,8 +58,6 @@ class EmployeeFactory extends Factory
             'passport' => fake()->randomElement(["PS".fake()->numberBetween(10000000, 99999999),null]),
             'id_card' => fake()->randomElement(["ID".fake()->numberBetween(10000000, 99999999),null]),
 
-            'active' => fake()->numberBetween(0, 1),
-
             'created_at' => now(),
             'updated_at' => now(),
         ];
