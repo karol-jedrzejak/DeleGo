@@ -20,7 +20,7 @@ import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { carService } from '@/api/services/backend/car/car.service.ts';
 
 // USERS //
-import UserSelect from '@/features/user/components/userSelect.tsx';
+import UserSelect from '@/features/user/components/UserSelect.tsx';
 import getUsers from '@/features/user/hooks/getUsers.ts';
 
 export default function Create() {
@@ -43,11 +43,14 @@ export default function Create() {
         setFormData((p) => ({ ...p, user_id: value }));
     };
 
+    /*  
+    GDby domyślny nie miał byż brak wyboru
     useEffect(() => {
     if (users && users.length > 0) {
         handleUserChange(users[0].id);
     }
     }, [users]);
+    */
 
     // -------------------------------------------------------------------------- //
     // Submit Handler
@@ -83,7 +86,7 @@ export default function Create() {
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>
                     {authData.hasPermission('admin','admin') && (
-                        <UserSelect items={users} value={formData.user_id} loading={loadingUsers} onChange={value => handleUserChange(Number(value))} disabled={false}/>
+                        <UserSelect items={users} value={formData.user_id} loading={loadingUsers} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
                     )}
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>
@@ -92,7 +95,7 @@ export default function Create() {
                         )}
                         <Button
                             className='mx-4 flex items-center'
-                            disabled={loading}
+                            disabled={loading || loadingUsers}
                             type="submit"
                             color="green"
                         >
@@ -102,7 +105,7 @@ export default function Create() {
                         <Button
                             onClick={() => navigate(-1)}
                             className='flex items-center'
-                            disabled={loading}
+                            disabled={loading || loadingUsers}
                             color="sky"
                         >
                             <Undo2 size={24} className="pe-1"/>

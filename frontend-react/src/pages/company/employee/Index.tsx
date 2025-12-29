@@ -5,7 +5,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 
 // Komponenty UI //
 
-import { Search,SquarePlus,SquarePen,Mail,Phone } from "lucide-react";
+import { Search,SquarePlus,SquarePen,Mail,Phone , Trash2} from "lucide-react";
 import { Loading, Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading } from '@/components';
 
 import { Buttons as ParentButtons } from '@/features/company/components/Buttons';
@@ -145,8 +145,22 @@ const Index = () => {
                                 <TableDataLoading loading={loadingItems} items={items} colNumber={7}/>
 
                                 {items?.map( (item,key) => (
-                                    <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 `+(key % 2 === 0 ? "bg-gray-100 dark:bg-neutral-900/50" : "bg-white dark:bg-neutral-800")}>
-                                        <td className="p-2">{item.position}</td>
+                                <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
+                                            key % 2 === 0
+                                            ? "bg-gray-100 dark:bg-neutral-900/50"
+                                            : "bg-white dark:bg-neutral-800"
+                                        } ${
+                                            item.deleted_at
+                                            ? " text-red-700 dark:text-red-500 bg-gray-400 dark:bg-neutral-950"
+                                            : ""
+                                        }`}>
+                                        <td className="p-2">
+                                            {item.deleted_at ? 
+                                            <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.position}</span></div>
+                                            : 
+                                            <>{item.position}</>
+                                            }
+                                        </td>
                                         <td className="p-2">{item.name}</td>
                                         <td className="p-2">{item.surname}</td>
                                         <td className="p-2">

@@ -37,7 +37,7 @@ export default function Create() {
     const { parent_id } = useParams<{ parent_id: string }>();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
-    const [parent, setParent] = useState<ParentItemType | undefined>(undefined);
+    const [ parent, setParent] = useState<ParentItemType | undefined>(undefined);
 
     // -------------------------------------------------------------------------- //
     // Submit Handler

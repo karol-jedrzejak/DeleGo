@@ -37,7 +37,7 @@ export default function Edit() {
     // Get
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", companyService.paths.getById(id ?? ""));
+    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", companyService.paths.getById(id ?? ""),{ initialLoading: true });
 
     useEffect(() => {
         mutateGet()

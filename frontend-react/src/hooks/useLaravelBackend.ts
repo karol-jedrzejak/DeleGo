@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useMessage } from "@/providers/MessageProvider";
 
 import axiosLaravelBackend from "@/api/axiosInstances/axiosLaravelBackend";
@@ -6,6 +6,10 @@ import type { ValidationErrorsType } from "@/api/response/types";
 
 
 type Method = "get" | "post" | "put" | "delete";
+
+type UseBackendOptions = {
+  initialLoading?: boolean; // domyślnie false
+};
 
 type ErrorType = {
   type: "standard" | "authorization";
@@ -18,10 +22,16 @@ type MutateOptions = {
   params?: URLSearchParams;
 };
 
-export const useBackend = <T>(method: Method, url: string) => {
+export const useBackend = <T>(
+  method: Method,
+  url: string,
+  options?: UseBackendOptions
+) => {
   
   const { setMessage } = useMessage();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(
+    options?.initialLoading ?? false
+  );
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsType>(null);
   const [error, setError] = useState<ErrorType | null>(null);
 

@@ -53,7 +53,7 @@ class CarController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (!$user->isAdmin() || !$data['user_id']) {
+        if (!$user->isAdmin()) {
             $data['user_id'] = $user->id;
         }
 

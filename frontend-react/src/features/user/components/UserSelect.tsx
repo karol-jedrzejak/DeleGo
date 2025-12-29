@@ -12,9 +12,10 @@ type Props = {
     value?: number | undefined;
     onChange: (id: string) => void;
     disabled?: boolean;
+    noneText?: string;
 };
 
-export default function UserSelect({ items, value, onChange, loading, disabled=false }:Props) {
+export default function UserSelect({ items, value, onChange, loading, disabled=false, noneText}:Props) {
 
     return (
         <>
@@ -27,6 +28,9 @@ export default function UserSelect({ items, value, onChange, loading, disabled=f
                     onChange={e => onChange(e.target.value)}
                     defaultValue={value}
                     >
+                    {noneText != "" &&
+                        <option>{noneText}</option>
+                    }
                     {items?.map( (item_selection,key) => (  
                         <option key={key} value={item_selection.id}
                         >{item_selection.name} {item_selection.surname} [id={item_selection.id}]</option>

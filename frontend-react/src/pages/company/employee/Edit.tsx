@@ -5,7 +5,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 
 // Komponenty UI //
 
-import { SquarePen,Undo2,Trash } from "lucide-react";
+import { ArchiveRestore,SquarePen,Undo2,Trash,Trash2 } from "lucide-react";
 import { Card, Button, Loading, Error, PopUp } from '@/components';
 
 import { Buttons as ParentButtons } from '@/features/company/components/Buttons.tsx';
@@ -39,6 +39,7 @@ export default function Edit() {
     const navigate = useNavigate();
     const [deletePopUp, setDeletePopUp] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
+    const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
     const [parent, setParent] = useState<ParentItemType | undefined>(undefined);
 
@@ -46,18 +47,22 @@ export default function Edit() {
     // Get Parent
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingParent, error:errorParent, mutate:mutateParent } = useBackend<ParentItemType>("get",companyService.paths.getById(""));
+    const { loading:loadingParent, error:errorParent, mutate:mutateParent } = useBackend<ParentItemType>("get",companyService.paths.getById(""),{ initialLoading: true });
 
     // -------------------------------------------------------------------------- //
     // Get
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", employeeService.paths.getById(id ?? ""));
+    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", employeeService.paths.getById(id ?? ""),{ initialLoading: true });
 
     useEffect(() => {
         mutateGet()
         .then((res) => {
             setFormData(res.data);
+            if(res.data.deleted_at)
+            {
+                setIsDeleted(true);
+            }
             parent_id.current = res.data.company_id;
             mutateParent({url: companyService.paths.getById(parent_id.current.toString())})
                 .then((res) => {
@@ -99,15 +104,50 @@ export default function Edit() {
     };
 
     // -------------------------------------------------------------------------- //
+    // Admin - Restore
+    // -------------------------------------------------------------------------- //
+
+    const { loading: loadingRestore, error:errorRestore, mutate:mutateRestore } = useBackend("put", employeeService.paths.restore(id ?? ""));
+
+    const handleRestore = async () => {
+        try {
+            await mutateRestore();
+            navigate(ROUTES.COMPANY.EMPLOYEE.INDEX.LINK(parent_id.current));
+        } catch {}
+    };
+
+    // -------------------------------------------------------------------------- //
+    // Admin - Permanently Destroy
+    // -------------------------------------------------------------------------- //
+    
+    const { loading:loadingDestroy, error:errorDestroy, mutate:mutateDestroy } = useBackend("delete", employeeService.paths.destroy(id ?? ""));
+
+    const handleDestroy = async () => {
+        try {
+            await mutateDestroy();
+            navigate(ROUTES.COMPANY.EMPLOYEE.INDEX.LINK(parent_id.current));
+            setDeletePopUp(false);
+        } catch {
+            setDeletePopUp(false);
+        }
+    };
+
+
+    // -------------------------------------------------------------------------- //
     // Wyświetlanie błędu i Loading
     // -------------------------------------------------------------------------- //
 
-    if(loadingGet || loadingParent || !parent) { return <Loading/>; }
+    if(loadingGet || loadingParent) { return <Loading/>; }
+
     if(errorParent) { return <Error><Error.Text type={errorParent.type}>{errorParent.text}</Error.Text></Error>; }
+    
     if(errorGet) { return <Error><Error.Text type={errorGet.type}>{errorGet.text}</Error.Text></Error>; }
     if(errorPut) { return <Error><Error.Text type={errorPut.type}>{errorPut.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
     if(errorDel) { return <Error><Error.Text type={errorDel.type}>{errorDel.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
-
+    
+    if(errorRestore) { return <Error><Error.Text type={errorRestore.type}>{errorRestore.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
+    if(errorDestroy) { return <Error><Error.Text type={errorDestroy.type}>{errorDestroy.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
+    
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
@@ -126,8 +166,31 @@ export default function Edit() {
                     <Card.Body>
                         <div>Czy na pewno chcesz usunąć tego pracownika? Operacji nie da się cofnąć.</div>
                         <div className='flex justify-end items-center pt-4'>
+                            {loadingDel && (
+                                <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                            )}
                             <Button
-                                className='flex items-center'
+                                className='ms-4 flex items-center'
+                                disabled={loadingDel || loadingDestroy}
+                                color="cyan"
+                                onClick={() => setDeletePopUp(false)}
+                            >
+                                <Undo2 size={24} className="pe-1"/>
+                                Anuluj
+                            </Button>
+                            {isDeleted ? (
+                            <Button
+                                className='ms-4 flex items-center'
+                                disabled={loadingDestroy}
+                                color="red"
+                                onClick={()=>handleDestroy()}
+                            >
+                                <Trash2 size={24} className="pe-1"/>
+                                Usuń z bazy danych
+                            </Button>
+                            ):(
+                            <Button
+                                className='ms-4 flex items-center'
                                 disabled={loadingDel}
                                 color="red"
                                 onClick={()=>handleDelete()}
@@ -135,15 +198,7 @@ export default function Edit() {
                                 <Trash size={24} className="pe-1"/>
                                 Usuń
                             </Button>
-                            <Button
-                                className='ms-4 flex items-center'
-                                disabled={loadingDel}
-                                color="cyan"
-                                onClick={() => setDeletePopUp(false)}
-                            >
-                                <Undo2 size={24} className="pe-1"/>
-                                Anuluj
-                            </Button>
+                            )}
                         </div>
                     </Card.Body>
                 </Card>
@@ -163,15 +218,38 @@ export default function Edit() {
                         <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                         <div className='w-full flex justify-between items-center pt-4'>
                             <div>
+                                {isDeleted ? (
+                                <div className='flex flex-row gap-2'>
+                                <Button
+                                    className='flex items-center'
+                                    disabled={loadingPut || loadingRestore}
+                                    color="green"
+                                    onClick={() => handleRestore()}
+                                >
+                                    <ArchiveRestore size={24} className="pe-1"/>
+                                    Przywróć
+                                </Button>
+                                <Button
+                                    className='flex items-center'
+                                    disabled={loadingPut || loadingRestore}
+                                    color="red"
+                                    onClick={() => setDeletePopUp(true)}
+                                >
+                                    <Trash2 size={24} className="pe-1"/>
+                                    Usuń z bazy danych
+                                </Button>
+                                </div>
+                                ):(
                                 <Button
                                     className='me-4 flex items-center'
-                                    disabled={loadingPut}
+                                    disabled={loadingPut || loadingRestore}
                                     color="red"
                                     onClick={() => setDeletePopUp(true)}
                                 >
                                     <Trash size={24} className="pe-1"/>
                                     Usuń
                                 </Button>
+                                )}
                             </div>
                             <div className='flex justify-between items-center gap-2'>
                                 {loadingPut && (
@@ -179,7 +257,7 @@ export default function Edit() {
                                 )}
                                 <Button
                                     className='flex items-center'
-                                    disabled={loadingPut}
+                                    disabled={loadingPut || loadingRestore}
                                     type="submit"
                                     color="yellow"
                                 >
@@ -189,7 +267,7 @@ export default function Edit() {
                                 <Button
                                 onClick={() => navigate(-1)}
                                     className='flex items-center'
-                                    disabled={loadingPut}
+                                    disabled={loadingPut || loadingRestore}
                                     color="sky"
                                 >
                                     <Undo2 size={24} className="pe-1"/>

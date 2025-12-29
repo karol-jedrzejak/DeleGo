@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { Input, Select, Line } from '@/components';
+import { Input, Line } from '@/components';
 
 import type { FormPropsType } from '@/models/Employee.tsx';
 

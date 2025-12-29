@@ -5,7 +5,7 @@ export const employeeService = {
     create: (parent_id: string) => `company/${parent_id}/employee`,
     update: (id: string) => `/employee/${id}`,
     deactivate: (id: string) => `/employee/${id}`,
-    restore: (id: string) => `/employee/${id}/ restore`,
+    restore: (id: string) => `/employee/${id}/restore`,
     destroy: (id: string) => `/employee/${id}/destroy`,
   },
 };

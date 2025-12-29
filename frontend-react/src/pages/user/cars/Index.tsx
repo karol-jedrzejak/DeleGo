@@ -106,7 +106,9 @@ const Index = () => {
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="brand"/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="model"/>
                                 <th></th>
-                                <th></th>
+                                {authData.hasPermission('admin','admin') && (
+                                    <th></th>
+                                )}
                                 <th></th>
                             </tr>
                         </thead>
@@ -125,7 +127,7 @@ const Index = () => {
                                     <td className="p-2">{item.brand}</td>
                                     <td className="p-2">{item.model}</td>
                                     <td className="p-2">
-                                        {item.active ? (
+                                        {!item.deleted_at ? (
                                             <span className="p-2 rounded-md bg-green-300 text-black">Tak</span>
                                         ) : (
                                             <span className="p-2 rounded-md bg-red-300 text-black">Nie</span>

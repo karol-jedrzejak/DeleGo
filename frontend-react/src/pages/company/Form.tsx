@@ -7,7 +7,7 @@ import { MessageContext } from "@/providers/MessageProvider.js";
 // Komponenty UI //
 
 import { LocateFixed,Map } from "lucide-react";
-import { Input, Button , Select, Line } from '@/components';
+import { Input, Button , Line } from '@/components';
 
 // Model //
 
