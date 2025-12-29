@@ -116,13 +116,11 @@ const Index = () => {
                             {/*  Rekordy */}                     
                             {items?.map( (item,key) => (
                                 <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
-                                            key % 2 === 0
-                                            ? "bg-gray-100 dark:bg-neutral-900/50"
-                                            : "bg-white dark:bg-neutral-800"
-                                        } ${
                                             item.deleted_at
                                             ? " text-red-700 dark:text-red-500 bg-gray-400 dark:bg-neutral-950"
-                                            : ""
+                                            : (key % 2 === 0
+                                            ? "bg-gray-100 dark:bg-neutral-900/50"
+                                            : "bg-white dark:bg-neutral-800")
                                         }`}>
                                     <td className="p-2">
                                         {item.deleted_at ? 

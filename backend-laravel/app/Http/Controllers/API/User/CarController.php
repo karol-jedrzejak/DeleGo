@@ -18,7 +18,6 @@ class CarController extends Controller
     {
         $this->authorizeResource(Car::class,'car');
     }
-    
 
     /**
      * Display a listing of the resource.
@@ -32,11 +31,10 @@ class CarController extends Controller
 
         // razem z modelem user jeśli admin
         if ($user->isAdmin()) {
-            $query->with('user');
+            $query->with('user')->withTrashed();
         } else{
             $query->where('user_id', $user->id);
         }
-
         $cars = $query->paginate($request->query('perPage', 10))
                     ->withPath('');
         return response()->json($cars);

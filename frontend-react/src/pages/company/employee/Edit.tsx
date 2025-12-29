@@ -164,7 +164,7 @@ export default function Edit() {
                         <span>Potwierdź</span>
                     </Card.Header>
                     <Card.Body>
-                        <div>Czy na pewno chcesz usunąć tego pracownika? Operacji nie da się cofnąć.</div>
+                        <div>Czy na pewno chcesz usunąć tego pracownika ?</div>
                         <div className='flex justify-end items-center pt-4'>
                             {loadingDel && (
                                 <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
