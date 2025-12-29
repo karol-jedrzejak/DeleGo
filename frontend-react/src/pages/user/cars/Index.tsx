@@ -6,7 +6,7 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
-import { SquarePlus,SquarePen } from "lucide-react";
+import { SquarePlus,SquarePen,Trash2 } from "lucide-react";
 import { Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading } from '@/components';
 
 // Model //
@@ -17,7 +17,7 @@ import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/mode
 // API //
 
 import { useBackend } from "@/hooks/useLaravelBackend";
-import { carService } from "@/api/services/backend/car/car.service";
+import { carService } from "@/api/services/backend/user/car.service";
 
 import type { SearchType,SortType } from '@/api/queryParams/types'
 import type { PaginatedDataResponse,PaginationData } from "@/api/response/types";
@@ -95,7 +95,6 @@ const Index = () => {
                                 <HeaderSorting sort={sort} setSort={setSort} variable_name="registration_number" text="Nr. Rejestracyjny" />                                
                                 <HeaderSorting sort={sort} setSort={setSort} variable_name="brand" text="Marka" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_name="model" text="Model" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="active" text="Aktywny" />
                                 {authData.hasPermission('admin','admin') && (
                                     <HeaderSorting sort={sort} setSort={setSort} variable_name="user" text="Użytkownik" />
                                 )}
@@ -105,7 +104,6 @@ const Index = () => {
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="registration_number"/> 
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="brand"/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="model"/>
-                                <th></th>
                                 {authData.hasPermission('admin','admin') && (
                                     <th></th>
                                 )}
@@ -119,21 +117,22 @@ const Index = () => {
                             {/*  Rekordy */}                     
                             {items?.map( (item,key) => (
                                 <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
-                                            key % 2 === 0
-                                            ? "bg-gray-100 dark:bg-neutral-900/50"
-                                            : "bg-white dark:bg-neutral-800"
-                                        }`}>
-                                    <td className="p-2">{item.registration_number}</td>
+                                        item.deleted_at
+                                        ? " text-red-700 dark:text-red-500 bg-gray-400 dark:bg-neutral-950"
+                                        : (key % 2 === 0
+                                        ? "bg-gray-100 dark:bg-neutral-900/50"
+                                        : "bg-white dark:bg-neutral-800")
+                                    }`}>
+                                    <td className="p-2">
+                                        {item.deleted_at ? 
+                                        <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.registration_number}</span></div>
+                                        : 
+                                        <>{item.registration_number}</>
+                                        }
+                                    </td>
                                     <td className="p-2">{item.brand}</td>
                                     <td className="p-2">{item.model}</td>
-                                    <td className="p-2">
-                                        {!item.deleted_at ? (
-                                            <span className="p-2 rounded-md bg-green-300 text-black">Tak</span>
-                                        ) : (
-                                            <span className="p-2 rounded-md bg-red-300 text-black">Nie</span>
-                                            )}
-                                    </td>
-                                    {authData.hasPermission('admin','admin') && (
+                                     {authData.hasPermission('admin','admin') && (
                                         <td className="p-2">{item.user?.name} {item.user?.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">

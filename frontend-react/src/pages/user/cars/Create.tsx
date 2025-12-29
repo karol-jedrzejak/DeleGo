@@ -17,7 +17,7 @@ import Form from './Form.tsx';
 // API //
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
-import { carService } from '@/api/services/backend/car/car.service.ts';
+import { carService } from '@/api/services/backend/user/car.service.ts';
 
 // USERS //
 import UserSelect from '@/features/user/components/UserSelect.tsx';
@@ -44,7 +44,7 @@ export default function Create() {
     };
 
     /*  
-    GDby domyślny nie miał byż brak wyboru
+    Gdyby domyślny nie miał by brak wyboru
     useEffect(() => {
     if (users && users.length > 0) {
         handleUserChange(users[0].id);
