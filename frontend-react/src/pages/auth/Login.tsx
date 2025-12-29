@@ -5,7 +5,7 @@ import logo from "@/assets/logos/app_logo.svg"
 
 import axiosLaravelBackend from '@/api/axiosInstances/axiosLaravelBackend.js'
 
-import { Input, Button } from '@/components';
+import { Input, Button ,Spinner } from '@/components';
 
 import { AuthContext } from "@/providers/AuthProvider.js";
 
@@ -93,7 +93,7 @@ export default function Login() {
                         type="submit"
                     >Zaloguj</Button>
                     {loading && (
-                        <div className="loader w-5 h-5 border-[3px] border-(--app_color) dark:border-(--app_color)"></div>
+                        <Spinner/>
                     )}
                 </div>
             </form>

@@ -5,7 +5,7 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 // Komponenty UI //
 
 import { SquarePlus,Undo2 } from "lucide-react";
-import { Card, Button,Error,Loading} from '@/components';
+import { Card, Button,Error,Loading,Spinner} from '@/components';
 
 // Model //
 
@@ -93,7 +93,7 @@ export default function Create() {
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>
                         {loading && (
-                            <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                            <Spinner/>
                         )}
                         <Button
                             className='mx-4 flex items-center'

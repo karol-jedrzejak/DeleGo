@@ -6,7 +6,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 // Komponenty UI //
 
 import { Search,SquarePlus,SquarePen,Mail,Phone , Trash2} from "lucide-react";
-import { Loading, Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading } from '@/components';
+import { Loading, Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading,Spinner } from '@/components';
 
 import { Buttons as ParentButtons } from '@/features/company/components/Buttons';
 
@@ -115,7 +115,7 @@ const Index = () => {
                         </div>
                         ):(
                             <div className="p-4 w-full flex justify-center items-center ">
-                                <div className="loader w-10 h-10 border-[5px] border-black dark:border-yellow-300"></div>
+                                <Spinner/>
                             </div>
                         )}
                         <table className="table-auto w-full">

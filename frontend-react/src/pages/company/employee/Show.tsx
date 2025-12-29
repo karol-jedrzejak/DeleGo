@@ -205,10 +205,6 @@ const Show = () => {
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Aktywny/a:</td>
-                                        <td className="p-2">{item.active ? (<>Tak</>):(<>Nie</>)}</td>
-                                    </tr>
-                                    <tr className="custom-table-row">
                                         <td className="p-2">Firma - Nazwa:</td>
                                         <td className="p-2 flex items-center">
                                             <div>{parent.name_short}</div>                         

@@ -7,7 +7,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 // Komponenty UI //
 
 import { Search,Map } from "lucide-react";
-import { Button } from '@/components';
+import { Button ,Spinner } from '@/components';
 
 // Utilities //
 
@@ -48,7 +48,7 @@ export const Buttons = ({ company }: ButtonsProps) => {
         </div>
         ) :(
           <>
-            <div className="loader w-5 h-5 border-[3px] border-(--app_color_second) dark:border-(--app_color_first) pb-2"></div>
+            <Spinner/>
           </>
         )
       }

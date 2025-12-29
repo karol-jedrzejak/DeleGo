@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom"
 // Komponenty UI //
 
 import { SquarePlus,Undo2 } from "lucide-react";
-import { Card, Button,Error, Loading} from '@/components';
+import { Card, Button,Error, Loading,Spinner} from '@/components';
 
 import { Buttons as ParentButtons } from '@/features/company/components/Buttons.tsx';
 
@@ -85,7 +85,7 @@ export default function Create() {
                 <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                 <div className='w-full flex justify-end items-center pt-4 gap-2'>
                     {loadingItem && (
-                        <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                        <Spinner/>
                     )}
                     <Button
                         className='flex items-center'

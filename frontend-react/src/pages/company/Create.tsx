@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 // Komponenty UI //
 
 import { SquarePlus,Undo2 } from "lucide-react";
-import { Card, Button,Error} from '@/components';
+import { Card, Button,Error,Spinner} from '@/components';
 
 // Model //
 
@@ -64,7 +64,7 @@ export default function Create() {
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4 gap-2'>
                         {loading && (
-                            <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                            <Spinner/>
                         )}
                         <Button
                             className='flex items-center'

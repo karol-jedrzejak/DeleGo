@@ -6,7 +6,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 // Komponenty UI //
 
 import { ArchiveRestore,SquarePen,Undo2,Trash,Trash2 } from "lucide-react";
-import { Card, Button, Loading, Error, PopUp } from '@/components';
+import { Card, Button, Loading, Error, PopUp,Spinner } from '@/components';
 
 // Model //
 
@@ -142,7 +142,7 @@ export default function Edit() {
                             <div>Czy na pewno chcesz usunąć tę firmę?</div>
                             <div className='flex justify-end items-center pt-4'>
                                 {loadingDel && (
-                                    <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                                    <Spinner/>
                                 )}
                                 <Button
                                     className='ms-4 flex items-center'
@@ -228,7 +228,7 @@ export default function Edit() {
                                 </div>
                                 <div className='flex justify-between items-center gap-2'>
                                     {loadingPut && (
-                                        <div className="loader w-5 h-5 border-[3px] border-black dark:border-yellow-300"></div>
+                                        <Spinner/>
                                     )}
                                     <Button
                                         className='flex items-center'
