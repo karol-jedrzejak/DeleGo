@@ -5,7 +5,7 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 // Komponenty UI //
 
 import { SquarePlus,Undo2 } from "lucide-react";
-import { Card, Button,Error} from '@/components';
+import { Card, Button,Error,Loading} from '@/components';
 
 // Model //
 
@@ -70,6 +70,8 @@ export default function Create() {
     // Wyświetlanie błędów
     // -------------------------------------------------------------------------- //
 
+    if(loadingUsers) { return <Loading/>; }
+
     if(errorUsers) { return <Error><Error.Text type={errorUsers.type}>{errorUsers.text}</Error.Text></Error>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
 
@@ -86,7 +88,7 @@ export default function Create() {
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>
                     {authData.hasPermission('admin','admin') && (
-                        <UserSelect items={users} value={formData.user_id} loading={loadingUsers} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
+                        <UserSelect items={users} value={formData.user_id} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
                     )}
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>

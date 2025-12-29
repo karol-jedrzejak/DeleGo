@@ -7,7 +7,6 @@ import { Select } from '@/components';
 import type { ItemsType } from "@/models/User";
 
 type Props = {
-    loading: boolean,
     items: ItemsType | null;
     value?: number | undefined;
     onChange: (id: string) => void;
@@ -15,11 +14,11 @@ type Props = {
     noneText?: string;
 };
 
-export default function UserSelect({ items, value, onChange, loading, disabled=false, noneText}:Props) {
+export default function UserSelect({ items, value, onChange, disabled=false, noneText}:Props) {
 
     return (
         <>
-            {(!loading && items) ? (
+            {items && (
                 <Select
                     label="Wybierz usera:"   
                     name="user_id"
@@ -36,10 +35,6 @@ export default function UserSelect({ items, value, onChange, loading, disabled=f
                         >{item_selection.name} {item_selection.surname} [id={item_selection.id}]</option>
                     ))}
                 </Select>
-            ):(
-                <div className="w-full flex items-center justify-center p-4">
-                    <div className='pe-2 text-(--app_color) font-semibold'>ŁADOWANIE UŻYTKOWNIKÓW</div><div className="loader w-10 h-10 border-[5px] border-(--app_color) dark:border-(--app_color)"></div>
-                </div>
             )}
         </>
     );

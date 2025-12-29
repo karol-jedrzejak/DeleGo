@@ -206,7 +206,7 @@ export default function Edit() {
                     <Card.Body>
                         <form onSubmit={handleUpdate} className='w-full'>
                             {authData.hasPermission('admin','admin') && (
-                                <UserSelect items={users} value={formData.user_id} loading={loadingUsers} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
+                                <UserSelect items={users} value={formData.user_id} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
                             )}
                             <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                             <div className='w-full flex justify-between items-center pt-4'>

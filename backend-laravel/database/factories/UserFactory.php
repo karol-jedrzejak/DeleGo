@@ -32,15 +32,31 @@ class UserFactory extends Factory
             null
         ];
 
+        $firstName = fake()->firstName();
+        $lastName  = fake()->lastName();
+
+        $baseEmail = Str::lower(
+            Str::ascii($firstName . '.' . $lastName)
+        );
+
+        $email = $baseEmail . '@gmail.com';
+
+        // 🔁 sprawdzaj unikalność w DB
+        $counter = 1;
+        while (\App\Models\User::where('email', $email)->exists()) {
+            $email = $baseEmail . $counter . '@gmail.com';
+            $counter++;
+        }
+
         return [
-            'name' => fake()->firstName(),
-            'surname' => fake()->lastName(),
+            'name' => $firstName,
+            'surname' => $lastName,
             'position' => fake()->randomElement($titles),
             'phone_mobile' => fake()->e164PhoneNumber(),
             'phone_landline' => fake()->phoneNumber(),
             'academic_titles_before' => fake()->randomElement(['mgr. inż.', 'inż',null]),
             'academic_titles_after' => fake()->randomElement(['(IWE)', '(EWE)', null]),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $email,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
