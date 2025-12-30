@@ -106,5 +106,4 @@ class Company extends BaseModel
     {
         return $this->employees()->exists();
     }
-
 }

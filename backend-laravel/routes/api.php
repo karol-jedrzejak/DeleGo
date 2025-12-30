@@ -9,12 +9,17 @@ use App\Http\Controllers\API\News\NewsController;
 use App\Http\Controllers\API\Company\CompanyController;
 use App\Http\Controllers\API\Company\EmployeeController;
 use App\Http\Controllers\API\User\CarController;
+use App\Http\Controllers\API\Delegation\DelegationController;
 
 // Authentication
 Route::prefix('v1')->group(function () {
 
     Route::post('register', [AuthenticationController::class, 'register']);
     Route::post('login', [AuthenticationController::class, 'login']);
+
+
+    Route::apiResource('delegation', DelegationController::class);
+
 
 
     Route::middleware('auth:sanctum')->group(function () {

@@ -13,26 +13,27 @@ return new class extends Migration
     {
         Schema::create('delegations', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedInteger('number');
+            $table->unsignedSmallInteger('year');
+
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->foreignId('car_id')->nullable()->constrained('cars');
 
+            $table->foreignId('company_id')->nullable()->constrained('companies');
+            $table->string('custom_address')->nullable();
+
             $table->text('description');
-
-            $table->integer('distance');
-
-            $table->float('hotel', 7, 2)->nullable();
-            $table->float('highways', 7, 2)->nullable();
-            $table->float('fuel', 7, 2)->nullable();
-            $table->float('travel_costs', 7, 2)->nullable();
-            $table->float('advance_cash', 7, 2)->nullable();
+            $table->integer('total_distance');
 
             $table->dateTime('departure');
             $table->dateTime('return');
 
-            $table->boolean('paid');
+            $table->boolean('settled');
 
             $table->timestamps();
+
+            $table->unique(['number', 'year']);
         });
     }
 
