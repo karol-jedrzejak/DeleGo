@@ -78,7 +78,7 @@ function HeaderSearch({ search, setSearch, setPage, variable_name, text = "Wyszu
                             placeholder={text}
                             disabled={search.search !== null}
                             className={
-                                `font-normal w-full px-3 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-(--app_color) `
+                                `font-normal w-full px-3 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 `
                                 +( search.search ?
                                     `text-gray-500 dark:text-gray-500 border-gray-400 dark:border-gray-200 bg-neutral-300` :
                                     'text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-white')

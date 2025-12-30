@@ -221,7 +221,7 @@ const UserPermission = () => {
                     <div key={key}>
                       { department != "admin" &&
                         <div>
-                          <div className="text-xl border-b text-(--app_color) border-(--app_color) dark:text-(--app_color) dark:border-(--app_color) py-2 font-semibold">{department}</div>
+                          <div className="text-xl border-b text-sky-800 border-sky-800 dark:text-sky-500 dark:border-sky-500 py-2 font-semibold">{department}</div>
                           <ul>
                             {Object.entries(resources).map(([resource, level],key) => (
                               <li key={key}>

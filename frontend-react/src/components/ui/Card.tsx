@@ -6,14 +6,14 @@ type Props = {
 const Card = ({ children,className="" }: Props) => {
 
   return (
-    <div className={className+` rounded-md shadow-md dark:ring dark:ring-neutral-950 m-2 bg-white dark:bg-neutral-800 dark:text-neutral-100`}>
+    <div className={className+` shadow-md dark:ring dark:ring-neutral-900 m-2 bg-white dark:bg-neutral-800 dark:text-white`}>
       {children}
     </div>
     );
 };
 
 Card.Header = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-(--app_color) rounded-t-md text-black py-2 px-4">{children}</div>
+  <div className="bg-slate-300 dark:bg-sky-950 text-black dark:text-white py-2 px-4">{children}</div>
 )
 
 Card.Body = ({ children }: { children: React.ReactNode }) => (

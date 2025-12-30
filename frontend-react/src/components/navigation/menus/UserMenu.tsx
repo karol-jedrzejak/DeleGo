@@ -1,56 +1,57 @@
 import { useContext } from "react";
-import { User,ShieldUser } from "lucide-react";
+import {LogOut,Car, User } from "lucide-react";
 import NavMenuTemplate from "./Template.js";
 import { ROUTES } from "@/routes/Routes.tsx"
-import { AuthContext } from "@/providers/AuthProvider.js";
+import { Sun, Moon } from "lucide-react";
+import { ThemeContext } from "@/providers/ThemeProvider.js"; 
+import { Link } from "react-router-dom"
 
 const UserMenu = () => {
-  const authData = useContext(AuthContext);
- 
-  const user_menu = {
-    title: "Użytkownik",
-    options: [
-      {
-        title: "Auta",
-        link: ROUTES.USER.CARS.INDEX.LINK,
-        sub_options: [],
-      },
-      {
-        title: "Wyloguj",
-        link: ROUTES.AUTH.LOGOUT.LINK,
-        sub_options: [],
-      }
-    ]
-  }
+  const { darkTheme, changeTheme } = useContext(ThemeContext);
 
-  const admin_menu = {
+  const menu = {
     title: "Użytkownik",
     options: [
       {
         title: "Auta",
         link: ROUTES.USER.CARS.INDEX.LINK,
-        sub_options: [],
-      },
-      {
-        title: "Uprawnienia",
-        link: ROUTES.ADMIN.USER_PERMISSIONS.LINK,
-        sub_options: [],
-      },
-      {
-        title: "Wyloguj",
-        link: ROUTES.AUTH.LOGOUT.LINK,
-        sub_options: [],
+        icon: Car,
       }
     ]
   }
 
   return (
-    <NavMenuTemplate menu={authData.hasPermission('admin','admin') ? admin_menu : user_menu}>
-        {authData.hasPermission('admin','admin') ?(
-          <ShieldUser size={20} className="pe-1 drop-shadow-xs drop-shadow-black" />
-        ):(
-          <User size={20} className="pe-1 drop-shadow-xs drop-shadow-black" />
-        )}
+    <NavMenuTemplate
+      menu={menu}
+      special={
+      <>
+        {/*  THEME CHANGE */}
+        <button
+          onClick={changeTheme}
+          className={'px-1 py-1 rounded cursor-pointer flex items-center group '
+            + 'text-neutral-600 hover:text-sky-950 '
+            + 'hover:bg-slate-200 '
+            + 'dark:text-neutral-400 dark:hover:text-white '
+            + 'dark:hover:bg-sky-900 '}
+        >
+          {darkTheme ? <Sun size={18}  className="w-4"/> : <Moon size={18} className="w-4" />}
+          <span className="ps-2 font-normal text-sm">Przełącz Tryb</span>
+        </button>
+        {/*  LOGOUT */}
+        <Link 
+          to={ROUTES.AUTH.LOGOUT.LINK}
+          className={'px-1 py-1 rounded cursor-pointer flex items-center group '
+            + 'text-neutral-600 hover:text-sky-950 '
+            + 'hover:bg-slate-200 '
+            + 'dark:text-neutral-400 dark:hover:text-white '
+            + 'dark:hover:bg-sky-900'}
+        >
+          <LogOut size={18}  className="w-4"/>
+          <span className="ps-2 font-normal text-sm">Wyloguj</span>
+        </Link >
+      </>
+      }>
+      <User size={16} className="w-4"/>
     </NavMenuTemplate>
   );
 };

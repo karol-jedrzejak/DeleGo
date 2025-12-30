@@ -29,7 +29,7 @@ const Select = ({
                 <select
                     name={name}
                     autoComplete={autoComplete}
-                    className={`custom-select my-2 px-3 py-2 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-white rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-(--app_color) ${classNameInput}`}
+                    className={`custom-select my-2 px-3 py-2 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-white rounded-md focus:outline-none shadow-md focus:ring-1 focus:ring-sky-600 ${classNameInput}`}
                     {...props}
                 >
                     {children}

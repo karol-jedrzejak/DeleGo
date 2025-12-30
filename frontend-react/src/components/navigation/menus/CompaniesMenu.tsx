@@ -10,14 +10,14 @@ const NewsMenu = () => {
       {
         title: "Lista",
         link: ROUTES.COMPANY.INDEX.LINK,
-        sub_options: [],
+        icon: Building2,
       }
     ]
   }
 
   return (
     <NavMenuTemplate menu={menu}>
-        <Building2 size={20} className="pe-1 drop-shadow-xs drop-shadow-black" />
+        <Building2 size={16} className="w-4"/>
     </NavMenuTemplate>
   );
 };

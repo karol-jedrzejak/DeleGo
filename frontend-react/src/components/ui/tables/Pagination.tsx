@@ -37,12 +37,12 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
 
     let active = 
         "w-8 h-8 flex justify-center items-center cursor-pointer border "+
-        "border-neutral-300 hover:bg-(--app_color) "+
-        "dark:hover:bg-neutral-700 dark:border-white/10";
+        "border-neutral-300 hover:bg-sky-400 "+
+        "dark:hover:bg-sky-500/75 dark:border-white/10";
     let current = 
         "w-8 h-8 flex justify-center items-center cursor-pointer border "+
-        "border-neutral-300 bg-(--app_color_second) hover:bg-(--app_color) "+
-        "dark:bg-(--app_color_second)/50 dark:hover:bg-(--app_color_second)/75 dark:border-white/10";
+        "border-neutral-300 bg-sky-600 hover:bg-sky-400 "+
+        "dark:bg-sky-800/50 dark:hover:bg-sky-500/75 dark:border-white/10";
     let inactive = 
         "w-8 h-8 flex justify-center items-center border "+
         "border-neutral-300 text-neutral-500 bg-neutral-200 "+
@@ -72,7 +72,7 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
                         onChange={handleChange}
                         name="perPage"
                         id="perPage"
-                        className="custom-select w-[60px] m-2 px-2 py-1 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-neutral-100 rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-(--app_color_dark)">
+                        className="custom-select w-[60px] m-2 px-2 py-1 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-neutral-100 rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-800">
                         <option value="10">10   </option>
                         <option value="25">25   </option>
                         <option value="50">50   </option>

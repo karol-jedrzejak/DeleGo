@@ -26,11 +26,13 @@ function Body() {
                         </>
                     ) :(
                         <>
-                            <div className='min-h-screen flex flex-col relative'>
+                            <div className='min-h-screen flex flex-row relative'>
                                 <Navbar/>
-                                <MessageProvider>
-                                    <BodyRouter/>
-                                </MessageProvider>
+                                <div className="min-h-screen w-full flex flex-col">
+                                    <MessageProvider>
+                                        <BodyRouter/>
+                                    </MessageProvider>
+                                </div>
                             </div>
                         </>
                     )}

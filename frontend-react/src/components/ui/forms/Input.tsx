@@ -41,7 +41,7 @@ const Input = ({
 
                         placeholder={placeholder}
                         autoComplete={autoComplete}
-                        className={`my-2 px-3 py-2 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white focus:outline-none shadow-md focus:ring-3 focus:ring-(--app_color) ${classNameInput}` + (unit ? (" rounded-s-md text-right") :(" rounded-md"))}
+                        className={`my-2 px-3 py-2 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ${classNameInput}` + (unit ? (" rounded-s-md text-right") :(" rounded-md"))}
                     />
                     <>
                     {unit ? (<span className="my-2 px-3 py-2 text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-neutral-300 rounded-e-md border-y border-e">{unit}</span>) : (<></>)}

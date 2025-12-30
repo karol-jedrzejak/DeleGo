@@ -46,7 +46,7 @@ function HeaderSearchMeany({ search, setSearch, setPage }: Props) {
             onChange={handleSearchMeany}
             placeholder="Wyszukaj"
             className={
-                `font-normal w-48 px-3 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-(--app_color) `
+                `font-normal w-48 px-3 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 `
                 +( search.searchBy !== null && search.searchBy.length > 0?
                     `text-gray-500 dark:text-gray-500 border-gray-400 dark:border-gray-200 bg-neutral-300` :
                     'text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-white')

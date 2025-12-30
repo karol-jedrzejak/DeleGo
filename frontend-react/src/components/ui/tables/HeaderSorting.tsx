@@ -87,7 +87,7 @@ function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
                     <button
                     className={`bg-neutral-100 dark:bg-neutral-700 border rounded-md p-2 flex-1 me-2 cursor-pointer text-left `
                         + (sort.find(item => item.sortBy === variable_name) ?
-                        `border-(--app_color)`:
+                        `border-sky-600`:
                         `border-neutral-500`)}
                     onClick={(e) => handleSort(e,{
                             sortBy: variable_name,
@@ -101,7 +101,7 @@ function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
                                 sortDir: 'asc',
                             })}
                             className={`cursor-pointer ` + (sort.find(item => item.sortBy === variable_name)?.sortDir === "asc" ?
-                            `text-(--app_color) hover:text-(--app_color_light) dark:text-(--app_color) dark:hover:text-(--app_color_light)`:
+                            `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500`:
                             `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>▲
                         </button>
                         <button
@@ -110,7 +110,7 @@ function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
                                 sortDir: 'desc',
                             })}
                             className={`cursor-pointer ` + (sort.find(item => item.sortBy === variable_name)?.sortDir === "desc" ?
-                            `text-(--app_color) hover:text-(--app_color_light) dark:text-(--app_color) dark:hover:text-(--app_color_light)`:
+                            `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500`:
                             `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>▼
                         </button>
                     </div>

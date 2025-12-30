@@ -6,10 +6,6 @@
   font-weight: 300;
   font-style: normal;
   font-size: 1rem;
-  --app_color_light: #9cc2ff;
-  --app_color: #4089ff;
-  --app_color_second: #1351b6;
-  --app_color_third: #4AAA28;
 }
 
 @theme {
@@ -51,5 +47,5 @@
 }
 
 .custom-table-row {
-  @apply border-t border-neutral-600 even:bg-white odd:bg-gray-100 odd:dark:bg-neutral-900/50 even:dark:bg-neutral-800;
+  @apply border-t border-neutral-900 even:bg-white odd:bg-neutral-200 odd:dark:bg-neutral-900/50 even:dark:bg-neutral-800;
 }
