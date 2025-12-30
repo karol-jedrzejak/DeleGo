@@ -14,7 +14,7 @@ const Navbar = () => {
       
       {/* MOBILE BAR */}
       <div className="lg:hidden w-full flex flex-row justify-between">
-        <img src={logo} className="w-28 "/>
+        <img src={logo} className="w-28"/>
         <button
           onClick={() => setMobileOpen(true)}
           className="p-2 cursor-pointer text-neutral-500 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
@@ -33,7 +33,7 @@ const Navbar = () => {
               aria-label="Close menu"
               className="p-2 cursor-pointer text-neutral-500 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
             >
-              <X className="text-black dark:text-white" size={20}/>
+              <X size={20}/>
             </button>
           </div>
 
@@ -46,7 +46,9 @@ const Navbar = () => {
 
       {/* DESKTOP */}
       <div className="hidden lg:flex flex-col items-left gap-2">
-        <img src={logo} className="w-28 "/>
+        <div className="w-full flex justify-center items-center pb-2">
+          <img src={logo} className="w-32 "/>
+        </div>
         <Menu/>
       </div>
     </div>
