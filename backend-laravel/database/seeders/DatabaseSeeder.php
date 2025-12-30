@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CompanySeeder::class,
             CarSeeder::class,
+            DelegationBillTypeSeeder::class,
+            DelegationSeeder::class,
         ]);
     }
 }

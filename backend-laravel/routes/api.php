@@ -17,11 +17,6 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [AuthenticationController::class, 'register']);
     Route::post('login', [AuthenticationController::class, 'login']);
 
-
-    Route::apiResource('delegation', DelegationController::class);
-
-
-
     Route::middleware('auth:sanctum')->group(function () {
 
         // Auth
@@ -32,6 +27,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('car', CarController::class)->middleware('permission:misc,cars,1');
         Route::put('car/{id}/restore', [CarController::class, 'restore'])->middleware('permission:admin,admin,1');
         Route::delete('car/{id}/destroy', [CarController::class, 'forceDelete'])->middleware('permission:admin,admin,1');
+
+        // Delegations
+        Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
 
         // Admin
         Route::get('admin/users', [AuthenticationController::class, 'users_info'])->middleware('permission:admin,admin,1');
@@ -49,6 +47,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('company.employee', EmployeeController::class)->middleware('permission:sales,employees,1')->shallow();
         Route::put('employee/{id}/restore', [EmployeeController::class, 'restore'])->middleware('permission:admin,admin,1');
         Route::delete('employee/{id}/destroy', [EmployeeController::class, 'forceDelete'])->middleware('permission:admin,admin,1');
+
+
+
 
     });
 

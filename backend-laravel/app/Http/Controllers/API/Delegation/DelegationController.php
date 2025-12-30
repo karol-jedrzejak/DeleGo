@@ -4,16 +4,50 @@ namespace App\Http\Controllers\API\Delegation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Delegation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+use App\Http\Resources\DelegationResource;
 
 class DelegationController extends Controller
 {
+    use AuthorizesRequests;
+    public function __construct()
+    {
+        $this->authorizeResource(Delegation::class,'delegation');
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return "test";
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $query = Delegation::filter($request);
+
+        // razem z modelem user jeśli admin
+        if ($user->isAdmin()) {
+            $query->with('user');
+        } else{
+            $query->where('user_id', $user->id);
+        }
+
+        // Z submodelami
+        $query->with([
+            'car:id,registration_number,brand,model',
+            'company:id,name_short',
+            'delegationTrips',
+        ]);
+
+        // delegationBills razem z type
+        $query->with('delegationBills.delegationBillType');
+
+        $items = $query->paginate($request->query('perPage', 10));
+
+        return DelegationResource::collection($items)->withPath('');
     }
 
     /**

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('custom_address')->nullable();
 
             $table->text('description');
-            $table->integer('total_distance');
+            $table->integer('total_distance')->nullable();
 
             $table->dateTime('departure');
             $table->dateTime('return');

@@ -30,6 +30,10 @@ class PermissionTypeSeeder extends Seeder
             [
                 'resource' => 'cars',
                 'department' => 'misc'
+            ],
+            [
+                'resource' => 'delegations',
+                'department' => 'misc'
             ]
         ];
 

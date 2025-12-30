@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Filters\BaseFilter;
+use BaseFilter as GlobalBaseFilter;
 
 trait Filterable
 {

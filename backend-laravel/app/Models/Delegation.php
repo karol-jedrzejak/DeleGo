@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Models\Traits\Filterable;
+
 class Delegation extends Model
 {
     /** @use HasFactory<\Database\Factories\DelegationFactory> */
     use HasFactory;
 
     protected $fillable = [
+        'number',
+        'year',
         'user_id',
         'car_id',
         'company_id',
@@ -21,13 +25,13 @@ class Delegation extends Model
         'total_distance',
         'departure',
         'return',
-        'settled',
+        'settled'
     ];
 
     protected $attributes = [
-        'number' => 1,
-        'year' => date('Y'),
-        'user_id' => 1,
+        'number' => null,
+        'year' => null,
+        'user_id' => null,
         'car_id' => null,
         'company_id' => null,
         'custom_address' => null,
@@ -35,7 +39,7 @@ class Delegation extends Model
         'total_distance' => 0,
         'departure' => null,
         'return' => null,
-        'settled' => false,
+        'settled' => false
     ];
 
     // --------------------------------------------------------- //
@@ -66,4 +70,27 @@ class Delegation extends Model
     {
         return $this->hasMany(DelegationTrip::class);
     }
+
+    // --------------------------------------------------------- //
+    // Sortowanie i wyszukiwanie
+    // --------------------------------------------------------- //
+
+    use Filterable;
+
+    public static array $sortable = [
+        'number',
+        'year',
+        'company.name',
+        'custom_address',
+        'description',
+        'departure',
+        'return',
+        'settled'
+    ];
+
+    public static array $searchable = [
+        'custom_address',
+        'description',
+        'company.name',
+    ];
 }

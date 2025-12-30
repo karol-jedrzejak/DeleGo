@@ -26,68 +26,118 @@ class BaseFilter
         return $query;
     }
 
+    /* -------------------------------------------------
+     | SEARCH
+     |--------------------------------------------------*/
+
     protected function applySearch(Builder $query): void
     {
         $search = $this->request->query('search');
         $searchBy = $this->request->query('searchBy');
-        
-        if($searchBy && !$search && count($this->searchable))
-        {
+
+        // searchBy: konkretne pola
+        if (is_array($searchBy) && count($searchBy)) {
             $query->where(function ($q) use ($searchBy) {
-                foreach ($searchBy as $column => $search) {
-                    $q->Where($column, 'LIKE', "%{$search}%");
+                foreach ($searchBy as $column => $value) {
+                    $this->applyWhere($q, $column, $value);
                 }
             });
+            return;
         }
 
-        if ($search && !$searchBy && count($this->searchable)) {
+        // search: globalny
+        if ($search && count($this->searchable)) {
             $query->where(function ($q) use ($search) {
                 foreach ($this->searchable as $column) {
-                    $q->orWhere($column, 'LIKE', "%{$search}%");
+                    $this->applyOrWhere($q, $column, $search);
                 }
             });
         }
     }
 
+    protected function applyWhere(Builder $query, string $column, string $value): void
+    {
+        if (str_contains($column, '.')) {
+            [$relation, $field] = explode('.', $column, 2);
+
+            $query->whereHas($relation, function ($q) use ($field, $value) {
+                $q->where($field, 'LIKE', "%{$value}%");
+            });
+        } else {
+            $query->where($column, 'LIKE', "%{$value}%");
+        }
+    }
+
+    protected function applyOrWhere(Builder $query, string $column, string $value): void
+    {
+        if (str_contains($column, '.')) {
+            [$relation, $field] = explode('.', $column, 2);
+
+            $query->orWhereHas($relation, function ($q) use ($field, $value) {
+                $q->where($field, 'LIKE', "%{$value}%");
+            });
+        } else {
+            $query->orWhere($column, 'LIKE', "%{$value}%");
+        }
+    }
+
+    /* -------------------------------------------------
+     | SORT
+     |--------------------------------------------------*/
+
     protected function applySorting(Builder $query): void
     {
-        $sortByArray = $this->request->query('sortBy', 'id');
-        $sortDirArray = $this->request->query('sortDir', 'asc');
+        $sortByArray = $this->request->query('sortBy', ['id']);
+        $sortDirArray = $this->request->query('sortDir', ['asc']);
 
-        $length = count($sortByArray);
-        if($length == count($sortDirArray) && $length > 0 )
-        {
-            for ($i=0; $i < $length; $i++) { 
-                
-                if (!in_array($sortByArray[$i], $this->sortable)) {
-                    $sortByArray[$i] = 'id';
-                }
+        if (!is_array($sortByArray)) {
+            $sortByArray = [$sortByArray];
+        }
+        if (!is_array($sortDirArray)) {
+            $sortDirArray = [$sortDirArray];
+        }
 
-                if (!in_array(strtolower($sortDirArray[$i]), ['asc', 'desc'])) {
-                    $sortDirArray[$i] = 'asc';
-                }
+        foreach ($sortByArray as $i => $column) {
+            $dir = strtolower($sortDirArray[$i] ?? 'asc');
 
-                $query->orderBy($sortByArray[$i], $sortDirArray[$i]);
+            if (!in_array($column, $this->sortable)) {
+                continue;
             }
 
+            if (!in_array($dir, ['asc', 'desc'])) {
+                $dir = 'asc';
+            }
+
+            if (str_contains($column, '.')) {
+                // sort po relacji -> JOIN
+                [$relation, $field] = explode('.', $column, 2);
+                $this->applyRelationSort($query, $relation, $field, $dir);
+            } else {
+                $query->orderBy($column, $dir);
+            }
         }
+    }
 
-        /*    
-        Pojedynczy Sort
+    protected function applyRelationSort(
+        Builder $query,
+        string $relation,
+        string $field,
+        string $direction
+    ): void {
+        $relationInstance = $query->getModel()->{$relation}();
+        $relatedTable = $relationInstance->getRelated()->getTable();
+        $parentTable = $query->getModel()->getTable();
+        $foreignKey = $relationInstance->getForeignKeyName();
+        $ownerKey = $relationInstance->getOwnerKeyName();
 
-        $sortBy = $this->request->query('sortBy', 'id');
-        $sortDir = $this->request->query('sortDir', 'asc');
-
-        if (!in_array($sortBy, $this->sortable)) {
-            $sortBy = 'id';
-        }
-
-        if (!in_array(strtolower($sortDir), ['asc', 'desc'])) {
-            $sortDir = 'asc';
-        }
-
-        $query->orderBy($sortBy, $sortDir);
-        */
-
+        $query
+            ->leftJoin(
+                $relatedTable,
+                "{$parentTable}.{$foreignKey}",
+                '=',
+                "{$relatedTable}.{$ownerKey}"
+            )
+            ->orderBy("{$relatedTable}.{$field}", $direction)
+            ->select("{$parentTable}.*");
     }
 }

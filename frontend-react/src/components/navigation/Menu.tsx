@@ -5,6 +5,7 @@ import NewsMenu from "./menus/NewsMenu";
 import CompaniesMenu from "./menus/CompaniesMenu";
 import UserMenu from "./menus/UserMenu";
 import AdminMenu from "./menus/AdminMenu";
+import DelegationsMenu from "./menus/DelegationsMenu";
 
 type MenuProps = {
   onItemClick?: () => void;
@@ -19,6 +20,7 @@ const Menu = ({ onItemClick }: MenuProps) => {
         {authData.hasPermission('sales','companies') && (
           <CompaniesMenu onItemClick={onItemClick}/>
         )}
+        <DelegationsMenu onItemClick={onItemClick}/>
         {authData.hasPermission('admin','admin') && (
         <AdminMenu onItemClick={onItemClick}/>
         )}

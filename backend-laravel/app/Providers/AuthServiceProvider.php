@@ -6,17 +6,21 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 use App\Models\Car;
 use App\Policies\CarPolicy;
-
+/* 
 use App\Models\Company;
 use App\Policies\CompanyPolicy;
 use App\Models\Employee;
 use App\Policies\EmployeePolicy;
+ */
+use App\Models\Delegation;
+use App\Policies\DelegationPolicy;
 
 
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
         Car::class => CarPolicy::class,
+        Delegation::class => DelegationPolicy::class,
         //Company::class => CompanyPolicy::class,
         //Employee::class => EmployeePolicy::class,
     ];
