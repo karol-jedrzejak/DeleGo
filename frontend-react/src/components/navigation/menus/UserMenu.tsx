@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import {LogOut,Car, User } from "lucide-react";
+import {LogOut,CarFront, User } from "lucide-react";
 import NavMenuTemplate from "./Template.js";
 import { ROUTES } from "@/routes/Routes.tsx"
 import { Sun, Moon } from "lucide-react";
@@ -20,7 +20,7 @@ const UserMenu = ({ onItemClick }: MenuProps) => {
       {
         title: "Auta",
         link: ROUTES.USER.CARS.INDEX.LINK,
-        icon: Car,
+        icon: CarFront,
       }
     ]
   }
