@@ -6,11 +6,16 @@ import { Sun, Moon } from "lucide-react";
 import { ThemeContext } from "@/providers/ThemeProvider.js"; 
 import { Link } from "react-router-dom"
 
-const UserMenu = () => {
+type MenuProps = {
+  onItemClick?: () => void;
+};
+
+const UserMenu = ({ onItemClick }: MenuProps) => {
   const { darkTheme, changeTheme } = useContext(ThemeContext);
 
   const menu = {
     title: "Użytkownik",
+    icon: User,
     options: [
       {
         title: "Auta",
@@ -22,12 +27,16 @@ const UserMenu = () => {
 
   return (
     <NavMenuTemplate
+      onItemClick={onItemClick}
       menu={menu}
       special={
       <>
         {/*  THEME CHANGE */}
         <button
-          onClick={changeTheme}
+          onClick={() => {
+            changeTheme();
+            onItemClick?.();
+          }}
           className={'px-1 py-1 rounded cursor-pointer flex items-center group '
             + 'text-neutral-600 hover:text-sky-950 '
             + 'hover:bg-slate-200 '
@@ -39,6 +48,7 @@ const UserMenu = () => {
         </button>
         {/*  LOGOUT */}
         <Link 
+          onClick={onItemClick}
           to={ROUTES.AUTH.LOGOUT.LINK}
           className={'px-1 py-1 rounded cursor-pointer flex items-center group '
             + 'text-neutral-600 hover:text-sky-950 '
@@ -50,9 +60,7 @@ const UserMenu = () => {
           <span className="ps-2 font-normal text-sm">Wyloguj</span>
         </Link >
       </>
-      }>
-      <User size={16} className="w-4"/>
-    </NavMenuTemplate>
+      }/>
   );
 };
 

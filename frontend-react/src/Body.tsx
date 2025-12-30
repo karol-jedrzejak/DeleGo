@@ -16,7 +16,7 @@ function Body() {
                 <>
                     <Loading fullScreen={true}/>
                 </>
-            ) :(
+            ) : (
                 <>
                     {!authData.user ? (
                         <>
@@ -26,7 +26,7 @@ function Body() {
                         </>
                     ) :(
                         <>
-                            <div className='min-h-screen flex flex-row relative'>
+                            <div className='min-h-screen flex flex-col lg:flex-row relative'>
                                 <Navbar/>
                                 <div className="min-h-screen w-full flex flex-col">
                                     <MessageProvider>

@@ -2,23 +2,20 @@ import { Building2 } from "lucide-react";
 import NavMenuTemplate from "./Template.js";
 import { ROUTES } from "@/routes/Routes.tsx"
 
-const NewsMenu = () => {
+type MenuProps = {
+  onItemClick?: () => void;
+};
+
+const NewsMenu = ({ onItemClick }: MenuProps) => {
 
   const menu = {
     title: "Firmy",
-    options: [
-      {
-        title: "Lista",
-        link: ROUTES.COMPANY.INDEX.LINK,
-        icon: Building2,
-      }
-    ]
+    icon: Building2,
+    link: ROUTES.COMPANY.INDEX.LINK,
   }
 
   return (
-    <NavMenuTemplate menu={menu}>
-        <Building2 size={16} className="w-4"/>
-    </NavMenuTemplate>
+    <NavMenuTemplate menu={menu} onItemClick={onItemClick}/>
   );
 };
 
