@@ -10,6 +10,7 @@ class BaseFilter
     protected Request $request;
     protected array $sortable = [];
     protected array $searchable = [];
+    protected array $joinedTables = [];
 
     public function __construct(Request $request, array $sortable, array $searchable)
     {
@@ -129,15 +130,20 @@ class BaseFilter
         $parentTable = $query->getModel()->getTable();
         $foreignKey = $relationInstance->getForeignKeyName();
         $ownerKey = $relationInstance->getOwnerKeyName();
+        
 
-        $query
-            ->leftJoin(
+        if (!in_array($relatedTable, $this->joinedTables)) {
+            $query->leftJoin(
                 $relatedTable,
                 "{$parentTable}.{$foreignKey}",
                 '=',
                 "{$relatedTable}.{$ownerKey}"
-            )
-            ->orderBy("{$relatedTable}.{$field}", $direction)
+            );
+            $this->joinedTables[] = $relatedTable;
+        }
+
+
+        $query->orderBy("{$relatedTable}.{$field}", $direction)
             ->select("{$parentTable}.*");
     }
 }

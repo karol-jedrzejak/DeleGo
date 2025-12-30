@@ -231,7 +231,7 @@ const Show = () => {
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Dane do oferty:</td>
+                                        <td className="p-2">Dane do schowka:</td>
                                         <td className="p-2 flex flex-row gap-2 items-center">
                                             
                                             <Button

@@ -11,8 +11,10 @@ export { default as Button } from "@/components/ui/forms/Button";
 export { default as Select } from "@/components/ui/forms/Select";
 export { default as Line } from "@/components/ui/forms/Line";
 
-export { default as HeaderSearch } from "@/components/ui/tables/HeaderSearch";
 export { default as TableDataLoading } from "@/components/ui/tables/TableDataLoading";
+export { default as HeaderSearch } from "@/components/ui/tables/HeaderSearch";
+export { default as HeaderSearchArray } from "@/components/ui/tables/HeaderSearchArray";
 export { default as HeaderSearchMeany } from "@/components/ui/tables/HeaderSearchMeany";
 export { default as HeaderSorting } from "@/components/ui/tables/HeaderSorting";
+export { default as HeaderSortingArray } from "@/components/ui/tables/HeaderSortingArray";
 export { default as Pagination } from "@/components/ui/tables/Pagination";

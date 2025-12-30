@@ -22,6 +22,7 @@ class DelegationResource extends JsonResource
             'return' => $this->return,
             'departure' => $this->departure,
             'custom_address' => $this->custom_address,
+            'description' => $this->description,
 
             // belongsTo
             'user' => $this->whenLoaded('user', fn () => [

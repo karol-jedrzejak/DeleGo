@@ -1,12 +1,13 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import { Link } from "react-router-dom"
 
 import { ROUTES } from "@/routes/Routes.tsx";
+import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
-import { Trash2,Search,SquarePlus,SquarePen,Map,Users } from "lucide-react";
-import { Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading } from '@/components';
+import { Search,SquarePlus,SquarePen } from "lucide-react";
+import { Card, Button , Pagination , HeaderSorting,HeaderSortingArray, HeaderSearchMeany,Error,TableDataLoading,HeaderSearch,HeaderSearchArray } from '@/components';
 
 // Model //
 
@@ -23,10 +24,6 @@ import type { PaginatedDataResponse,PaginationData } from "@/api/response/types"
 
 import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 
-// Utilities //
-
-import { buildCompanyGoogleMapsUrl } from "@/features/company/utilities/googleMaps";
-import { formatAddress } from "@/features/company/utilities/formatAddress";
 
 
 const Index = () => {
@@ -34,6 +31,7 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
+    const authData = useContext(AuthContext);
 
     const [items, setItems] = useState<DataType | null>(null);
 
@@ -55,9 +53,13 @@ const Index = () => {
 
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
+        
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
-            console.log(data,pagination)
+
+            console.log([...params]);
+            console.log(data,pagination);
+
             setItems(data);
             setPagination(pagination);
         });
@@ -94,11 +96,14 @@ const Index = () => {
                     <table className="table-auto w-full">
                         <thead>
                             <tr className="font-normal">
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="departure" text="Daty" />                                
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="name_complete" text="Firma / Adres" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="country" text="Kraj" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="region" text="Region" />
-                                <HeaderSorting sort={sort} setSort={setSort} text="Adres" />
+                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["return","departure"]} text="Daty" />                                
+                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["company.name_short","custom_address"]} text="Firma / Adres" />
+                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["car.brand","car.model","car.registration_number"]} text="Auto" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="description" text="Opis" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_name="settled" text="Rozliczone" />
+                                {authData.hasPermission('admin','admin') && (
+                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
+                                )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                             </tr>
                         </thead>
@@ -113,14 +118,37 @@ const Index = () => {
                                             ? "bg-gray-100 dark:bg-neutral-900/50"
                                             : "bg-white dark:bg-neutral-800"
                                         }`}>
-                                    <td className="p-2">{item.return} - {item.departure}</td>
-                                    <td className="p-2">{item.company?.id ? (
-                                        <>Firma: {item.company?.name_short}</>
+                                    <td className="p-2">
+                                        {item.return.slice(0, 10) == item.departure.slice(0, 10) ? (
+                                            <>{item.return.slice(0, 10)}</>
                                         ):(
-                                        <>Address: {item.custom_address}</>
+                                            <>{item.return.slice(0, 10)} - {item.departure.slice(0, 10)}</>
                                         )}
                                     </td>
+                                    <td className="p-2">{item.company?.id ? (
+                                        <><Link to={ROUTES.COMPANY.SHOW.LINK(item.company.id)}>
+                                            <Button color="sky">
+                                                {item.company.name_short}
+                                            </Button>
+                                        </Link></>
+                                        ):(
+                                        <>{item.custom_address}</>
+                                        )}
+                                    </td>
+                                    <td className="p-2">{item.car?.brand} {item.car?.model} {item.car?.registration_number}</td>
                                     <td className="p-2">{item.description}</td>
+                                    <td className="p-2">
+                                        <div className="flex w-full flex-row items-center justify-center pr-4">
+                                        {item.settled ? (
+                                            <span className="py-1 px-2 text-white bg-green-800 rounded-md">Tak</span>
+                                        ):(
+                                            <span className="py-1 px-2 text-white bg-red-800 rounded-md">Nie</span>
+                                        )}
+                                        </div>
+                                    </td>
+                                    {authData.hasPermission('admin','admin') && (
+                                        <td className="p-2">{item.user?.name} {item.user?.surname}</td>
+                                    )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                         <Link to={ROUTES.DELEGATION.SHOW.LINK(item.id)}>
                                             <Button color="sky">

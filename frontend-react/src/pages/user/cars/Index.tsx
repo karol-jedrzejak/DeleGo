@@ -132,7 +132,7 @@ const Index = () => {
                                     </td>
                                     <td className="p-2">{item.brand}</td>
                                     <td className="p-2">{item.model}</td>
-                                     {authData.hasPermission('admin','admin') && (
+                                    {authData.hasPermission('admin','admin') && (
                                         <td className="p-2">{item.user?.name} {item.user?.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">

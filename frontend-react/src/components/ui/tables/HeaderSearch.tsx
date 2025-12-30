@@ -7,7 +7,7 @@ type Search = {
     searchBy: {
             name: string
             value:string
-    }[]  |null, 
+    }[]  | null, 
 };
 
 type Props = {

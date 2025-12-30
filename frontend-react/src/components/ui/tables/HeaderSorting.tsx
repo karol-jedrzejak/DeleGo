@@ -16,7 +16,6 @@ type Props = {
   text: string,
 };
 
-
 function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
 
     const handleSort = (click: React.MouseEvent<HTMLButtonElement>,newSort: SortItem) => {

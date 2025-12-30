@@ -80,7 +80,12 @@ class Delegation extends Model
     public static array $sortable = [
         'number',
         'year',
-        'company.name',
+        'company.name_short',
+        'car.model',
+        'car.brand',
+        'car.registration_number',
+        'user.name',
+        'user.surname',
         'custom_address',
         'description',
         'departure',
@@ -91,6 +96,8 @@ class Delegation extends Model
     public static array $searchable = [
         'custom_address',
         'description',
-        'company.name',
+        'company.name_short',
+        'user.name',
+        'user.surname',
     ];
 }
