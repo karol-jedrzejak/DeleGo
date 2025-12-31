@@ -59,6 +59,8 @@ const Index = () => {
             const { data, ...pagination } = res.data;
             setItems(data);
             setPagination(pagination);
+            console.log([...params]);
+            console.log(data,pagination);
         });
     }, [page, perPage,search,sort]);
 
