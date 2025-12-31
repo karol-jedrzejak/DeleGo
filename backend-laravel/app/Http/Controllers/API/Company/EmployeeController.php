@@ -11,6 +11,9 @@ use App\Models\Company;
 use App\Models\Employee;
 use App\Http\Requests\Company\Employee\EmployeeRequest;
 
+use App\Http\Resources\Company\EmployeeIndexResource;
+use App\Http\Resources\Company\EmployeeShowResource;
+use App\Http\Resources\Company\EmployeeOptionsResource;
 
 class EmployeeController extends Controller
 {
@@ -36,11 +39,11 @@ class EmployeeController extends Controller
             $query->withTrashed();
         }
 
-        return response()->json(
+        return EmployeeIndexResource::collection(
             $query
                 ->paginate($request->query('perPage', 10))
-                ->withPath('')
-        );
+                
+        )->withPath('');
     }
 
     /**
@@ -60,12 +63,59 @@ class EmployeeController extends Controller
         ]);
     }
 
+        /**
+     * Display a list for select input.
+     */
+    public function options(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $search = $request->query('search');
+        $company_id = $request->query('company_id');
+
+        $query = Employee::query()
+            ->select(['id', 'name','surname','company_id']);
+
+        if ($user->isAdmin()) {
+            $query->withTrashed();
+        }
+
+        $query->where('company_id',"=",$company_id);
+
+        $query->when($search, function ($q, $search) {
+            // 1. Rozbijamy string po spacjach i usuwamy puste elementy
+            $words = explode(' ', $search);
+            $words = array_filter($words);
+
+            // 2. Tworzymy grupę warunków ( nested where )
+            $q->where(function ($innerQuery) use ($words) {
+                foreach ($words as $word) {
+                    // Każde słowo musi pasować do imienia LUB nazwiska
+                    $innerQuery->where(function ($subQuery) use ($word) {
+                        $subQuery->where('name', 'LIKE', "{$word}%")
+                                ->orWhere('surname', 'LIKE', "{$word}%");
+                    });
+                }
+            });
+        });
+    
+        $employee = $query->orderBy('name')
+            ->orderBy('surname')
+            ->limit(15)
+            ->get();
+
+
+
+        return EmployeeOptionsResource::collection($employee);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Employee $employee)
     {
-        return response()->json($employee);
+        return new EmployeeShowResource($employee);
     }
 
     /**

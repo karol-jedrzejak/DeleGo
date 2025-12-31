@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-use App\Http\Resources\DelegationResource;
+use App\Http\Resources\Delegation\DelegationIndexResource;
 
 class DelegationController extends Controller
 {
@@ -47,7 +47,7 @@ class DelegationController extends Controller
 
         $items = $query->paginate($request->query('perPage', 10));
 
-        return DelegationResource::collection($items)->withPath('');
+        return DelegationIndexResource::collection($items)->withPath('');
     }
 
     /**

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies');
 
-            $table->string('name')->index();
-            $table->string('surname')->index();
+            $table->string('name');
+            $table->string('surname');
 
             $table->string('position')->nullable();
             $table->string('academic_titles_before')->nullable();
@@ -32,7 +32,9 @@ return new class extends Migration
             $table->char('pesel', length: 12)->nullable();
             $table->string('passport')->nullable();
             $table->string('id_card')->nullable();
-            
+
+            $table->index(['company_id', 'surname', 'name'], 'idx_emp_comp_sur_name');
+
             $table->softDeletes();
 
             $table->timestamps();

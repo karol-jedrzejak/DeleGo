@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Delegation;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DelegationResource extends JsonResource
+class DelegationIndexResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -44,8 +44,10 @@ class DelegationResource extends JsonResource
             ]),
 
             // hasMany
+            /*
             'delegationTrips' => $this->whenLoaded('delegationTrips'),
             'delegationBills' => $this->whenLoaded('delegationBills'),
+            */
         ];
     }
 }

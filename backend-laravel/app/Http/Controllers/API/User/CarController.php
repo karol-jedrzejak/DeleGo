@@ -10,6 +10,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Car;
 use App\Http\Requests\User\CarRequest;
 
+use App\Http\Resources\User\CarIndexResource;
+use App\Http\Resources\User\CarShowResource;
+
+
+
 class CarController extends Controller
 {
     // Dla Policies (plus AuthService Provider w App/Providers)
@@ -35,9 +40,8 @@ class CarController extends Controller
         } else{
             $query->where('user_id', $user->id);
         }
-        $cars = $query->paginate($request->query('perPage', 10))
-                    ->withPath('');
-        return response()->json($cars);
+        $cars = $query->paginate($request->query('perPage', 10));
+        return CarIndexResource::collection($cars)->withPath('');
     }
 
     /**
@@ -69,7 +73,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return response()->json($car);
+        return new CarShowResource($car);
     }
 
     /**

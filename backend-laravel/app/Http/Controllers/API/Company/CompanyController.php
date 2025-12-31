@@ -10,6 +10,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Company;
 use App\Http\Requests\Company\CompanyRequest;
 
+use App\Http\Resources\Company\CompanyIndexResource;
+use App\Http\Resources\Company\CompanyShowResource;
+use App\Http\Resources\Company\CompanyOptionsResource;
+
 class CompanyController extends Controller
 {
     use AuthorizesRequests;
@@ -34,11 +38,10 @@ class CompanyController extends Controller
             $query->withTrashed();
         }
 
-        return response()->json(
-            $query
-                ->paginate($request->query('perPage', 10))
-                ->withPath('')
-        );
+        $companies = $query
+                ->paginate($request->query('perPage', 10));
+
+        return CompanyIndexResource::collection($companies)->withPath('');
     }
 
     /**
@@ -65,7 +68,7 @@ class CompanyController extends Controller
             ->limit(15)
             ->get();
 
-        return response()->json($companies);
+        return CompanyOptionsResource::collection($companies);
     }
 
     /**
@@ -89,7 +92,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return response()->json($company);
+        return new CompanyShowResource($company);
     }
 
     /**
