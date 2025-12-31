@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
 
         // Company
         Route::apiResource('company', CompanyController::class)->middleware('permission:sales,companies,1');
+        Route::get('company/options', [CompanyController::class, 'options'])->middleware('permission:sales,companies,1');
         Route::put('company/{id}/restore', [CompanyController::class, 'restore'])->middleware('permission:admin,admin,1');
         Route::delete('company/{id}/destroy', [CompanyController::class, 'forceDelete'])->middleware('permission:admin,admin,1');
 

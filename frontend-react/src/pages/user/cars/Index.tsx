@@ -56,7 +56,6 @@ const Index = () => {
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
             setItems(data);
-            console.log(data);
             setPagination(pagination);
         });
     }, [page, perPage,search,sort]);
@@ -92,18 +91,18 @@ const Index = () => {
                     <table className="table-auto w-full">
                         <thead>
                             <tr className="font-normal">
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="registration_number" text="Nr. Rejestracyjny" />                                
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="brand" text="Marka" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="model" text="Model" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["registration_number"]} text="Nr. Rejestracyjny" />                                
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["brand"]} text="Marka" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["model"]} text="Model" />
                                 {authData.hasPermission('admin','admin') && (
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="user" text="Użytkownik" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["user"]} text="Użytkownik" />
                                 )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                             </tr>
                             <tr>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="registration_number"/> 
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="brand"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="model"/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["registration_number"]}/> 
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["brand"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["model"]}/>
                                 {authData.hasPermission('admin','admin') && (
                                     <th></th>
                                 )}

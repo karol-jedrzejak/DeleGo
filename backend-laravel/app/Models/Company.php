@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\BaseModel;
+use App\Models\SoftDeletesModel ;
 use App\Models\Traits\Filterable;
 
-class Company extends BaseModel
+class Company extends SoftDeletesModel 
 {
     use HasFactory;
     use SoftDeletes;  
@@ -93,17 +93,4 @@ class Company extends BaseModel
         'name_short',
         'name_complete',
     ];
-
-    // --------------------------------------------------------- //
-    // Appends
-    // --------------------------------------------------------- //
-    
-    protected $appends = [
-        'has_employees',
-    ];
-
-    public function getHasEmployeesAttribute()
-    {
-        return $this->employees()->exists();
-    }
 }

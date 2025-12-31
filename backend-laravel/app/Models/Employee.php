@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\BaseModel;
+use App\Models\SoftDeletesModel ;
 use App\Models\Traits\Filterable;
 
-class Employee extends BaseModel
+class Employee extends SoftDeletesModel 
 {
     use HasFactory;
     use SoftDeletes;  

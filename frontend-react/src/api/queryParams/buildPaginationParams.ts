@@ -14,14 +14,23 @@ export const buildPaginationParams = ({
     params.set("perPage", perPage.toString());
   }
 
+  // Search globalny
   if (search.search) {
     params.set("search", search.search);
   }
 
-  search.searchBy?.forEach((item) => {
-    params.append(`searchBy[${item.name}]`, item.value);
+  // searchBy (grupy)
+  search.searchBy?.forEach((item, index) => {
+    // value
+    params.set(`searchBy[${index}][value]`, item.value);
+
+    // fields[]
+    item.fields.forEach((field) => {
+      params.append(`searchBy[${index}][fields][]`, field);
+    });
   });
 
+  // Sortowanie
   sort.forEach((item) => {
     params.append("sortBy[]", item.sortBy);
     params.append("sortDir[]", item.sortDir);

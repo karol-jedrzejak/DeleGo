@@ -98,6 +98,6 @@ class Delegation extends Model
         'description',
         'company.name_short',
         'user.name',
-        'user.surname',
+        'user.surname'
     ];
 }

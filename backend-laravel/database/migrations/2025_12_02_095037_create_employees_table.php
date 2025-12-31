@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies');
 
-            $table->string('name');
-            $table->string('surname');
+            $table->string('name')->index();
+            $table->string('surname')->index();
 
             $table->string('position')->nullable();
             $table->string('academic_titles_before')->nullable();

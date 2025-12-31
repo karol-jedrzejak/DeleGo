@@ -6,7 +6,7 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> &{
     type?: "button" | "submit" | "reset",
     disabled?: boolean,
     className?: string,
-    color?: "yellow" | "blue" | "red" | "green" | "lime" | "emerald" | "purple" | "pink" | "slate" | "cyan" | "sky" | "teal",
+    color?: "yellow" | "blue" | "red" | "green" | "lime" | "emerald" | "purple" | "pink" | "slate" | "cyan" | "sky" | "teal" | "white",
     size?: number,
 };
 
@@ -179,6 +179,18 @@ const Button = ({
                 text-gray-500 border-cyan-500
                 bg-neutral-100 dark:bg-neutral-900
                 dark:text-neutral-500 dark:border-cyan-500`: '')
+
+                // white
+                +( color=="white" && disabled==false ? `
+                border-neutral-300 bg-neutral-100
+                text-gray-900 hover:bg-neutral-400
+                dark:border-neutral-300 dark:bg-neutral-200
+                dark:text-gray-900 dark:hover:bg-neutral-400
+                cursor-pointer` : '')
+                +( color=="white" && disabled==true ? `
+                text-gray-500 border-neutral-500
+                bg-neutral-100 dark:bg-neutral-900
+                dark:text-neutral-500 dark:border-neutral-500`: '')
             }
              {...props} 
     >

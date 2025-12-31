@@ -42,6 +42,33 @@ class CompanyController extends Controller
     }
 
     /**
+     * Display a list for select input.
+     */
+    public function options(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $search = $request->query('search');
+
+        $query = Company::query()
+            ->select(['id', 'name_short']);
+
+        if ($user->isAdmin()) {
+            $query->withTrashed();
+        }
+
+        $companies = $query->when($search, function ($query, $search) {
+                $query->where('name_short', 'LIKE', "{$search}%");
+            })
+            ->orderBy('name_short')
+            ->limit(15)
+            ->get();
+
+        return response()->json($companies);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(CompanyRequest $request)

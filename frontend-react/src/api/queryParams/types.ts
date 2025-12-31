@@ -1,5 +1,5 @@
 export type SearchByItem = {
-  name: string;
+  fields: string[];
   value: string;
 };
 

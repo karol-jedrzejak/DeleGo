@@ -121,18 +121,18 @@ const Index = () => {
                         <table className="table-auto w-full">
                             <thead>
                                 <tr className="font-normal">
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="position" text="Stanowisko" />
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="name" text="Imię" />                                
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="surname" text="Nazwisko" />
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="email" text="E-mail" />
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="phone_mobile" text="Tel. Komórkowy" />
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_name="phone_landline" text="Tel. Stacjonarny" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["position"]} text="Stanowisko" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["name"]} text="Imię" />                                
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["surname"]} text="Nazwisko" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["email"]} text="E-mail" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["phone_mobile"]} text="Tel. Komórkowy" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["phone_landline"]} text="Tel. Stacjonarny" />
                                     <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                                 </tr>
                                 <tr>
-                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="position"/>
-                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="name"/> 
-                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="surname"/>
+                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["position"]}/>
+                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name"]}/> 
+                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["surname"]}/>
                                     <th></th>
                                     <th></th>
                                     <th></th>

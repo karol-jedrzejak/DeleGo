@@ -69,4 +69,12 @@ class CompanyPolicy
         }
         return false;
     }
+    /**
+     * 
+     * Determine whether the user can permanently delete the model.
+     */
+    public function options(User $user): bool
+    {
+        return true;
+    }
 }

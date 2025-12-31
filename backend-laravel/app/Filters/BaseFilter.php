@@ -28,21 +28,37 @@ class BaseFilter
     }
 
     /* -------------------------------------------------
-     | SEARCH
-     |--------------------------------------------------*/
+    | SEARCH
+    |--------------------------------------------------*/
 
     protected function applySearch(Builder $query): void
     {
         $search = $this->request->query('search');
         $searchBy = $this->request->query('searchBy');
 
-        // searchBy: konkretne pola
+        // searchBy: grupy pól (AND między grupami, OR wewnątrz)
         if (is_array($searchBy) && count($searchBy)) {
-            $query->where(function ($q) use ($searchBy) {
-                foreach ($searchBy as $column => $value) {
-                    $this->applyWhere($q, $column, $value);
+            foreach ($searchBy as $group) {
+                if (
+                    empty($group['fields']) || 
+                    (!isset($group['value']) || $group['value'] === '') 
+                ) {
+                    continue;
                 }
-            });
+
+
+                // 🔥 NOWE
+                $tokens = preg_split('/\s+/', trim($group['value']));
+
+                foreach ($tokens as $token) {
+                    $query->where(function ($q) use ($group, $token) {
+                        foreach ($group['fields'] as $column) {
+                            $this->applyOrWhere($q, $column, $token);
+                        }
+                    });
+                }
+            }
+
             return;
         }
 
@@ -56,6 +72,7 @@ class BaseFilter
         }
     }
 
+    
     protected function applyWhere(Builder $query, string $column, string $value): void
     {
         if (str_contains($column, '.')) {

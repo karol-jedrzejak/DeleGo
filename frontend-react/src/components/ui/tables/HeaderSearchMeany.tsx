@@ -5,7 +5,7 @@ import { useState } from "react";
 type Search = {
     search: string | null,
     searchBy: {
-            name: string
+            fields: string[]
             value:string
     }[]  |null, 
 };

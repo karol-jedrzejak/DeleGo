@@ -6,12 +6,14 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
-import { Search,SquarePlus,SquarePen } from "lucide-react";
-import { Card, Button , Pagination , HeaderSorting,HeaderSortingArray, HeaderSearchMeany,Error,TableDataLoading,HeaderSearch,HeaderSearchArray } from '@/components';
+import pdf_icon from "@/assets/icons/pdf_icon.svg"
+
+import { Search,SquarePlus,SquarePen,FileText } from "lucide-react";
+import { Card, Button , Pagination , HeaderSorting,HeaderSearchMeany,Error,TableDataLoading,HeaderSearch,HeaderSearchSelect} from '@/components';
 
 // Model //
 
-import type { DataType, ItemType } from '@/models/Delegation.tsx';
+import type { DataType} from '@/models/Delegation.tsx';
 import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/models/Delegation.tsx';
 
 // API //
@@ -57,9 +59,6 @@ const Index = () => {
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
 
-            console.log([...params]);
-            console.log(data,pagination);
-
             setItems(data);
             setPagination(pagination);
         });
@@ -96,15 +95,51 @@ const Index = () => {
                     <table className="table-auto w-full">
                         <thead>
                             <tr className="font-normal">
-                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["return","departure"]} text="Daty" />                                
-                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["company.name_short","custom_address"]} text="Firma / Adres" />
-                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["car.brand","car.model","car.registration_number"]} text="Auto" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="description" text="Opis" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="settled" text="Rozliczone" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["return","departure"]} text="Daty" />                                
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["company.name_short","custom_address"]} text="Firma / Adres" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["car.brand","car.model","car.registration_number"]} text="Auto" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["description"]} text="Opis" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["settled"]} text="Rozliczone" />
                                 {authData.hasPermission('admin','admin') && (
-                                <HeaderSortingArray sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
                                 )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
+                            </tr>
+                            <tr>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["return","departure"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["company.name_short","custom_address"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["car.brand","car.model","car.registration_number"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["description"]}/>
+                                <HeaderSearchSelect
+                                    search={search} setSearch={setSearch} setPage={setPage} options={
+                                        [
+                                            {
+                                                text: "-",
+                                                search: [{
+                                                    variable: ["settled"],
+                                                    value: null
+                                                }],
+                                            },
+                                            {
+                                                text: "Tak",
+                                                search: [{
+                                                    variable: ["settled"],
+                                                    value: "1"
+                                                }],
+                                            },
+                                            {
+                                                text: "Nie",
+                                                search: [{
+                                                    variable: ["settled"],
+                                                    value: "0"
+                                                }],
+                                            },
+                                        ]
+                                    }/>
+                                {authData.hasPermission('admin','admin') && (
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["user.name","user.surname"]}/>
+                                )}
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody className="relative">
@@ -151,8 +186,9 @@ const Index = () => {
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                         <Link to={ROUTES.DELEGATION.SHOW.LINK(item.id)}>
-                                            <Button color="sky">
-                                                <Search size={20}/>
+                                            <Button color="white" className="w-[38px]">
+                                                {/* <FileText size={20}/> */}
+                                                <img src={pdf_icon} className="w-10 "/>
                                             </Button>
                                         </Link>
                                         <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)} className="ps-1">

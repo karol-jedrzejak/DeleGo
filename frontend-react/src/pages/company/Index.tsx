@@ -59,8 +59,6 @@ const Index = () => {
             const { data, ...pagination } = res.data;
             setItems(data);
             setPagination(pagination);
-            console.log([...params]);
-            console.log(data,pagination);
         });
     }, [page, perPage,search,sort]);
 
@@ -95,19 +93,19 @@ const Index = () => {
                     <table className="table-auto w-full">
                         <thead>
                             <tr className="font-normal">
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="name_short" text="Nazwa Skrócona" />                                
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="name_complete" text="Nazwa Pełna" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="country" text="Kraj" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_name="region" text="Region" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["name_short"]} text="Nazwa Skrócona" />                                
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["name_complete"]} text="Nazwa Pełna" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["country"]} text="Kraj" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["region"]} text="Region" />
                                 <HeaderSorting sort={sort} setSort={setSort} text="Adres" />
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                             </tr>
                             <tr>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="name_short"/> 
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="name_complete"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="country"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_name="region"/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} nosort={true} text="Wuszykaj po miejscowości" variable_name="city"/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name_short"]}/> 
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name_complete"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["country"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["region"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} nosort={true} text="Wuszykaj po miejscowości" variable_names={["city"]}/>
                                 <th></th>
                             </tr>
                         </thead>

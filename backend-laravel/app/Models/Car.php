@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use App\Models\BaseModel;
+use App\Models\SoftDeletesModel ;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Filterable;
 
-class Car extends BaseModel
+class Car extends SoftDeletesModel 
 {
     use HasFactory;
     use SoftDeletes;  

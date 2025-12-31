@@ -1,120 +1,93 @@
-
 import React from "react";
-
-type SortItem = {
-    sortBy: string;
-    sortDir: string;
-};
-
-type Sort = SortItem[];
-
+import type { SortItem, SortType } from "@/api/queryParams/types";
 
 type Props = {
-  setSort: React.Dispatch<React.SetStateAction<Sort>>,
-  sort: Sort,
-  variable_name?: string | null,
+  setSort: React.Dispatch<React.SetStateAction<SortType>>,
+  sort: SortType,
+  variable_names?: string[] | null;
   text: string,
 };
 
-function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
+function HeaderSorting({ setSort, sort, variable_names = null, text }: Props) {
 
-    const handleSort = (click: React.MouseEvent<HTMLButtonElement>,newSort: SortItem) => {
-
+    const handleSort = (click: React.MouseEvent<HTMLButtonElement>, newSorts: SortItem[]) => {
         if (click.ctrlKey) {
-            if(newSort.sortDir == "change")
-            {
-                let foundIndex = sort.findIndex(item => item.sortBy == newSort.sortBy);
-                if(foundIndex != -1){
-                    if(sort[foundIndex].sortDir == "asc")
-                    {
-                        newSort.sortDir = "desc";
-                    }else{
-                        newSort.sortDir = "asc";
+            // Dodawanie lub modyfikacja w istniejącym sort
+            const updatedSort: SortType = [...sort];
+            newSorts.forEach(newSort => {
+                const foundIndex = updatedSort.findIndex(item => item.sortBy === newSort.sortBy);
+                if (foundIndex !== -1) {
+                    if (newSort.sortDir === "change") {
+                        newSort.sortDir = updatedSort[foundIndex].sortDir === "asc" ? "desc" : "asc";
                     }
-                    const newSortArray: Sort = [...sort];
-                    newSortArray[foundIndex] = newSort;
-                    setSort(newSortArray);
+                    updatedSort[foundIndex] = newSort;
                 } else {
-                    newSort.sortDir = "asc";
-                    setSort(prev => [
-                        ...prev, 
-                        newSort
-                    ])
+                    newSort.sortDir = newSort.sortDir === "change" ? "asc" : newSort.sortDir;
+                    updatedSort.push(newSort);
                 }
-            } else {
-                let foundIndex = sort.findIndex(item => item.sortBy == newSort.sortBy);
-                if(foundIndex != -1){
-                    const newSortArray: Sort = [...sort];
-                    newSortArray[foundIndex] = newSort;
-                    setSort(newSortArray);
-    
-                } else {
-                    setSort(prev => [
-                        ...prev, 
-                        newSort
-                    ])
-                }
-            }
+            });
+            setSort(updatedSort);
         } else {
-            if(newSort.sortDir == "change")
-            {
-                // Zmiana na inny jesli (jesli ten sam) lub ten sam w innym kierunku bez CTRL
-                let foundIndex = sort.findIndex(item => item.sortBy == newSort.sortBy);
-                if(foundIndex != -1){
-                    if(sort[foundIndex].sortDir == "asc")
-                    {
-                        newSort.sortDir = "desc";
-                    }else{
-                        newSort.sortDir = "asc";
-                    }
-                    setSort([newSort]);
-                } else {
-                    newSort.sortDir = "asc";
-                    setSort([newSort]);
+            // Bez CTRL - ustawienie tylko podanych kolumn
+            const newSortProcessed = newSorts.map(newSort => {
+                if (newSort.sortDir === "change") {
+                    const existing = sort.find(item => item.sortBy === newSort.sortBy);
+                    return { sortBy: newSort.sortBy, sortDir: existing?.sortDir === "asc" ? "desc" : "asc" };
                 }
-            } else {
-                // Ustawienie nowego jesli bez CTRL
-                setSort([newSort]);
-            }
+                return newSort;
+            });
+            setSort(newSortProcessed);
         }
-    }
+    };
+
+    const isActive = variable_names
+        ? sort.some(item => variable_names.includes(item.sortBy))
+        : false;
 
     return (
         <th>
-            {variable_name ? (
+            {variable_names && variable_names.length > 0 ? (
                 <div className="p-2 flex justify-between items-center">
                     <button
-                    className={`bg-neutral-100 dark:bg-neutral-700 border rounded-md p-2 flex-1 me-2 cursor-pointer text-left `
-                        + (sort.find(item => item.sortBy === variable_name) ?
-                        `border-sky-600`:
-                        `border-neutral-500`)}
-                    onClick={(e) => handleSort(e,{
-                            sortBy: variable_name,
-                            sortDir: 'change',
-                        })}
-                    >{text}</button>
+                        className={`bg-neutral-100 dark:bg-neutral-700 border rounded-md p-2 flex-1 me-2 cursor-pointer text-left ` +
+                            (isActive ? `border-sky-600` : `border-neutral-500`)}
+                        onClick={(e) =>
+                            handleSort(
+                                e,
+                                variable_names.map(v => ({ sortBy: v, sortDir: "change" }))
+                            )
+                        }
+                    >
+                        {text}
+                    </button>
                     <div className="flex flex-col text-xs">
                         <button
-                            onClick={(e) => handleSort(e,{
-                                sortBy: variable_name,
-                                sortDir: 'asc',
-                            })}
-                            className={`cursor-pointer ` + (sort.find(item => item.sortBy === variable_name)?.sortDir === "asc" ?
-                            `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500`:
-                            `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>▲
+                            onClick={(e) =>
+                                handleSort(
+                                    e,
+                                    variable_names.map(v => ({ sortBy: v, sortDir: "asc" }))
+                                )
+                            }
+                            className={`cursor-pointer ` + (sort.some(item => variable_names.includes(item.sortBy) && item.sortDir === "asc") ?
+                                `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500` :
+                                `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>
+                            ▲
                         </button>
                         <button
-                            onClick={(e) => handleSort(e,{
-                                sortBy: variable_name,
-                                sortDir: 'desc',
-                            })}
-                            className={`cursor-pointer ` + (sort.find(item => item.sortBy === variable_name)?.sortDir === "desc" ?
-                            `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500`:
-                            `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>▼
+                            onClick={(e) =>
+                                handleSort(
+                                    e,
+                                    variable_names.map(v => ({ sortBy: v, sortDir: "desc" }))
+                                )
+                            }
+                            className={`cursor-pointer ` + (sort.some(item => variable_names.includes(item.sortBy) && item.sortDir === "desc") ?
+                                `text-sky-800 hover:text-sky-500 dark:text-sky-800 dark:hover:text-sky-500` :
+                                `text-neutral-700 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-white`)}>
+                            ▼
                         </button>
                     </div>
                 </div>
-            ):(
+            ) : (
                 <div className="p-2 flex justify-between">
                     <div className="bg-neutral-100 dark:bg-neutral-700 border rounded-md p-2 flex-1 me-2 text-left">
                         {text}
@@ -122,7 +95,7 @@ function HeaderSorting({ setSort, sort, variable_name = null, text }: Props) {
                 </div>
             )}
         </th>
-    )
+    );
 }
 
-export default HeaderSorting
+export default HeaderSorting;

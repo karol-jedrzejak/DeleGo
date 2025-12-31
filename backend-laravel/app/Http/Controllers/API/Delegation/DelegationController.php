@@ -39,11 +39,11 @@ class DelegationController extends Controller
         $query->with([
             'car:id,registration_number,brand,model',
             'company:id,name_short',
-            'delegationTrips',
+/*             'delegationTrips', */
         ]);
 
         // delegationBills razem z type
-        $query->with('delegationBills.delegationBillType');
+/*         $query->with('delegationBills.delegationBillType'); */
 
         $items = $query->paginate($request->query('perPage', 10));
 
