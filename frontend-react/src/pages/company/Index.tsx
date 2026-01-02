@@ -105,7 +105,7 @@ const Index = () => {
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name_complete"]}/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["country"]}/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["region"]}/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} nosort={true} text="Wuszykaj po miejscowości" variable_names={["city"]}/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} nosort={true} text="Wuszykaj po miejscowości" variable_names={["city","street","postal_city"]}/>
                                 <th></th>
                             </tr>
                         </thead>

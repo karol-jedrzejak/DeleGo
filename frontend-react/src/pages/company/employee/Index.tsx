@@ -121,18 +121,16 @@ const Index = () => {
                         <table className="table-auto w-full">
                             <thead>
                                 <tr className="font-normal">
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["position"]} text="Stanowisko" />
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["name"]} text="Imię" />                                
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["surname"]} text="Nazwisko" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["name","surname"]} text="Imię i Nazwisko" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["position"]} text="Stanowisko" />                                
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["email"]} text="E-mail" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["phone_mobile"]} text="Tel. Komórkowy" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["phone_landline"]} text="Tel. Stacjonarny" />
                                     <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                                 </tr>
                                 <tr>
+                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name","surname"]}/> 
                                     <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["position"]}/>
-                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["name"]}/> 
-                                    <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["surname"]}/>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -154,13 +152,12 @@ const Index = () => {
                                         }`}>
                                         <td className="p-2">
                                             {item.deleted_at ? 
-                                            <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.position}</span></div>
+                                            <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.name} {item.surname}</span></div>
                                             : 
-                                            <>{item.position}</>
+                                            <>{item.name} {item.surname}</>
                                             }
                                         </td>
-                                        <td className="p-2">{item.name}</td>
-                                        <td className="p-2">{item.surname}</td>
+                                        <td className="p-2">{item.position}</td>
                                         <td className="p-2">
                                             {item.email ? (
                                             <Button

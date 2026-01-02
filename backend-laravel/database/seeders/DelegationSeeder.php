@@ -17,7 +17,7 @@ class DelegationSeeder extends Seeder
     public function run(): void
     {
         Delegation::factory()
-            ->count(20)
+            ->count(100)
             ->create()
             ->each(function ($delegation) {
 
