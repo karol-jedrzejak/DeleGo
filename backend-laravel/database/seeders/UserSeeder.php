@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        User::factory(10)
+        User::factory(50)
             ->has(Car::factory()->count(3))
             ->create()
             ->each(function ($user) use ($types) {

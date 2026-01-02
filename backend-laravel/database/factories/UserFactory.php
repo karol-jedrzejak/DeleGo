@@ -39,7 +39,7 @@ class UserFactory extends Factory
             Str::ascii($firstName . '.' . $lastName)
         );
 
-        $email = $baseEmail . '@gmail.com';
+        $email = $baseEmail . '@'.fake()->word().'-'.fake()->word().'.pl';
 
         // 🔁 sprawdzaj unikalność w DB
         $counter = 1;

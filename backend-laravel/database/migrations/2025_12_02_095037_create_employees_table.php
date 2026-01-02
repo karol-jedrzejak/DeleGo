@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('passport')->nullable();
             $table->string('id_card')->nullable();
 
-            $table->index(['company_id', 'surname', 'name'], 'idx_emp_comp_sur_name');
+            $table->index(['company_id', 'name','surname'], 'idx_emp_comp_name_sur');
 
             $table->softDeletes();
 
