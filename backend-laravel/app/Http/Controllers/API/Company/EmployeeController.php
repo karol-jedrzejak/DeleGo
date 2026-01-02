@@ -63,8 +63,8 @@ class EmployeeController extends Controller
         ]);
     }
 
-        /**
-     * Display a list for select input.
+     /**
+     * Return a list for select input.
      */
     public function options(Request $request)
     {
@@ -102,10 +102,8 @@ class EmployeeController extends Controller
     
         $employee = $query->orderBy('name')
             ->orderBy('surname')
-            ->limit(15)
+            ->limit(10)
             ->get();
-
-
 
         return EmployeeOptionsResource::collection($employee);
     }

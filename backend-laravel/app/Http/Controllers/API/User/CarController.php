@@ -12,6 +12,7 @@ use App\Http\Requests\User\CarRequest;
 
 use App\Http\Resources\User\CarIndexResource;
 use App\Http\Resources\User\CarShowResource;
+use App\Http\Resources\User\CarOptionsResource;
 
 
 
@@ -43,6 +44,39 @@ class CarController extends Controller
         $cars = $query->paginate($request->query('perPage', 10));
         return CarIndexResource::collection($cars)->withPath('');
     }
+
+    /**
+     * Return a list for select input.
+     */
+    public function options(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $user_id = $request->query('user_id');
+
+        $query = Car::query()
+            ->select(['id', 'brand','model','registration_number','deleted_at']);
+
+        if ($user->isAdmin()) {
+            $query->withTrashed();
+        }
+
+        $query->where(function ($q) use ($user_id) {
+            $q->where('user_id', $user_id)
+            ->orWhereNull('user_id');
+        });
+
+        $cars = $query
+            ->orderBy('brand')
+            ->orderBy('model')
+            ->orderBy('registration_number')
+            ->limit(10)
+            ->get();
+
+        return CarOptionsResource::collection($cars);
+    }
+
 
     /**
      * Store a newly created resource in storage.

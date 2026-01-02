@@ -5,65 +5,38 @@ namespace App\Http\Controllers\API\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
-use App\Models\PermissionType;
-use App\Models\UserPermission;
 
 use App\Http\Requests\User\SetUserPermissionsRequest;
 
-use \stdClass;
+use App\Http\Resources\User\UserShowResource;
+use App\Http\Resources\User\UserIndexResource;
+
+use App\Services\User\UserPermissionService;
+use App\Services\User\LoginService;
 
 class AuthenticationController extends Controller
 {
     /**
      * Login user.
      */
-    public function login(Request $request)
+    public function login(Request $request, LoginService $loginService)
     {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $data = $loginService->login($request->only('email', 'password'));
 
-        // E-mail nie istnieje
-        if (!$user) {
-            return response()->json(['message' => 'Złe dane logowania.'], 401);
+        if($data['token'])
+        {
+            return response()->json(['token' => $data['token']]);
+        } else {
+            return response()->json(['message' => $data['error']], $data['error_number']);
         }
-
-        // Blokada użytkownika
-        if ($user->active == 0) {
-            return response()->json(['message' => 'Konto zablokowane. Skontaktuj się z administratorem.'], 403);
-        }
-
-        if (!Auth::attempt($request->only('email', 'password'))) {
-
-            $user->failed_attempts += 1;
-
-            // Blokada po 5 próbach
-            if ($user->failed_attempts >= 5) {
-                $user->active = 0;
-            }
-
-            $user->save();
-
-            return response()->json(['message' => 'Złe dane logowania'], 401);
-        }
-
-        // Po udanym logowaniu reset prób
-        $user->failed_attempts = 0;
-        $user->save();
-
-        /** @var \App\Models\User */
-        $user = Auth::user();
-
-        $token = $user->createToken('API Token')->plainTextToken;
-
-        return response()->json(['token' => $token]);
     }
 
     /**
@@ -80,38 +53,8 @@ class AuthenticationController extends Controller
      */
     public function user_info(Request $request)
     {
-        $permission_types = PermissionType::all();
-
-        $user = $request->user()->load([
-        'permissions',
-        'permissions.type'
-        ]);
-
-        $all_permissions = [];
-
-        // Wszystkie Permission jako zera
-        foreach ($permission_types as $permission) {
-            $dep = $permission['department'];
-            $res = $permission['resource'];
-
-            // jeśli departament jeszcze nie istnieje → tworzymy
-            if (!isset($all_permissions[$dep])) {
-                $all_permissions[$dep] = [];
-            }
-
-            // dodajemy resource ustawiając wartość 0
-            $all_permissions[$dep][$res] = 0;
-        }
-
-        // Jesli istnieje pivot zmieniamy permission z zera na właściwe
-        foreach ($user->permissions as $key => $permission_unformatted) {
-            $all_permissions[$permission_unformatted->type->department][$permission_unformatted->type->resource] = $permission_unformatted->level;
-        }
-
-        unset($user->permissions);
-        $user->permissions = $all_permissions;
-
-        return response()->json($user);
+        $user = $request->user()->load(['permissions','permissions.type']);
+        return new UserShowResource($user);
     }
 
     /**
@@ -119,82 +62,24 @@ class AuthenticationController extends Controller
      */
     public function users_info()
     {
-        // wszystkie możliwe permission types
-        $permission_types = PermissionType::orderBy('department','asc')->orderBy('resource','asc')->get();
-
-        // budujemy "szablon" permissionów z zerami
-        $permissionTemplate = [];
-
-        foreach ($permission_types as $permission) {
-            $dep = $permission->department;
-            $res = $permission->resource;
-
-            if (!isset($permissionTemplate[$dep])) {
-                $permissionTemplate[$dep] = [];
-            }
-
-            $permissionTemplate[$dep][$res] = 0;
-        }
-
-        // pobieramy userów z permissionami
-        $users = User::with(['permissions.type'])->orderBy('name','asc')->orderBy('surname','asc')->get();
-
-        foreach ($users as $user) {
-            // kopiujemy szablon (ważne!)
-            $all_permissions = $permissionTemplate;
-
-            // nadpisujemy realnymi wartościami z pivotu
-            foreach ($user->permissions as $permission) {
-                $all_permissions
-                    [$permission->type->department]
-                    [$permission->type->resource]
-                    = $permission->level;
-            }
-
-            // podmieniamy relację
-            unset($user->permissions);
-            $user->permissions = $all_permissions;
-        }
-
-        return response()->json($users);
+        $users = User::with('permissions.type')
+                ->orderBy('name')
+                ->orderBy('surname')
+                ->get();
+        return UserIndexResource::collection($users);
     }
 
     /**
      * Display users info.
      */
-    public function update_permissions(SetUserPermissionsRequest $request)
+    public function update_permissions(SetUserPermissionsRequest $request,UserPermissionService $permissionService)
     {
-        $request->validated();
-        $data = $request->post();
+        $data = $request->validated();
 
-        foreach ($data['permissions'] as $department => $permission) {
-            foreach ($permission as $resource => $level) {
-
-                $permission_type = PermissionType::where('department', $department)
-                    ->where('resource', $resource)
-                    ->value('id');
-
-                if($permission_type)
-                {
-                    $permission = UserPermission::where('user_id', $data['id'])
-                        ->where('permission_type_id', $permission_type)
-                        ->first();
-
-                    if($permission)
-                    {
-                        $permission->update([
-                            'level' => $level
-                        ]);
-                    } else {
-                        UserPermission::create([
-                            'level' => $level,
-                            'user_id' => $data['id'],
-                            'permission_type_id' => $permission_type,
-                        ]);
-                    }
-                }
-            }
-        }
+        $permissionService->updateUserPermissions(
+            $data['id'],
+            $data['permissions']
+        );
 
         return response()->json([
             'text' => 'Poprawnie zaktualizowano uprawnienia usera.',

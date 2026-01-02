@@ -39,13 +39,13 @@ class CompanyController extends Controller
         }
 
         $companies = $query
-                ->paginate($request->query('perPage', 10));
+            ->paginate($request->query('perPage', 10));
 
         return CompanyIndexResource::collection($companies)->withPath('');
     }
 
     /**
-     * Display a list for select input.
+     * Return a list for select input.
      */
     public function options(Request $request)
     {
@@ -65,7 +65,7 @@ class CompanyController extends Controller
                 $query->where('name_short', 'LIKE', "{$search}%");
             })
             ->orderBy('name_short')
-            ->limit(15)
+            ->limit(10)
             ->get();
 
         return CompanyOptionsResource::collection($companies);

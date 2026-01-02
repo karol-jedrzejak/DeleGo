@@ -55,7 +55,8 @@ const AuthProvider = ({ children }: Props) => {
             const response = await axiosTsBackend.get('user');
             setUser(response.data);
             setLoadingUser(false);
-        } catch {
+        } catch(err) {
+            console.log(err);
             setUser(null);
         }
     };
