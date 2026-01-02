@@ -1,5 +1,5 @@
 
-import { useState, useEffect,useContext } from 'react';
+import { useState, useEffect,useContext,useRef } from 'react';
 import { useNavigate,useParams } from "react-router-dom"
 import { ROUTES } from "@/routes/Routes.tsx";
 import { AuthContext } from "@/providers/AuthProvider.js";
@@ -7,7 +7,7 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 // Komponenty UI //
 
 import { ArchiveRestore,SquarePen,Undo2,Trash,Trash2 } from "lucide-react";
-import { Card, Button, Loading, Error, PopUp,Spinner } from '@/components';
+import { Card, Button,Error, PopUp,Spinner,Loading } from '@/components';
 
 // Model //
 
@@ -16,6 +16,8 @@ import type { FormDataType, ItemType } from '@/models/Car.tsx';
 
 import Form from './Form.tsx';
 
+import type { ItemLookupType as UserLookupType } from "@/models/User";
+
 // API //
 
 import { carService } from "@/api/services/backend/user/car.service.ts";
@@ -23,7 +25,6 @@ import { useBackend } from '@/hooks/useLaravelBackend.ts';
 
 // USERS //
 import UserSelect from '@/features/user/components/UserSelect.tsx';
-import getUsers from '@/features/user/hooks/getUsers.ts';
 
 export default function Edit() {
 
@@ -36,15 +37,16 @@ export default function Edit() {
     const [deletePopUp, setDeletePopUp] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
+    const selectedUser = useRef<string>("");
 
     // -------------------------------------------------------------------------- //
     // Get Users For Admin
     // -------------------------------------------------------------------------- //
 
-    const { users,loadingUsers,errorUsers } = getUsers(authData.hasPermission('admin','admin'));
-    const handleUserChange = (value:number) => {
-        setFormData((p) => ({ ...p, user_id: value }));
+    const handleUserChange = (user: UserLookupType  ) => {
+        setFormData((p) => ({ ...p, user_id: user.id}));
     };
+
 
     // -------------------------------------------------------------------------- //
     // Get
@@ -56,6 +58,7 @@ export default function Edit() {
         mutateGet()
         .then((res) => {
             setFormData(res.data);
+            selectedUser.current = (res.data.user?.name+" "+res.data.user?.surname);
             if(res.data.deleted_at)
             {
                 setIsDeleted(true);
@@ -127,9 +130,7 @@ export default function Edit() {
     // Wyświetlanie błędu i Loading
     // -------------------------------------------------------------------------- //
 
-    if(loadingGet || loadingUsers) { return <Loading/>; }
-    
-    if(errorUsers) { return <Error><Error.Text type={errorUsers.type}>{errorUsers.text}</Error.Text></Error>; }
+    if(loadingGet || !selectedUser) { return <Loading/>; }
 
     if(errorGet) { return <Error><Error.Text type={errorGet.type}>{errorGet.text}</Error.Text></Error>; }
     if(errorPut) { return <Error><Error.Text type={errorPut.type}>{errorPut.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
@@ -156,9 +157,6 @@ export default function Edit() {
                         <Card.Body>
                             <div>Czy na pewno chcesz usunąć to auto?</div>
                             <div className='flex justify-end items-center pt-4'>
-                                {loadingDel && (
-                                    <Spinner/>
-                                )}
                                 <Button
                                     className='ms-4 flex items-center'
                                     disabled={loadingDel || loadingDestroy}
@@ -175,7 +173,11 @@ export default function Edit() {
                                     color="red"
                                     onClick={()=>handleDestroy()}
                                 >
-                                    <Trash2 size={24} className="pe-1"/>
+                                    {(loadingDestroy) ? (
+                                        <Spinner button={true} buttonClassName="pe-1"/>
+                                    ):(
+                                        <Trash2 size={24} className="pe-1"/>
+                                    )}
                                     Usuń z bazy danych
                                 </Button>
                                 ):(
@@ -185,7 +187,11 @@ export default function Edit() {
                                     color="red"
                                     onClick={()=>handleDelete()}
                                 >
-                                    <Trash size={24} className="pe-1"/>
+                                    {(loadingDel) ? (
+                                        <Spinner button={true} buttonClassName="pe-1"/>
+                                    ):(
+                                        <Trash size={24} className="pe-1"/>
+                                    )}
                                     Usuń
                                 </Button>
                                 )}
@@ -206,7 +212,7 @@ export default function Edit() {
                     <Card.Body>
                         <form onSubmit={handleUpdate} className='w-full'>
                             {authData.hasPermission('admin','admin') && (
-                                <UserSelect items={users} value={formData.user_id} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
+                                <UserSelect onSelect={handleUserChange} initialValue={selectedUser.current}/>
                             )}
                             <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                             <div className='w-full flex justify-between items-center pt-4'>
@@ -219,7 +225,11 @@ export default function Edit() {
                                         color="green"
                                         onClick={() => handleRestore()}
                                     >
-                                        <ArchiveRestore size={24} className="pe-1"/>
+                                        {(loadingRestore) ? (
+                                            <Spinner button={true} buttonClassName="pe-1"/>
+                                        ):(
+                                            <ArchiveRestore size={24} className="pe-1"/>
+                                        )}
                                         Przywróć
                                     </Button>
                                     <Button
@@ -254,7 +264,11 @@ export default function Edit() {
                                         type="submit"
                                         color="yellow"
                                     >
-                                        <SquarePen size={24} className="pe-1"/>
+                                        {(loadingPut) ? (
+                                            <Spinner button={true} buttonClassName="pe-1"/>
+                                        ):(
+                                            <SquarePen size={24} className="pe-1"/>
+                                        )}
                                         Zmień
                                     </Button>
                                     <Button

@@ -8,6 +8,7 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> &{
     className?: string,
     color?: "yellow" | "blue" | "red" | "green" | "lime" | "emerald" | "purple" | "pink" | "slate" | "cyan" | "sky" | "teal" | "white",
     size?: number,
+    loading?: boolean,
 };
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
     className = "",
     color = "blue",
     size = 2,
+    loading = false,
     ...props 
 }: Props) => (
     <button
@@ -194,18 +196,10 @@ const Button = ({
             }
              {...props} 
     >
-        {children}
+        <>
+            {children}
+        </> 
     </button>
 );
-                             /* hover:shadow-md */  /*  dark:shadow-yellow-800 */
 
-/*                                              cursor-pointer
-                px-3 py-2
-                rounded-xl
-                font-medium
-                border border-yellow-300 dark:border-yellow-400
-                text-gray-700 bg-yellow-200
-                dark:text-gray-900 dark:bg-yellow-300
-                hover:bg-yellow-300
-                dark:hover:bg-yellow-400 */
 export default Button;

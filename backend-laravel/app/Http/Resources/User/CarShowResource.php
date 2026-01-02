@@ -21,7 +21,7 @@ class CarShowResource extends JsonResource
             'registration_number' => $this->registration_number,
             'user_id' => $this->user_id,
             'deleted_at' => $this->deleted_at,
-
+            
             // belongsTo
             'user' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,

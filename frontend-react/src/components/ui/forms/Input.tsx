@@ -11,6 +11,7 @@ type Props = React.InputHTMLAttributes<HTMLInputElement> & {
     linear?: boolean,
     classNameContainer?: string,
     unit?: string | null,
+    disabled?: boolean,
 };
 
 const Input = ({
@@ -26,6 +27,7 @@ const Input = ({
     autoComplete = "off",
     linear = false,
     unit = null,
+    disabled = false,
     ...props 
 }: Props) => (
     <>
@@ -38,13 +40,17 @@ const Input = ({
                         name={name}
                         type={type}
                         value={value}
-
+                        disabled={disabled}
                         placeholder={placeholder}
                         autoComplete={autoComplete}
-                        className={`my-2 px-3 py-2 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ${classNameInput}` + (unit ? (" rounded-s-md text-right") :(" rounded-md"))}
+                        className={`my-2 px-3 py-2 border `
+                            +(disabled ? `text-neutral-800 bg-neutral-200 border-neutral-400 ` : `text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white `)+
+                            `focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ${classNameInput}` + (unit ? (" rounded-s-md text-right") :(" rounded-md"))}
                     />
                     <>
-                    {unit ? (<span className="my-2 px-3 py-2 text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-neutral-300 rounded-e-md border-y border-e">{unit}</span>) : (<></>)}
+                    {unit ? (<span className={`my-2 px-3 py-2 `+
+                    `text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-neutral-300`+
+                    ` rounded-e-md border-y border-e`}>{unit}</span>) : (<></>)}
                     </>
                 </div>
             </div>

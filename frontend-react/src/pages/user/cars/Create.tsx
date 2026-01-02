@@ -1,11 +1,11 @@
-import React, { useState,useContext, useEffect } from 'react';
+import React, { useState,useContext } from 'react';
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
 import { SquarePlus,Undo2 } from "lucide-react";
-import { Card, Button,Error,Loading,Spinner} from '@/components';
+import { Card, Button,Error,Spinner} from '@/components';
 
 // Model //
 
@@ -14,6 +14,8 @@ import type { FormDataType } from '@/models/Car.tsx';
 
 import Form from './Form.tsx';
 
+import type { ItemLookupType as UserLookupType } from "@/models/User";
+
 // API //
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
@@ -21,7 +23,6 @@ import { carService } from '@/api/services/backend/user/car.service.ts';
 
 // USERS //
 import UserSelect from '@/features/user/components/UserSelect.tsx';
-import getUsers from '@/features/user/hooks/getUsers.ts';
 
 export default function Create() {
 
@@ -38,19 +39,9 @@ export default function Create() {
     // Get Users For Admin
     // -------------------------------------------------------------------------- //
 
-    const { users,loadingUsers,errorUsers } = getUsers(authData.hasPermission('admin','admin'));
-    const handleUserChange = (value:number) => {
-        setFormData((p) => ({ ...p, user_id: value }));
+    const handleUserChange = (user: UserLookupType  ) => {
+        setFormData((p) => ({ ...p, user_id: user.id}));
     };
-
-    /*  
-    Gdyby domyślny nie miał by brak wyboru
-    useEffect(() => {
-    if (users && users.length > 0) {
-        handleUserChange(users[0].id);
-    }
-    }, [users]);
-    */
 
     // -------------------------------------------------------------------------- //
     // Submit Handler
@@ -70,9 +61,6 @@ export default function Create() {
     // Wyświetlanie błędów
     // -------------------------------------------------------------------------- //
 
-    if(loadingUsers) { return <Loading/>; }
-
-    if(errorUsers) { return <Error><Error.Text type={errorUsers.type}>{errorUsers.text}</Error.Text></Error>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
@@ -88,26 +76,27 @@ export default function Create() {
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>
                     {authData.hasPermission('admin','admin') && (
-                        <UserSelect items={users} value={formData.user_id} onChange={value => handleUserChange(Number(value))} disabled={false} noneText="Nieprzypisane do pracownika"/>
+                        <UserSelect onSelect={handleUserChange}/>
                     )}
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>
-                        {loading && (
-                            <Spinner/>
-                        )}
                         <Button
                             className='mx-4 flex items-center'
-                            disabled={loading || loadingUsers}
+                            disabled={loading}
                             type="submit"
                             color="green"
                         >
-                            <SquarePlus size={24} className="pe-1"/>
+                            {(loading) ? (
+                                <Spinner button={true} buttonClassName="pe-1"/>
+                            ):(
+                                <SquarePlus size={24} className="pe-1"/>
+                            )}
                             Dodaj
                         </Button>
                         <Button
                             onClick={() => navigate(-1)}
                             className='flex items-center'
-                            disabled={loading || loadingUsers}
+                            disabled={loading}
                             color="sky"
                         >
                             <Undo2 size={24} className="pe-1"/>

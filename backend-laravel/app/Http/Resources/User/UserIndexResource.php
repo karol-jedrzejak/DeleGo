@@ -18,15 +18,7 @@ class UserIndexResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'surname' => $this->surname,
-            'academic_titles_after' => $this->academic_titles_after,
-            'academic_titles_before' => $this->academic_titles_before,
-            'email' => $this->email,
-            'phone_landline' => $this->phone_landline,
-            'phone_mobile' => $this->phone_mobile,
-            'position' => $this->position,
-            'permissions' => new UserPermissionResource($this),
+            'name_surname' => $this->name.' '.$this->surname,
         ];
     }
 }

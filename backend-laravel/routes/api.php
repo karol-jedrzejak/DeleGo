@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
 
         // Auth
         Route::post('logout', [AuthenticationController::class, 'logout']);
-        Route::get('user', [AuthenticationController::class, 'user_info']);
+        Route::get('user', [AuthenticationController::class, 'current_user_info']);
 
         // Car
         Route::apiResource('car', CarController::class)->middleware('permission:misc,cars,1');
@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
 
         // Admin
+        Route::get('admin/user/{user}', [AuthenticationController::class, 'user_info'])->middleware('permission:admin,admin,1');
         Route::get('admin/users', [AuthenticationController::class, 'users_info'])->middleware('permission:admin,admin,1');
         Route::put('admin/users/update_permissions', [AuthenticationController::class, 'update_permissions'])->middleware('permission:admin,admin,1');
 

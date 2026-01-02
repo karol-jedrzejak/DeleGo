@@ -166,9 +166,6 @@ export default function Edit() {
                     <Card.Body>
                         <div>Czy na pewno chcesz usunąć tego pracownika ?</div>
                         <div className='flex justify-end items-center pt-4'>
-                            {loadingDel && (
-                                <Spinner/>
-                            )}
                             <Button
                                 className='ms-4 flex items-center'
                                 disabled={loadingDel || loadingDestroy}
@@ -185,7 +182,11 @@ export default function Edit() {
                                 color="red"
                                 onClick={()=>handleDestroy()}
                             >
-                                <Trash2 size={24} className="pe-1"/>
+                                {(loadingDestroy) ? (
+                                    <Spinner button={true} buttonClassName="pe-1"/>
+                                ):(
+                                    <Trash2 size={24} className="pe-1"/>
+                                )}
                                 Usuń z bazy danych
                             </Button>
                             ):(
@@ -195,7 +196,11 @@ export default function Edit() {
                                 color="red"
                                 onClick={()=>handleDelete()}
                             >
-                                <Trash size={24} className="pe-1"/>
+                                {(loadingDel) ? (
+                                    <Spinner button={true} buttonClassName="pe-1"/>
+                                ):(
+                                    <Trash size={24} className="pe-1"/>
+                                )}
                                 Usuń
                             </Button>
                             )}
@@ -226,7 +231,11 @@ export default function Edit() {
                                     color="green"
                                     onClick={() => handleRestore()}
                                 >
-                                    <ArchiveRestore size={24} className="pe-1"/>
+                                    {(loadingRestore) ? (
+                                        <Spinner button={true} buttonClassName="pe-1"/>
+                                    ):(
+                                        <ArchiveRestore size={24} className="pe-1"/>
+                                    )}
                                     Przywróć
                                 </Button>
                                 <Button
@@ -261,7 +270,11 @@ export default function Edit() {
                                     type="submit"
                                     color="yellow"
                                 >
-                                    <SquarePen size={24} className="pe-1"/>
+                                    {(loadingPut) ? (
+                                        <Spinner button={true} buttonClassName="pe-1"/>
+                                    ):(
+                                        <SquarePen size={24} className="pe-1"/>
+                                    )}
                                     Zmień
                                 </Button>
                                 <Button

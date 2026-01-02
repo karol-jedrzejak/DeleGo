@@ -17,7 +17,7 @@ export const formDataKeys = [
 
 export type FormDataType = {
   [K in typeof formDataKeys[number]]: 
-    K extends "user_id" ? number | undefined :
+    K extends "user_id" ? string | undefined :
     string; // domyślnie string
 };
 

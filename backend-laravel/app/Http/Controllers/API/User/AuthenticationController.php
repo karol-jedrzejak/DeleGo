@@ -49,24 +49,61 @@ class AuthenticationController extends Controller
     }
     
     /**
-     * Display single user info.
+     * Display current user info.
      */
-    public function user_info(Request $request)
+    public function current_user_info(Request $request)
     {
         $user = $request->user()->load(['permissions','permissions.type']);
         return new UserShowResource($user);
     }
 
     /**
+     * Display user info.
+     */
+    public function user_info(User $user)
+    {
+        return new UserShowResource($user);
+    }
+
+    /**
      * Display users info.
      */
-    public function users_info()
+    public function users_info(Request $request)
     {
-        $users = User::with('permissions.type')
+        $search = $request->query('search');
+
+        $query = User::with('permissions.type');
+
+        $query->when($search, function ($q, $search) {
+            // 1. Rozbijamy string po spacjach i usuwamy puste elementy
+            $words = explode(' ', $search);
+            $words = array_filter($words);
+
+            // 2. Tworzymy grupę warunków ( nested where )
+            $q->where(function ($innerQuery) use ($words) {
+                foreach ($words as $word) {
+                    // Każde słowo musi pasować do imienia LUB nazwiska
+                    $innerQuery->where(function ($subQuery) use ($word) {
+                        $subQuery->where('name', 'LIKE', "{$word}%")
+                                ->orWhere('surname', 'LIKE', "{$word}%");
+                    });
+                }
+            });
+        });
+        
+        $users = $query
+                ->orderBy('name')
+                ->orderBy('surname')
+                ->limit(10)
+                ->get();
+
+        return UserIndexResource::collection($users);
+
+/*         $users = User::with('permissions.type')
                 ->orderBy('name')
                 ->orderBy('surname')
                 ->get();
-        return UserIndexResource::collection($users);
+        return UserIndexResource::collection($users); */
     }
 
     /**

@@ -107,6 +107,11 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            $car->load('user');
+        }
         return new CarShowResource($car);
     }
 

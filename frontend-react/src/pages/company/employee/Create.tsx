@@ -84,16 +84,17 @@ export default function Create() {
                 <form onSubmit={handleSubmit} className='w-full mt-2'>
                 <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                 <div className='w-full flex justify-end items-center pt-4 gap-2'>
-                    {loadingItem && (
-                        <Spinner/>
-                    )}
                     <Button
                         className='flex items-center'
                         disabled={loadingItem}
                         type="submit"
                         color="green"
                     >
-                        <SquarePlus size={24} className="pe-1"/>
+                        {(loadingItem) ? (
+                            <Spinner button={true} buttonClassName="pe-1"/>
+                        ):(
+                             <SquarePlus size={24} className="pe-1"/>
+                        )}
                         Dodaj
                     </Button>
                     <Button

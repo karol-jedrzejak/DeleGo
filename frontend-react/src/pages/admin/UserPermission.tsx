@@ -3,12 +3,13 @@ import { MessageContext } from "@/providers/MessageProvider.js";
 
 // Komponenty UI //
 
-import { Copy,Phone,Mail } from "lucide-react";
-import { Card, Loading, Button , Select, Input, Error} from '@/components';
+import { Copy,Phone,Mail ,SquarePen} from "lucide-react";
+import { Card, Loading, Button , Input, Error, Spinner} from '@/components';
 
 // Model //
 
-import type { ItemType,ItemsType } from "@/models/User";
+import UserSelect from "@/features/user/components/UserSelect";
+import type { ItemType,ItemLookupType  } from "@/models/User";
 
 // API //
 
@@ -22,24 +23,13 @@ const UserPermission = () => {
   // -------------------------------------------------------------------------- //
   
   const { setMessage } = useContext(MessageContext);
-
-  const [items, setItems] = useState<ItemsType | null>(null);
   const [item, setItem] = useState<ItemType | null>(null);
 
   // -------------------------------------------------------------------------- //
   // Get
   // -------------------------------------------------------------------------- //
 
-  const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemsType>("get", userService.paths.getAll);
-
-  useEffect(() => {
-      mutateGet()
-      .then((res) => {
-          setItems(res.data);
-          setItem(res.data[0]);
-      })
-      .catch(() => {});
-  }, []);
+  const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", userService.paths.getById(""));
 
   // -------------------------------------------------------------------------- //
   // Update
@@ -57,14 +47,6 @@ const UserPermission = () => {
   // Handle Change
   // -------------------------------------------------------------------------- //
 
-  const handleChangeUser = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-      ) => {
-      const { value } = e.target;
-      let found = items?.find(item => item.id == Number(value));
-      setItem(found ?? null)
-  };
-
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement>
       ) => {
@@ -80,6 +62,15 @@ const UserPermission = () => {
       }
 
       setItem(new_item);
+  };
+
+  const handleUserSelect = (user: ItemLookupType  ) => {
+    console.log("Wybrano użytkownika o ID:", user.id);
+    mutateGet({ url: userService.paths.getById(user.id) })
+      .then((res) => {
+          setItem(res.data);
+      })
+      .catch(() => {});
   };
 
   // -------------------------------------------------------------------------- //
@@ -117,7 +108,6 @@ const UserPermission = () => {
   // Wyświetlanie błędu i Loading
   // -------------------------------------------------------------------------- //
 
-  if(loadingGet || loadingPut) { return <Loading/>; }
   if(errorGet || errorPut) { return <Error><Error.Text>Błąd</Error.Text></Error> }
 
   // -------------------------------------------------------------------------- //
@@ -131,20 +121,9 @@ const UserPermission = () => {
           Zmiana uprawnień Userów
         </Card.Header>
         <Card.Body>
-          {items &&
+
             <div>
-              <Select
-                  label="Wybierz usera:"   
-                  name="active"
-                  classNameInput="w-full"
-                  onChange={handleChangeUser}
-                  defaultValue={item?.id}
-                  >
-                    {items.map( (item_selection,key) => (  
-                      <option key={key} value={item_selection.id}
-                      >{item_selection.name} {item_selection.surname} [id={item_selection.id}]</option>
-                    ))}
-              </Select>
+              <UserSelect onSelect={handleUserSelect}/>
               {item && (
                 <>
                 <div className="flex justify-center items-center">
@@ -208,6 +187,7 @@ const UserPermission = () => {
                           color="purple" size={2}
                           className="flex flex-row items-center"
                           onClick={() => copyDataToClipboard()}
+                          disabled={loadingGet || loadingPut}
                           >
                                   <Copy size={18}/>
                           </Button>
@@ -238,6 +218,7 @@ const UserPermission = () => {
                                     max={9}
                                     step={1}
                                     linear
+                                    disabled={loadingGet || loadingPut}
                                 ></Input>
                               </li>
                             ))}
@@ -249,12 +230,24 @@ const UserPermission = () => {
 
                 </div>
                 <div className="w-full flex items-center justify-center pt-4">
-                  <Button onClick={() => handleUpdate()}>Aktualizuj</Button>
+                  <Button
+                    className='flex items-center'
+                    onClick={() => handleUpdate()}
+                    disabled={loadingGet || loadingPut}
+                    color="yellow"
+                    >
+                      {(loadingGet || loadingPut) ? (
+                        <Spinner button={true} buttonClassName="pe-1"/>
+                      ):(
+                        <SquarePen size={24} className="pe-1"/>
+                      )}
+                      <span>Aktualizuj</span></Button>
+                    
                 </div>
                 </>
               )}
             </div>
-          }
+          
         </Card.Body>
       </Card>
     </div>

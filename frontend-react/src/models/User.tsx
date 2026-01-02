@@ -2,11 +2,11 @@ export type ItemType = {
     academic_titles_after: string,
     academic_titles_before: string,
     email: string,
-    id: number,
+    id: string,
     name: string,
     permissions?: {
         [department: string]: {        
-        [resource: string]: string; 
+            [resource: string]: string; 
         };
     },
     phone_landline: string,
@@ -15,4 +15,7 @@ export type ItemType = {
     surname: string,
 };
 
-export type ItemsType = ItemType[];
+export type ItemLookupType = {
+    id: string,
+    name_surname: string,
+};
