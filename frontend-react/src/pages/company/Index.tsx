@@ -142,21 +142,23 @@ const Index = () => {
                                         </Button>
                                     </td>
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
-                                        <Link to={ROUTES.COMPANY.SHOW.LINK(item.id)}>
-                                            <Button color="sky">
-                                                <Search size={20}/>
-                                            </Button>
-                                        </Link>
-                                        <Link to={ROUTES.COMPANY.EMPLOYEE.INDEX.LINK(item.id)} className="ps-1">
-                                            <Button color="emerald">
-                                                <Users size={20}/>
-                                            </Button>
-                                        </Link>
-                                        <Link to={ROUTES.COMPANY.EDIT.LINK(item.id)} className="ps-1">
-                                            <Button color="yellow">
-                                                <SquarePen size={20}/>
-                                            </Button>
-                                        </Link>
+                                        <div className="flex flex-row justify-center gap-1">
+                                            <Link to={ROUTES.COMPANY.SHOW.LINK(item.id)}>
+                                                <Button color="sky">
+                                                    <Search size={20}/>
+                                                </Button>
+                                            </Link>
+                                            <Link to={ROUTES.COMPANY.EMPLOYEE.INDEX.LINK(item.id)}>
+                                                <Button color="emerald">
+                                                    <Users size={20}/>
+                                                </Button>
+                                            </Link>
+                                            <Link to={ROUTES.COMPANY.EDIT.LINK(item.id)}>
+                                                <Button color="yellow">
+                                                    <SquarePen size={20}/>
+                                                </Button>
+                                            </Link>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

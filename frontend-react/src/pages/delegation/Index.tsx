@@ -8,13 +8,13 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 
 import pdf_icon from "@/assets/icons/pdf_icon.svg"
 
-import { Search,SquarePlus,SquarePen,FileText } from "lucide-react";
+import { SquarePlus,SquarePen,Search } from "lucide-react";
 import { Card, Button , Pagination , HeaderSorting,HeaderSearchMeany,Error,TableDataLoading,HeaderSearch,HeaderSearchSelect} from '@/components';
 
 // Model //
 
 import type { DataType} from '@/models/Delegation.tsx';
-import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/models/Delegation.tsx';
+import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/models/Delegation.tsx';
 
 // API //
 
@@ -185,17 +185,23 @@ const Index = () => {
                                         <td className="p-2">{item.user?.name} {item.user?.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
-                                        <Link to={ROUTES.DELEGATION.SHOW.LINK(item.id)}>
-                                            <Button color="white" className="w-[38px]">
-                                                {/* <FileText size={20}/> */}
-                                                <img src={pdf_icon} className="w-10 "/>
-                                            </Button>
-                                        </Link>
-                                        <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)} className="ps-1">
-                                            <Button color="yellow">
-                                                <SquarePen size={20}/>
-                                            </Button>
-                                        </Link>
+                                        <div className="flex flex-row justify-center gap-1">
+                                            <Link to={ROUTES.DELEGATION.PDF.LINK(item.id)}>
+                                                <Button color="white" className="w-[38px]">
+                                                    <img src={pdf_icon} className="w-10 "/>
+                                                </Button>
+                                            </Link>
+                                            <Link to={ROUTES.DELEGATION.SHOW.LINK(item.id)}>
+                                                <Button color="sky" className="w-[38px]">
+                                                    <Search size={20}/>
+                                                </Button>
+                                            </Link>
+                                            <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)}>
+                                                <Button color="yellow">
+                                                    <SquarePen size={20}/>
+                                                </Button>
+                                            </Link>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -30,8 +30,8 @@ export const DEFAULT_FORM_DATA = {
     destination: "",
     description: "",
     distance: 1,
-    departure: null,
-    arrival: null,
+    departure: "",
+    arrival: "",
 };
 
 // -------------------------------------------------------------------------- //

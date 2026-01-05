@@ -5,33 +5,40 @@ import type { ItemType as CarType } from '@/models/Car';
 import type { ItemType as UserType } from '@/models/User';
 import type { ItemType as CompanyType } from '@/models/Company';
 
-import type { ItemType as DelegationBillType } from '@/models/DelegationBill';
-import type { ItemType as DelegationTripType } from '@/models/DelegationTrip';
+import type { FormDataType as DelegationBillType } from '@/models/DelegationBill';
+import type { FormDataType as DelegationTripType } from '@/models/DelegationTrip';
+
+import { DEFAULT_FORM_DATA as DELEGATION_BILL_DEFAULT_FORM_DATA } from '@/models/DelegationBill';
+import { DEFAULT_FORM_DATA as DELEGATION_TRIP_DEFAULT_FORM_DATA } from '@/models/DelegationTrip';
 
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
 
 export const formDataKeys = [
-    'user_id',
-    'car_id',
-    'company_id',
-    'custom_address',
-    'description',
-    'total_distance',
-    'departure',
-    'return',
-    'settled'
+  'user_id',
+  'car_id',
+  'company_id',
+  'custom_address',
+  'description',
+  'total_distance',
+  'departure',
+  'return',
+  'settled',
+  'delegation_bills',
+  'delegation_trips',
 ] as const;
 
 
 export type FormDataType = {
   [K in typeof formDataKeys[number]]: 
     K extends "custom_address" ? string | null :
-    K extends "user_id" | "car_id" | "company_id" ? number | null :
+    K extends "user_id" | "car_id" | "company_id" ? string | null :
     K extends "total_distance" ? number :
     K extends "departure" | 'return' ? string :
     K extends "settled" ? boolean :
+    K extends "delegation_bills" ? DelegationBillType :
+    K extends "delegation_trips" ? DelegationTripType :
     string; // domyślnie string
 };
 
@@ -46,9 +53,11 @@ export const DEFAULT_FORM_DATA = {
     custom_address: "",
     description: "",
     total_distance: 1,
-    departure: null,
-    return: null,
-    settled: false
+    departure: "",
+    return: "",
+    settled: false,
+    delegation_bills: DELEGATION_BILL_DEFAULT_FORM_DATA,
+    delegation_trips: DELEGATION_TRIP_DEFAULT_FORM_DATA,
 };
 
 // -------------------------------------------------------------------------- //
@@ -78,13 +87,14 @@ export type ItemType = FormDataType &{
     car?: CarType,
     user?: UserType,
     company?: CompanyType,
-    delegation_bills?: DelegationBillType,
-    delegation_trips?: DelegationTripType,
+/*     delegation_bills?: DelegationBillType,
+    delegation_trips?: DelegationTripType, */
     created_at: string,
     updated_at: string,
 };
 
 export type DataType = ItemType[];
+
 
 // -------------------------------------------------------------------------- //
 // GENEROWANE AUTOMATYCZNIE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

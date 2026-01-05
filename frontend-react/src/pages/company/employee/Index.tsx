@@ -199,16 +199,18 @@ const Index = () => {
                                             )}
                                         </td>
                                         <td className="p-2">
-                                            <Link to={ROUTES.COMPANY.EMPLOYEE.SHOW.LINK(item.id)}>
-                                                <Button color="sky">
-                                                    <Search size={20}/>
-                                                </Button>
-                                            </Link>
-                                            <Link to={ROUTES.COMPANY.EMPLOYEE.EDIT.LINK(item.id)} className="ps-1">
-                                                <Button color="yellow">
-                                                    <SquarePen size={20}/>
-                                                </Button>
-                                            </Link>
+                                            <div className="flex flex-row justify-center gap-1">
+                                                <Link to={ROUTES.COMPANY.EMPLOYEE.SHOW.LINK(item.id)}>
+                                                    <Button color="sky">
+                                                        <Search size={20}/>
+                                                    </Button>
+                                                </Link>
+                                                <Link to={ROUTES.COMPANY.EMPLOYEE.EDIT.LINK(item.id)}>
+                                                    <Button color="yellow">
+                                                        <SquarePen size={20}/>
+                                                    </Button>
+                                                </Link>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

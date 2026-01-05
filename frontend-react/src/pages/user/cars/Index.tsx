@@ -135,11 +135,13 @@ const Index = () => {
                                         <td className="p-2">{item.user?.name} {item.user?.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
-                                        <Link to={ROUTES.USER.CARS.EDIT.LINK(item.id)} className="ps-1">
-                                            <Button color="yellow">
-                                                <SquarePen size={20}/>
-                                            </Button>
-                                        </Link>
+                                        <div className="flex flex-row justify-center gap-1">
+                                            <Link to={ROUTES.USER.CARS.EDIT.LINK(item.id)}>
+                                                <Button color="yellow">
+                                                    <SquarePen size={20}/>
+                                                </Button>
+                                            </Link>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

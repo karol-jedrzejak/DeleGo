@@ -7,6 +7,7 @@ import type { ItemType as DelegationBillTypeType } from '@/models/DelegationBill
 // -------------------------------------------------------------------------- //
 
 export const formDataKeys = [
+    'delegation_bill_type_id',
     'description',
     'amount',
 ] as const;
@@ -25,6 +26,7 @@ export type FormDataType = {
 export const DEFAULT_FORM_DATA = {
     description: "",
     amount: 0.01,
+    delegation_bill_type_id: "",
 };
 
 // -------------------------------------------------------------------------- //
@@ -34,7 +36,6 @@ export const DEFAULT_FORM_DATA = {
 export type ItemType = FormDataType &{
     id: number,
     delegation_id: number,
-    delegation_bill_type_id: number,
     delegation_bill_type?: DelegationBillTypeType,
     created_at: string,
     updated_at: string,

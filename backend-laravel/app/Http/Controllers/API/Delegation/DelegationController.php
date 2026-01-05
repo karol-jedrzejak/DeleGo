@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use App\Http\Resources\Delegation\DelegationIndexResource;
+use App\Http\Resources\Delegation\DelegationShowResource;
 
 class DelegationController extends Controller
 {
@@ -70,6 +71,30 @@ class DelegationController extends Controller
      * Display the specified resource.
      */
     public function show(Delegation $delegation)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // razem z modelem user jeśli admin
+        if ($user->isAdmin()) {
+            $delegation->load('user');
+        }
+
+        $delegation->load([
+            'car:id,registration_number,brand,model',
+            'company:id,name_short',
+          'delegationTrips',
+        ]);
+
+        $delegation->load('delegationBills.delegationBillType');
+
+        return new DelegationShowResource($delegation);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function pdf(Delegation $delegation)
     {
         //
     }

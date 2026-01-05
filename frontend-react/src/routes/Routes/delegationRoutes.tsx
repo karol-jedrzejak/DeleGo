@@ -1,5 +1,6 @@
 // Companies
 import DelegationIndex from "@/pages/delegation/Index";
+import DelegationShow from "@/pages/delegation/Show";
 
 export const DELEGATION = {
     INDEX: {
@@ -17,7 +18,13 @@ export const DELEGATION = {
     SHOW: {
         PATH:  '/delegation/:id',
         LINK:  (id: number) => `/delegation/${id}`,
-        COMPONENT: DelegationIndex,
+        COMPONENT: DelegationShow,
+        PERMISSIONS: {misc:{delegations: 1}}
+    },
+    PDF: {
+        PATH:  '/delegation/:id/pdf',
+        LINK:  (id: number) => `/delegation/${id}/pdf`,
+        COMPONENT: DelegationShow,
         PERMISSIONS: {misc:{delegations: 1}}
     },
     EDIT: {
