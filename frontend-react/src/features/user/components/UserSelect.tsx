@@ -15,7 +15,7 @@ import { userService } from "@/api/services/backend/user/user.service";
 
 type Props = {
     onSelect: (item: ItemLookupType ) => void;
-    initialValue?: string;
+    initialValue?: string | null;
     disabled?: boolean;
 };
 
@@ -25,19 +25,63 @@ export default function UserSelect({
     onSelect,
 }:Props) {
 
-    const [query, setQuery] = useState<string>(initialValue);
+    const [query, setQuery] = useState<string>(initialValue ?? '');
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
-    const [isSelecting, setIsSelecting] = useState(false);
-    const isFirstRender = useRef<boolean>(true);
+
+/*     const [isSelecting, setIsSelecting] = useState(false);
+    const isFirstRender = useRef<boolean>(true); */
+
+    const isTyping = useRef(false);
 
     const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemLookupType []>("get", userService.paths.getAll);
 
     useEffect(() => {
-        setQuery(initialValue);
-    }, [initialValue]);
+        if (!isTyping.current) return;
 
+        if (query.length < 2) {
+            setResults([]);
+            setShowDropdown(false);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            const params = new URLSearchParams();
+            params.set("search", query);
+
+            mutateGet({ params })
+                .then(res => {
+                    setResults(res.data);
+                    setShowDropdown(true);
+                })
+                .catch(() => {});
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [query]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        isTyping.current = true;
+        setQuery(e.target.value);
+    };
+
+    const handleSelect = (item: ItemLookupType) => {
+        setQuery(item.name_surname);
+        setResults([]);
+        setShowDropdown(false);
+        isTyping.current = false;
+        onSelect(item);
+    };
+
+
+    /* 
     useEffect(() => {
+        
+        if(query == initialValue)
+        {
+            return;
+        }
+
         if (isSelecting) {
             setIsSelecting(false);
             return;
@@ -74,7 +118,7 @@ export default function UserSelect({
         setResults([]);
         setShowDropdown(false);
         onSelect(item);
-    };
+    }; */
 
     if(errorGet){
         return <>Błąd</>
@@ -87,12 +131,13 @@ export default function UserSelect({
                     name="user_id"
                     value={query}
                     disabled={disabled}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+                    //onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
                     classNameContainer=''
                     classNameInput='w-full'
                     placeholder = "Wyszukaj"   
                     errors={null}
-                    onFocus={() => query.length >= 2 && setShowDropdown(true)}
+                    onChange={handleChange}
+                    //onFocus={() => query.length >= 2 && setShowDropdown(true)}
                 ></Input>
                 {loadingGet && <div className="absolute z-10 bottom-0 right-0 p-3"><Spinner/></div>}
                 {showDropdown && results.length > 0 && (

@@ -47,7 +47,6 @@ export default function Edit() {
         setFormData((p) => ({ ...p, user_id: user.id}));
     };
 
-
     // -------------------------------------------------------------------------- //
     // Get
     // -------------------------------------------------------------------------- //
@@ -58,7 +57,10 @@ export default function Edit() {
         mutateGet()
         .then((res) => {
             setFormData(res.data);
-            selectedUser.current = (res.data.user?.name+" "+res.data.user?.surname);
+            if(res.data.user?.id)
+            {
+                selectedUser.current = (res.data.user?.name+" "+res.data.user?.surname);
+            }
             if(res.data.deleted_at)
             {
                 setIsDeleted(true);
