@@ -82,7 +82,7 @@ const Index = () => {
                 </Card.Header>
                 <Card.Body>
                     <div className="pb-4 flex justify-end gap-2">
-                        <Link to={ROUTES.COMPANY.CREATE.LINK}>
+                        <Link to={ROUTES.DELEGATION.CREATE.LINK}>
                             <Button 
                                 color="green"
                                 className="flex items-center">

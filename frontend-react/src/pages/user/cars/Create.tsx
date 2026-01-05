@@ -34,6 +34,7 @@ export default function Create() {
 
     const navigate = useNavigate();   
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
+    const [errorUsers, setErrorUsers] = useState<string | null>(null);
     
     // -------------------------------------------------------------------------- //
     // Get Users For Admin
@@ -61,6 +62,7 @@ export default function Create() {
     // Wyświetlanie błędów
     // -------------------------------------------------------------------------- //
 
+    if(errorUsers) { return <Error><Error.Text>{errorUsers}</Error.Text></Error>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
@@ -76,7 +78,7 @@ export default function Create() {
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>
                     {authData.hasPermission('admin','admin') && (
-                        <UserSelect onSelect={handleUserChange}/>
+                        <UserSelect onSelect={handleUserChange} onError={() => setErrorUsers("Bład połączenia z serverem")}/>
                     )}
                     <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                     <div className='w-full flex justify-end items-center pt-4'>

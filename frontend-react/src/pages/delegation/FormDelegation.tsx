@@ -5,7 +5,6 @@ import { Input } from '@/components';
 
 import type { FormPropsType } from '@/models/Delegation';
 
-
 export default function Form({formData,setFormData,formError}:FormPropsType) {
 
     // -------------------------------------------------------------------------- //

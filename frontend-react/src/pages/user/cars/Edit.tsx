@@ -38,7 +38,8 @@ export default function Edit() {
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const selectedUser = useRef<string>("");
-
+    const [errorUsers, setErrorUsers] = useState<string | null>(null);
+    
     // -------------------------------------------------------------------------- //
     // Get Users For Admin
     // -------------------------------------------------------------------------- //
@@ -135,6 +136,7 @@ export default function Edit() {
     if(loadingGet || !selectedUser) { return <Loading/>; }
 
     if(errorGet) { return <Error><Error.Text type={errorGet.type}>{errorGet.text}</Error.Text></Error>; }
+    if(errorUsers) { return <Error><Error.Text>{errorUsers}</Error.Text></Error>; }
     if(errorPut) { return <Error><Error.Text type={errorPut.type}>{errorPut.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
     if(errorDel) { return <Error><Error.Text type={errorDel.type}>{errorDel.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
     
@@ -214,7 +216,7 @@ export default function Edit() {
                     <Card.Body>
                         <form onSubmit={handleUpdate} className='w-full'>
                             {authData.hasPermission('admin','admin') && (
-                                <UserSelect onSelect={handleUserChange} initialValue={selectedUser.current}/>
+                                <UserSelect onSelect={handleUserChange} initialValue={selectedUser.current} onError={() => setErrorUsers("Bład połączenia z serverem")}/>
                             )}
                             <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                             <div className='w-full flex justify-between items-center pt-4'>

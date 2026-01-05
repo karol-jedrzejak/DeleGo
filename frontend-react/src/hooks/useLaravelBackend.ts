@@ -98,6 +98,8 @@ export const useBackend = <T>(
           } else {
             switch (err?.status) {
               case 401:
+                setError({ type: "authorization", text: "Brak dostępu do zasobu." });
+                break;
               case 403:
                 setError({ type: "authorization", text: "Brak dostępu do zasobu." });
                 break;
