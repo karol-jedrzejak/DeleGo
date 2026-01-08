@@ -94,7 +94,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Nazwa skrócona:</td>
                                         <td className="p-2 flex items-center">       
-                                            <div>{item.name_short}</div>                    
+                                            <div>{item.names.name_short}</div>                    
                                             <Link to={ROUTES.COMPANY.EDIT.LINK(item.id)} className="ps-2">
                                                 <Button color="yellow" size={1} className="flex flex-row items-center">
                                                     <SquarePen size={14}/>
@@ -105,44 +105,44 @@ const Show = () => {
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Nazwa pełna:</td>
-                                        <td className="p-2">{item.name_complete}</td>
+                                        <td className="p-2">{item.names.name_complete}</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Adres:</td>
                                         <td className="p-2">
                                                 <Button
                                                 color="teal" size={1} className="flex flex-row items-center"
-                                                onClick={() => window.open(buildCompanyGoogleMapsUrl(item), "_blank")}
+                                                onClick={() => window.open(buildCompanyGoogleMapsUrl(item.address), "_blank")}
                                                 >
                                                     <Map size={14}/>
-                                                    <div className="ps-1">{formatAddress(item)}</div>
+                                                    <div className="ps-1">{formatAddress(item.address)}</div>
                                                     
                                                 </Button>
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Region / Kraj:</td>    
-                                        <td className="p-2">{item.region} / {item.country}</td>
+                                        <td className="p-2">{item.address.region} / {item.address.country}</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">NIP:</td>
-                                        <td className="p-2">{item.nip ?? "Brak"}</td>
+                                        <td className="p-2">{item.identifiers.nip ?? "Brak"}</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">KRS:</td>
-                                        <td className="p-2">{item.krs ?? "Brak"}</td>
+                                        <td className="p-2">{item.identifiers.krs ?? "Brak"}</td>
                                     </tr>
                                     <tr className="custom-table-row">    
                                         <td className="p-2">REGON:</td>
-                                        <td className="p-2">{item.regon ?? "Brak"}</td>
+                                        <td className="p-2">{item.identifiers.regon ?? "Brak"}</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Współrzędnie GPS:</td>
-                                        <td className="p-2">{item.latitude} N, {item.longitude} W</td>
+                                        <td className="p-2">{item.geo.latitude} N, {item.geo.longitude} W</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Odległość i dojazd:</td>
-                                        <td className="p-2">{item.distance && item.distance_time ? (item.distance+" km, "+item.distance_time+" min") : ("Brak Danych")}</td>
+                                        <td className="p-2">{item.distance && item.distance.distance_time ? (item.distance+" km, "+item.distance.distance_time+" min") : ("Brak Danych")}</td>
                                     </tr>
                                     <tr className="custom-table-row">
                                         <td className="p-2">Dane do schowka:</td>
@@ -150,13 +150,13 @@ const Show = () => {
                                             <Button
                                             color="purple" size={2}
                                             className="flex flex-row items-center"
-                                            onClick={() => copyToClipboard(item.name_complete+`\n`+formatAddress(item).split(";")[0]+`\n`+formatAddress(item).split(";")[1].trimStart())}
+                                            onClick={() => copyToClipboard(item.names.name_complete+`\n`+formatAddress(item.address).split(";")[0]+`\n`+formatAddress(item.address).split(";")[1].trimStart())}
                                             >
                                                     <Copy size={18}/>
                                             </Button>
                                             <textarea
                                             className="bg-white text-black dark:bg-neutral-700 dark:text-white rounded-md p-2 flex-1 h-20 resize-none border border-neutral-400 dark:border-0"
-                                            value={item.name_complete+`\n`+formatAddress(item).split(";")[0]+`\n`+formatAddress(item).split(";")[1].trimStart()}
+                                            value={item.names.name_complete+`\n`+formatAddress(item.address).split(";")[0]+`\n`+formatAddress(item.address).split(";")[1].trimStart()}
                                             readOnly/>
                                         </td>
                                     </tr>

@@ -1,7 +1,7 @@
-import type { FormDataType } from "@/models/Company";
+import type { CompanyAddress  } from "@/models/Company";
 
 export function buildCompanyGoogleMapsUrl(
-  company: FormDataType
+  address_object: CompanyAddress 
 ): string {
   const {
     street,
@@ -9,7 +9,7 @@ export function buildCompanyGoogleMapsUrl(
     city,
     postal_code,
     postal_city,
-  } = company;
+  } = address_object;
 
   let address = "";
 

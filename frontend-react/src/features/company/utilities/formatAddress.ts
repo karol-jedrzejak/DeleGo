@@ -1,6 +1,6 @@
-import type { FormDataType } from "@/models/Company";
+import type { CompanyAddress } from "@/models/Company";
 
-export function formatAddress(formData: FormDataType): string {
+export function formatAddress(formData: CompanyAddress ): string {
   // brak ulicy
   if (!formData.street) {
     return `${formData.city} ${formData.house_number}; ${formData.postal_code} ${formData.postal_city}, ${formData.country}`;

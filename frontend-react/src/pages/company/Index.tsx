@@ -10,7 +10,7 @@ import { Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMe
 
 // Model //
 
-import type { ItemFullType } from '@/models/Company.tsx';
+import type { ItemWithAddressType } from '@/models/Company.tsx';
 
 // API //
 
@@ -49,7 +49,7 @@ const Index = () => {
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
 
-    const [items, setItems] = useState<ItemFullType[] | null>(null);
+    const [items, setItems] = useState<ItemWithAddressType[] | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
     const [perPage, setPerPage] = useState<number>(DEFAULT_PER_PAGE);
@@ -62,7 +62,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemFullType[]>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemWithAddressType[]>>(
         "get",
         companyService.paths.getAll
     );
@@ -130,29 +130,29 @@ const Index = () => {
                             {/*  Rekordy */}                     
                             {items?.map( (item,key) => (
                                 <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
-                                            item.deleted_at
+                                            item.meta.deleted_at
                                             ? " text-red-700 dark:text-red-500 bg-gray-400 dark:bg-neutral-950"
                                             : (key % 2 === 0
                                             ? "bg-gray-100 dark:bg-neutral-900/50"
                                             : "bg-white dark:bg-neutral-800")
                                         }`}>
                                     <td className="p-2">
-                                        {item.deleted_at ? 
-                                        <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.name_short}</span></div>
+                                        {item.meta.deleted_at ? 
+                                        <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.names.name_short}</span></div>
                                         : 
-                                        <>{item.name_short}</>
+                                        <>{item.names.name_short}</>
                                         }
                                     </td>
-                                    <td className="p-2">{item.name_complete}</td>
-                                    <td className="p-2">{item.country}</td>
-                                    <td className="p-2">{item.region}</td>
+                                    <td className="p-2">{item.names.name_complete}</td>
+                                    <td className="p-2">{item.address.country}</td>
+                                    <td className="p-2">{item.address.region}</td>
                                     <td className="p-2">
                                         <Button
                                         color="teal" size={2} className="flex flex-row items-center"
-                                        onClick={() => window.open(buildCompanyGoogleMapsUrl(item), "_blank")}
+                                        onClick={() => window.open(buildCompanyGoogleMapsUrl(item.address), "_blank")}
                                         >
                                             <Map size={16}/>
-                                            <div className="ps-1">{formatAddress(item)}</div>
+                                            <div className="ps-1">{formatAddress(item.address)}</div>
                                         </Button>
                                     </td>
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">

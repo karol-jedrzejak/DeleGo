@@ -1,11 +1,17 @@
 
 import React from 'react';
-
 import { Input, Line } from '@/components';
 
-import type { FormPropsType } from '@/models/Employee.tsx';
+import type { FormDataType } from '@/models/Employee';
 
-export default function Form({formData,setFormData,formError}:FormPropsType) {
+type FormProps = {
+  formData: FormDataType
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
+  formError: Partial<Record<keyof FormDataType, string[]>> | null
+}
+
+
+export default function Form({formData,setFormData,formError}:FormProps) {
 
     // -------------------------------------------------------------------------- //
     // Change Handler

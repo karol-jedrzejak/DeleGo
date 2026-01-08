@@ -10,7 +10,7 @@ import { Card, Button, Loading, Error, PopUp,Spinner } from '@/components';
 
 // Model //
 
-import { DEFAULT_FORM_DATA} from '@/models/Company.tsx';
+import { DEFAULT_FORM_DATA, apiToForm } from '@/models/Company.tsx';
 import type { FormDataType, ItemFullType } from '@/models/Company.tsx';
 import Form from './Form.tsx';
 
@@ -41,8 +41,8 @@ export default function Edit() {
     useEffect(() => {
         mutateGet()
         .then((res) => {
-            setFormData(res.data);
-            if(res.data.deleted_at)
+            setFormData(apiToForm(res.data));
+            if(res.data.meta.deleted_at)
             {
                 setIsDeleted(true);
             }

@@ -17,13 +17,20 @@ class EmployeeIndexResource extends JsonResource
         return [
             'id' => $this->id,
             'company_id' => $this->company_id,
-            'name' => $this->name,
-            'surname' => $this->surname,
+            'names' => [
+                'name' => $this->name,
+                'surname' => $this->surname,
+
+            ],
             'position' => $this->position,
-            'phone_mobile' => $this->phone_mobile,
-            'phone_landline' => $this->phone_landline,
-            'email' => $this->email,
-            'deleted_at' => $this->deleted_at,
+            'contact' => [
+                'phone_mobile' => $this->phone_mobile,
+                'phone_landline' => $this->phone_landline,
+                'email' => $this->email,
+            ],
+            'meta' => [
+                'deleted_at' => $this->deleted_at,
+            ],
         ];
     }
 }

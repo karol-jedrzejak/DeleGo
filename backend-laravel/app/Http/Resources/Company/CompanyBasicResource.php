@@ -5,7 +5,7 @@ namespace App\Http\Resources\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompanyShowResource extends JsonResource
+class CompanyBasicResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,17 +14,8 @@ class CompanyShowResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $fields = collect(
-            explode(',', (string) $request->query('fields'))
-        )->filter();
-
-        $data = [
+        return [
             'id' => $this->id,
-            'identifiers' => [
-                'nip' => $this->nip,
-                'krs' => $this->krs,
-                'regon' => $this->regon,
-            ],
             'names' => [
                 'name_short' => $this->name_short,
                 'name_complete' => $this->name_complete,
@@ -38,27 +29,9 @@ class CompanyShowResource extends JsonResource
                 'region' => $this->region,
                 'country' => $this->country,
             ],
-            'geo' => [
-                'latitude' => $this->latitude,
-                'longitude' => $this->longitude,
-            ],
-            'distance' => [
-                'distance' => $this->distance,
-                'distance_time' => $this->distance_time,
-            ],
             'meta' => [
-                'created_at' => $this->created_at,
                 'deleted_at' => $this->deleted_at,
-                'updated_at' => $this->updated_at,
             ],
         ];
-
-        // jeśli nie podano fields → pełny obiekt
-        if ($fields->isEmpty()) {
-            return $data;
-        }
-
-        return collect($data)->only($fields)->toArray();
     }
-
 }

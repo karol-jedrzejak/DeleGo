@@ -11,7 +11,7 @@ import { Buttons as ParentButtons } from '@/features/company/components/Buttons.
 
 // Model //
 
-import type { ItemFullType as ParentItemType } from '@/models/Company.tsx';
+import type { ItemWithAddressType as ParentItemType } from '@/models/Company.tsx';
 
 import { DEFAULT_FORM_DATA } from '@/models/Employee.tsx';
 import type { FormDataType } from '@/models/Employee.tsx';
@@ -77,7 +77,7 @@ export default function Create() {
     <div className='flex items-center justify-center'>
         <Card className='w-full xl:w-3/4'>
             <Card.Header>
-                <div>Formularz dodania pracownika do firmy {parent.name_complete}</div>
+                <div>Formularz dodania pracownika do firmy {parent.names.name_complete}</div>
             </Card.Header>
             <Card.Body>
                 <ParentButtons company={parent}/>

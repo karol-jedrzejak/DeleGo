@@ -11,9 +11,8 @@ import { Loading, Card, Button , Pagination , HeaderSorting, HeaderSearch, Heade
 import { Buttons as ParentButtons } from '@/features/company/components/Buttons';
 
 // Model //
-import type { DataType } from '@/models/Employee.tsx';
-import type { ItemType as ParentItemType } from '@/models/Company.tsx';
-import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/models/Employee';
+import type { ItemFullType } from '@/models/Employee.tsx';
+import type { ItemWithAddressType as ParentItemType } from '@/models/Company.tsx';
 
 // API //
 
@@ -31,13 +30,28 @@ import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 
 const Index = () => {
 
+    const DEFAULT_SORT:SortType = [{
+        sortBy: 'name_short',
+        sortDir: 'asc',
+    }];
+
+    const DEFAULT_SEARCH:SearchType = {
+        search: null,
+        searchBy: null,
+    };
+
+    const DEFAULT_PAGE:string = "1";
+
+    const DEFAULT_PER_PAGE:number = 10;
+
+
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
 
     const { parent_id } = useParams<{ parent_id: string }>();
 
-    const [items, setItems] = useState<DataType | null>(null);
+    const [items, setItems] = useState<ItemFullType[] | null>(null);
     const [parent, setParent] = useState<ParentItemType | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
@@ -51,7 +65,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingItems, error:errorItems, mutate:mutateItems } = useBackend<PaginatedDataResponse<DataType>>(
+    const { loading:loadingItems, error:errorItems, mutate:mutateItems } = useBackend<PaginatedDataResponse<ItemFullType[]>>(
         "get",
         employeeService.paths.getAll(parent_id ?? "")
     );
@@ -71,8 +85,11 @@ const Index = () => {
     }, [page, perPage,search,sort]);
 
     useEffect(() => {
-        mutateParent()
+        const params = new URLSearchParams();
+        params.set("fields", "id,names,address");
+        mutateParent({params: params})
             .then((res) => {
+                console.log(res.data);
                 setParent(res.data);
             }).catch(() => {});
     }, []);
@@ -144,55 +161,55 @@ const Index = () => {
 
                                 {items?.map( (item,key) => (
                                     <tr key={key} className={`border-t border-neutral-300 dark:border-neutral-700 ${
-                                            item.deleted_at
+                                            item.meta.deleted_at
                                             ? " text-red-700 dark:text-red-500 bg-gray-400 dark:bg-neutral-950"
                                             : (key % 2 === 0
                                             ? "bg-gray-100 dark:bg-neutral-900/50"
                                             : "bg-white dark:bg-neutral-800")
                                         }`}>
                                         <td className="p-2">
-                                            {item.deleted_at ? 
-                                            <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.name} {item.surname}</span></div>
+                                            {item.meta.deleted_at ? 
+                                            <div className="flex flex-row content-center"><Trash2 size={18}/><span className="ms-2">{item.names.name} {item.names.surname}</span></div>
                                             : 
-                                            <>{item.name} {item.surname}</>
+                                            <>{item.names.name} {item.names.surname}</>
                                             }
                                         </td>
                                         <td className="p-2">{item.position}</td>
                                         <td className="p-2">
-                                            {item.email ? (
+                                            {item.contact.email ? (
                                             <Button
-                                            onClick={() => {window.location.href = "mailto:"+item.email+"?subject=Temat";}}
+                                            onClick={() => {window.location.href = "mailto:"+item.contact.email+"?subject=Temat";}}
                                             size={2} color="teal" className="flex flex-row items-center"
                                             
                                             >
                                                 <Mail size={16}/>
-                                                <div className="ps-1">{item.email}</div>
+                                                <div className="ps-1">{item.contact.email}</div>
                                             </Button>
                                             ):(
                                             <>-</>
                                             )}
                                         </td>
                                         <td className="p-2">
-                                            {item.phone_mobile ? (
+                                            {item.contact.phone_mobile ? (
                                                 <Button
-                                            onClick={() => {window.location.href = "tel:"+item.phone_mobile;}}
+                                            onClick={() => {window.location.href = "tel:"+item.contact.phone_mobile;}}
                                             size={2} color="lime" className="flex flex-row items-center"
                                             >
                                                 <Phone size={16}/>
-                                                <div className="ps-1">{item.phone_mobile}</div>
+                                                <div className="ps-1">{item.contact.phone_mobile}</div>
                                             </Button>
                                             ):(
                                             <>-</>
                                             )}
                                         </td>
                                         <td className="p-2">
-                                            {item.phone_landline ? (
+                                            {item.contact.phone_landline ? (
                                                 <Button
-                                            onClick={() => {window.location.href = "tel:"+item.phone_landline;}}
+                                            onClick={() => {window.location.href = "tel:"+item.contact.phone_landline;}}
                                             size={2} color="lime" className="flex flex-row items-center"
                                             >
                                                 <Phone size={16}/>
-                                                <div className="ps-1">{item.phone_landline}</div>
+                                                <div className="ps-1">{item.contact.phone_landline}</div>
                                             </Button>
                                             ):(
                                             <>-</>

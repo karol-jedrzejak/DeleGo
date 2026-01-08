@@ -1,5 +1,5 @@
 
-import type { ItemType } from '@/models/Company.tsx';
+import type { ItemWithAddressType } from '@/models/Company.tsx';
 import { Link } from "react-router-dom"
 
 import { ROUTES } from "@/routes/Routes.tsx";
@@ -16,7 +16,7 @@ import { formatAddress } from "@/features/company/utilities/formatAddress";
 
 
 type ButtonsProps = {
-  company: ItemType | undefined;
+  company: ItemWithAddressType | undefined;
 };
 
 export const Buttons = ({ company }: ButtonsProps) => {
@@ -32,7 +32,7 @@ export const Buttons = ({ company }: ButtonsProps) => {
               className="flex flex-row items-center"
             >
               <Search size={18} />
-              <div className="ps-1">{company.name_short}</div>
+              <div className="ps-1">{company.names.name_short}</div>
             </Button>
           </Link>
 
@@ -40,10 +40,10 @@ export const Buttons = ({ company }: ButtonsProps) => {
             color="teal"
             size={2}
             className="flex flex-row items-center"
-            onClick={() => window.open(buildCompanyGoogleMapsUrl(company), "_blank")}
+            onClick={() => window.open(buildCompanyGoogleMapsUrl(company.address), "_blank")}
           >
             <Map size={18} />
-            <div className="ps-1">{formatAddress(company)}</div>
+            <div className="ps-1">{formatAddress(company.address)}</div>
           </Button>
         </div>
         ) :(

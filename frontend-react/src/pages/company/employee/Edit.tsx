@@ -12,9 +12,9 @@ import { Buttons as ParentButtons } from '@/features/company/components/Buttons.
 
 // Model //
 
-import { DEFAULT_FORM_DATA} from '@/models/Employee.tsx';
-import type { FormDataType, ItemType } from '@/models/Employee.tsx';
-import type { ItemType as ParentItemType } from '@/models/Company.tsx';
+import { DEFAULT_FORM_DATA, apiToForm } from '@/models/Employee.tsx';
+import type { FormDataType, ItemFullType } from '@/models/Employee.tsx';
+import type { ItemWithAddressType as ParentItemType } from '@/models/Company.tsx';
 import Form from './Form.tsx';
 
 // API //
@@ -53,13 +53,13 @@ export default function Edit() {
     // Get
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", employeeService.paths.getById(id ?? ""),{ initialLoading: true });
+    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemFullType>("get", employeeService.paths.getById(id ?? ""),{ initialLoading: true });
 
     useEffect(() => {
         mutateGet()
         .then((res) => {
-            setFormData(res.data);
-            if(res.data.deleted_at)
+            setFormData(apiToForm(res.data));
+            if(res.data.meta.deleted_at)
             {
                 setIsDeleted(true);
             }

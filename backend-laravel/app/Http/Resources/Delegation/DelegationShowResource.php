@@ -5,7 +5,7 @@ namespace App\Http\Resources\Delegation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\Company\CompanyBasicWithAddressResource;
+use App\Http\Resources\Company\CompanyBasicResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\User\CarBasicResource;
 
@@ -39,7 +39,7 @@ class DelegationShowResource extends JsonResource
             // belongsTo
             'company' => $this->whenLoaded('company', function () {
                 if ($this->company && $this->company->id) {
-                    return new CompanyBasicWithAddressResource($this->company);
+                    return new CompanyBasicResource($this->company);
                 }
                 return [];
             }),

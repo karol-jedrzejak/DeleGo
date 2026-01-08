@@ -10,8 +10,8 @@ import { Card, Loading, Button , Error } from '@/components';
 
 // Model //
 
-import type { ItemType } from '@/models/Employee.tsx';
-import type { ItemType as ParentItemType } from '@/models/Company.tsx';
+import type { ItemFullType } from '@/models/Employee.tsx';
+import type { ItemWithAddressType as ParentItemType } from '@/models/Company.tsx';
 
 // API //
 
@@ -32,7 +32,7 @@ const Show = () => {
 
     const { setMessage } = useContext(MessageContext);
     const { id } = useParams<{ id: string }>();
-    const [item, setItem] = useState<ItemType | null>(null);
+    const [item, setItem] = useState<ItemFullType | null>(null);
     const [parent, setParent] = useState<ParentItemType | null>(null);
     const [offerText, setOfferText] = useState<string>("");
 
@@ -40,11 +40,11 @@ const Show = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingItem, error:errorItem, mutate:mutateItem } = useBackend<ItemType>("get", employeeService.paths.getById(id ?? ""));
+    const { loading:loadingItem, error:errorItem, mutate:mutateItem } = useBackend<ItemFullType>("get", employeeService.paths.getById(id ?? ""));
     const { loading: loadingParent, error: errorParent, mutate: mutateParent } = useBackend<ParentItemType>("get", companyService.paths.getById("1"));
 
     useEffect(() => {
-        let  item:ItemType;
+        let  item:ItemFullType;
         mutateItem()
         .then((resItem) => {
             item = resItem.data;
@@ -67,29 +67,29 @@ const Show = () => {
     // Formatowanie danych do oferty
     // -------------------------------------------------------------------------- //
 
-    const formatOfferData = ({parent,child}:{parent: ParentItemType|null,child: ItemType|null}) => {
+    const formatOfferData = ({parent,child}:{parent: ParentItemType|null,child: ItemFullType|null}) => {
         const lines: string[] = [];
         if(parent && child)
         {
-            lines.push(parent.name_complete ? parent.name_complete : "");
-            lines.push(formatAddress(parent).split(";")[0]);
-            lines.push(formatAddress(parent).split(";")[1].trimStart());
+            lines.push(parent.names.name_complete ? parent.names.name_complete : "");
+            lines.push(formatAddress(parent.address).split(";")[0]);
+            lines.push(formatAddress(parent.address).split(";")[1].trimStart());
             lines.push("");
 
             if(child.position) lines.push(child.position)
             lines.push("Szanowny/a Pan/Pani");
 
             const fullName = [
-                child.academic_titles_before?.trim(),
-                child.name,
-                child.surname,
-                child.academic_titles_after?.trim(),
+                child.academic_titles.academic_titles_before?.trim(),
+                child.names.name,
+                child.names.surname,
+                child.academic_titles.academic_titles_after?.trim(),
             ].join(" ");
 
             lines.push(fullName);
-            if (child.email) lines.push(`E-mail: ${child.email}`);
-            if (child.phone_mobile) lines.push(`Kom: ${child.phone_mobile}`);
-            if (child.phone_landline) lines.push(`Tel: ${child.phone_landline}`);
+            if (child.contact.email) lines.push(`E-mail: ${child.contact.email}`);
+            if (child.contact.phone_mobile) lines.push(`Kom: ${child.contact.phone_mobile}`);
+            if (child.contact.phone_landline) lines.push(`Tel: ${child.contact.phone_landline}`);
         }
         return lines.join("\n");
     }
@@ -126,7 +126,7 @@ const Show = () => {
                 <div className="flex">
                     <Card className="w-full">
                         <Card.Header>
-                            <div>Pracownik - {item.name} {item.surname}</div>
+                            <div>Pracownik - {item.names.name} {item.names.surname}</div>
                         </Card.Header>
                         <Card.Body>
                             <table className="table-auto w-full">
@@ -140,7 +140,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Imię i Nazwisko:</td>
                                         <td className="p-2 flex items-center">
-                                            <div>{item.academic_titles_before} {item.name} {item.surname} {item.academic_titles_after}</div>
+                                            <div>{item.academic_titles.academic_titles_before} {item.names.name} {item.names.surname} {item.academic_titles.academic_titles_after}</div>
                                             <Link to={ROUTES.COMPANY.EMPLOYEE.EDIT.LINK(item.id)} className="ps-2">
                                                 <Button
                                                 size={1} color="yellow" className="flex flex-row items-center">
@@ -157,13 +157,13 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">E-mail:</td>
                                         <td className="p-2">
-                                            {item.email ? (
+                                            {item.contact.email ? (
                                                 <Button
-                                                onClick={() => {window.location.href = "mailto:"+item.email+"?subject=Temat";}}
+                                                onClick={() => {window.location.href = "mailto:"+item.contact.email+"?subject=Temat";}}
                                                 size={1} color="teal" className="flex flex-row items-center"
                                                 >
                                                     <Mail size={16}/>
-                                                    <div className="ps-1">{item.email}</div>
+                                                    <div className="ps-1">{item.contact.email}</div>
                                                 </Button>
                                             ):(
                                             <>-</>
@@ -173,13 +173,13 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Komórka:</td>
                                         <td className="p-2">
-                                            {item.phone_mobile ? (
+                                            {item.contact.phone_mobile ? (
                                                 <Button
-                                                onClick={() => {window.location.href = "tel:"+item.phone_mobile;}}
+                                                onClick={() => {window.location.href = "tel:"+item.contact.phone_mobile;}}
                                                 size={1} color="lime" className="flex flex-row items-center"
                                                 >
                                                     <Phone size={16}/>
-                                                    <div className="ps-1">{item.phone_mobile}</div>
+                                                    <div className="ps-1">{item.contact.phone_mobile}</div>
                                                     
                                                 </Button>
                                             ):(
@@ -190,13 +190,13 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Telefon Stacjonarny::</td>
                                         <td className="p-2">
-                                            {item.phone_landline ? (
+                                            {item.contact.phone_landline ? (
                                                 <Button
-                                                onClick={() => {window.location.href = "tel:"+item.phone_landline;}}
+                                                onClick={() => {window.location.href = "tel:"+item.contact.phone_landline;}}
                                                 size={1} color="lime" className="flex flex-row items-center"
                                                 >
                                                     <Phone size={16}/>
-                                                    <div className="ps-1">{item.phone_landline}</div>
+                                                    <div className="ps-1">{item.contact.phone_landline}</div>
                                                     
                                                 </Button>
                                             ):(
@@ -207,7 +207,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Firma - Nazwa:</td>
                                         <td className="p-2 flex items-center">
-                                            <div>{parent.name_short}</div>                         
+                                            <div>{parent.names.name_short}</div>                         
                                             <Link to={ROUTES.COMPANY.SHOW.LINK(parent.id)} className="ps-2">
                                                 <Button 
                                                 size={1} color="sky" className="flex flex-row items-center">
@@ -222,10 +222,10 @@ const Show = () => {
                                         <td className="p-2">
                                                 <Button
                                                 color="teal" size={1} className="flex flex-row items-center"
-                                                onClick={() => window.open(buildCompanyGoogleMapsUrl(parent), "_blank")}
+                                                onClick={() => window.open(buildCompanyGoogleMapsUrl(parent.address), "_blank")}
                                                 >
                                                     <Map size={14}/>
-                                                    <div className="ps-1">{formatAddress(parent)}</div>
+                                                    <div className="ps-1">{formatAddress(parent.address)}</div>
                                                     
                                                 </Button>
                                         </td>

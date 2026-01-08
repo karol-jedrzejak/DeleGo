@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Company;
 use App\Http\Requests\Company\CompanyRequest;
 
-use App\Http\Resources\Company\CompanyIndexResource;
+use App\Http\Resources\Company\CompanyBasicResource;
 use App\Http\Resources\Company\CompanyShowResource;
 use App\Http\Resources\Company\CompanyOptionsResource;
 
@@ -41,7 +41,7 @@ class CompanyController extends Controller
         $companies = $query
             ->paginate($request->query('perPage', 10));
 
-        return CompanyIndexResource::collection($companies)->withPath('');
+        return CompanyBasicResource::collection($companies)->withPath('');
     }
 
     /**
