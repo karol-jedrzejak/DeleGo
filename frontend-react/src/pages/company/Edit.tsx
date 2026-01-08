@@ -12,7 +12,6 @@ import { Card, Button, Loading, Error, PopUp,Spinner } from '@/components';
 
 import { DEFAULT_FORM_DATA} from '@/models/Company.tsx';
 import type { FormDataType, ItemFullType } from '@/models/Company.tsx';
-
 import Form from './Form.tsx';
 
 // API //

@@ -18,7 +18,6 @@ type ValidationErrorsType<TFields extends string = string> = {
   [K in TFields]?: string[];
 } | null;
 
-
 type MutateOptions = {
   url?: string;
   data?: any;
