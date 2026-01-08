@@ -11,7 +11,7 @@ import { Input, Button , Line } from '@/components';
 
 // Model //
 
-import type { FormDataType,FormPropsType } from '@/models/Company.tsx';
+import type { FormDataType } from '@/models/Company.tsx';
 
 // API //
 
@@ -22,7 +22,13 @@ import { getCompanyDataByNIP } from '@/features/company/services/getCompanyDataB
 import { buildCompanyGoogleMapsUrl } from "@/features/company/utilities/googleMaps";
 
 
-export default function Form({formData,setFormData,formError}:FormPropsType) {
+type FormProps = {
+  formData: FormDataType
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
+  formError: Partial<Record<keyof FormDataType, string[]>> | null
+}
+
+export default function Form({formData,setFormData,formError}:FormProps) {
 
     // -------------------------------------------------------------------------- //
     // Definicje standardowych stanów i kontekstów

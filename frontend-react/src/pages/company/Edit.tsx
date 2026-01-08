@@ -11,7 +11,7 @@ import { Card, Button, Loading, Error, PopUp,Spinner } from '@/components';
 // Model //
 
 import { DEFAULT_FORM_DATA} from '@/models/Company.tsx';
-import type { FormDataType, ItemType } from '@/models/Company.tsx';
+import type { FormDataType, ItemFullType } from '@/models/Company.tsx';
 
 import Form from './Form.tsx';
 
@@ -37,7 +37,7 @@ export default function Edit() {
     // Get
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", companyService.paths.getById(id ?? ""),{ initialLoading: true });
+    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemFullType>("get", companyService.paths.getById(id ?? ""),{ initialLoading: true });
 
     useEffect(() => {
         mutateGet()

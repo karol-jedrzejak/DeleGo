@@ -31,23 +31,6 @@ class Employee extends SoftDeletesModel
         'id_card',
     ];
 
-    protected $attributes = [
-        'company_id' => null,
-        'name' => '',
-        'surname' => '',
-        'position' => null,
-        'academic_titles_before'=> null,
-        'academic_titles_after'=> null,
-        'phone_mobile' => null,
-        'phone_landline' => null,
-        'email' => null,
-        'birth_date' => null,
-        'birth_place' => null,
-        'pesel' => null,
-        'passport' => null,
-        'id_card' => null,
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

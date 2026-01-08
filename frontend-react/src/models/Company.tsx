@@ -1,10 +1,9 @@
-import type { SearchType, SortType } from '@/api/queryParams/types'
-import type { ValidationErrorsType } from '@/api/response/types'
+
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
 
-export const formDataKeys = [
+/* export const formDataKeys = [
   "nip",
   "krs",
   "regon",
@@ -30,6 +29,26 @@ export type FormDataType = {
     K extends "latitude" | "longitude" | "distance" | "distance_time" ? number | null :
     string; // domyślnie string
 };
+ */
+
+export type FormDataType = {
+  nip: string | null,
+  krs: string | null,
+  regon: string | null,
+  name_short: string,
+  name_complete: string,
+  street: string | null,
+  house_number: string,
+  city: string,
+  postal_code: string,
+  postal_city: string,
+  region: string,
+  country: string,
+  latitude: number | null,
+  longitude: number | null,
+  distance: number | null,
+  distance_time: number | null,
+}
 
 // -------------------------------------------------------------------------- //
 // Domyślne wartośći formularza
@@ -54,37 +73,33 @@ export const DEFAULT_FORM_DATA = {
   distance_time: null,
 };
 
-// -------------------------------------------------------------------------- //
-// Domyślne SORTOWANIE I WYSZUKIWANIE
-// -------------------------------------------------------------------------- //
-
-export const DEFAULT_SORT:SortType = [{
-  sortBy: 'name_short',
-  sortDir: 'asc',
-}];
-
-export const DEFAULT_SEARCH:SearchType = {
-  search: null,
-  searchBy: null,
-};
-
-export const DEFAULT_PAGE:string = "1";
-
-export const DEFAULT_PER_PAGE:number = 10;
 
 // -------------------------------------------------------------------------- //
 // Typy danych Obektów i odpowiedzi z backendu
 // -------------------------------------------------------------------------- //
 
-export type ItemType = FormDataType &{
-    id: number,
-    created_at: string,
-    updated_at: string,
-    deleted_at: string,
-    has_employees: boolean,
+export type ItemFullType = {
+  nip: string | null,
+  krs: string | null,
+  regon: string | null,
+  name_short: string,
+  name_complete: string,
+  street: string | null,
+  house_number: string,
+  city: string,
+  postal_code: string,
+  postal_city: string,
+  region: string,
+  country: string,
+  latitude: number | null,
+  longitude: number | null,
+  distance: number | null,
+  distance_time: number | null,
+  id: number,
+  created_at: string,
+  updated_at: string,
+  deleted_at: string,
 };
-
-export type DataType = ItemType[];
 
 // -------------------------------------------------------------------------- //
 // GENEROWANE AUTOMATYCZNIE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -94,23 +109,22 @@ export type DataType = ItemType[];
 // Typy błędów formularza
 // -------------------------------------------------------------------------- //
 
-export type FormErrorType = {
+/* type FormErrorType = {
   [K in keyof FormDataType]: string[] | null
 }
-
-// -------------------------------------------------------------------------- //
-// Props dla komponentu formularza
-// -------------------------------------------------------------------------- //
-
-export type FormPropsType = {
-  formData: FormDataType,
-  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>,
-  formError: ValidationErrorsType,
-};
+ */
+type FormErrorsType = {
+  [K in keyof FormDataType]?: string[] | null
+}
 
 // -------------------------------------------------------------------------- //
 // Puste, inicjalne błędy formularza
 // -------------------------------------------------------------------------- //
 
-export const DEFAULT_FORM_ERRORS: FormErrorType =
+/* export const DEFAULT_FORM_ERRORS: FormErrorType =
   Object.fromEntries(formDataKeys.map((key) => [key, null])) as FormErrorType;
+ */
+
+export const DEFAULT_FORM_ERRORS: FormErrorsType = Object.fromEntries(
+  Object.keys(DEFAULT_FORM_DATA).map((key) => [key, undefined])
+) as FormErrorsType

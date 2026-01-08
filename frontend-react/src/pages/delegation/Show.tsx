@@ -75,10 +75,13 @@ const Show = () => {
                                 </thead>
                                 <tbody>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Nazwa skrócona:</td>
-                                        <td className="p-2 flex items-center"></td>
+                                        <td className="p-2">Address:</td>
+                                        <td className="p-2 flex items-center">
+                                            {item.company?.id ? item.company?.name_short : ""}
+                                            {!item.company?.id ? item.custom_address : ""}
+                                        </td>
                                     </tr>
-                                </tbody>
+                                </tbody> 
                             </table>
                         </Card.Body>
                     </Card>

@@ -19,13 +19,6 @@ class DelegationBill extends Model
         'amount',
     ];
 
-    protected $attributes = [
-        'delegation_id' => null,
-        'delegation_bill_type_id' => null,
-        'description' => "",
-        'amount' => 0,
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

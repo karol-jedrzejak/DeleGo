@@ -1,9 +1,7 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useMessage } from "@/providers/MessageProvider";
 
 import axiosLaravelBackend from "@/api/axiosInstances/axiosLaravelBackend";
-import type { ValidationErrorsType } from "@/api/response/types";
-
 
 type Method = "get" | "post" | "put" | "delete";
 
@@ -15,6 +13,11 @@ type ErrorType = {
   type: "standard" | "authorization";
   text: string
 };
+
+type ValidationErrorsType<TFields extends string = string> = {
+  [K in TFields]?: string[];
+} | null;
+
 
 type MutateOptions = {
   url?: string;

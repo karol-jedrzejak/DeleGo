@@ -11,7 +11,7 @@ import { Card, Loading, Button , Error } from '@/components';
 
 // Model //
 
-import type { ItemType } from '@/models/Company.tsx';
+import type { ItemFullType } from '@/models/Company.tsx';
 
 // API //
 
@@ -33,13 +33,13 @@ const Show = () => {
     const { setMessage } = useContext(MessageContext);
 
     const { id } = useParams<{ id: string }>();
-    const [item, setItem] = useState<ItemType | null>(null);
+    const [item, setItem] = useState<ItemFullType | null>(null);
 
     // -------------------------------------------------------------------------- //
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<ItemType>("get", companyService.paths.getById(id ?? ""));
+    const { loading, error, mutate } = useBackend<ItemFullType>("get", companyService.paths.getById(id ?? ""));
 
     useEffect(() => {
         mutate()

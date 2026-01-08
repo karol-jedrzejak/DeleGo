@@ -15,13 +15,6 @@ class News extends Model
         'image_path',
     ];
 
-    protected $attributes = [
-        'user_id' => '',
-        'title' => '',
-        'content' => '',
-        'image_path' => '',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

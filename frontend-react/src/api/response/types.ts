@@ -25,12 +25,13 @@ export type PaginatedDataResponse<T> = PaginationData & {
   data: T;
 };
 
-export type ValidationErrorsType<TFields extends string = string> = {
-  [K in TFields]?: string[];
-} | null;
-
-export type BackendTsResponseType = {
+/* export type BackendTsResponseType = {
     text: string;
     type: "message" | "page";
     status: "success" | "error" | "info" | "warning";
 }
+ */
+/* export type ValidationErrorsType<TFields extends string = string> = {
+  [K in TFields]?: string[];
+} | null;
+ */

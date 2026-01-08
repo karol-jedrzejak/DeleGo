@@ -17,12 +17,6 @@ class UserPermission extends Model
         'level',
     ];
 
-    protected $attributes = [
-        'user_id' => null,
-        'permission_type_id' => null,
-        'level' => 0,
-    ];
-    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

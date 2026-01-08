@@ -11,7 +11,7 @@ import { Buttons as ParentButtons } from '@/features/company/components/Buttons.
 
 // Model //
 
-import type { ItemType as ParentItemType } from '@/models/Company.tsx';
+import type { ItemFullType as ParentItemType } from '@/models/Company.tsx';
 
 import { DEFAULT_FORM_DATA } from '@/models/Employee.tsx';
 import type { FormDataType } from '@/models/Employee.tsx';

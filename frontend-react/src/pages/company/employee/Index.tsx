@@ -13,7 +13,7 @@ import { Buttons as ParentButtons } from '@/features/company/components/Buttons'
 // Model //
 import type { DataType } from '@/models/Employee.tsx';
 import type { ItemType as ParentItemType } from '@/models/Company.tsx';
-import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/models/Company.tsx';
+import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/models/Employee';
 
 // API //
 

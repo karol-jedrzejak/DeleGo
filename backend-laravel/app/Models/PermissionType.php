@@ -16,11 +16,6 @@ class PermissionType extends Model
         'department',
     ];
 
-    protected $attributes = [
-        'resource' => '',
-        'department' => '',
-    ];
-
     public function permissions(): HasMany
     {
         return $this->hasMany(UserPermission::class);

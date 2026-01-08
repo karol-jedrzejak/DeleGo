@@ -71,7 +71,7 @@ const Show = () => {
         const lines: string[] = [];
         if(parent && child)
         {
-            lines.push(parent.name_complete);
+            lines.push(parent.name_complete ? parent.name_complete : "");
             lines.push(formatAddress(parent).split(";")[0]);
             lines.push(formatAddress(parent).split(";")[1].trimStart());
             lines.push("");

@@ -21,12 +21,6 @@ class Car extends SoftDeletesModel
         'user_id',
     ];
 
-    protected $attributes = [
-        'brand' => "",
-        'model' => "",
-        'registration_number' => "",
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

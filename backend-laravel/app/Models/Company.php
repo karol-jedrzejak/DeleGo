@@ -33,25 +33,6 @@ class Company extends SoftDeletesModel
         'distance_time',
     ];
 
-    protected $attributes = [
-        'nip' => null,
-        'krs' => null,
-        'regon' => null,
-        'name_short' => '',
-        'name_complete' => '',
-        'street' => '',
-        'house_number' => null,
-        'city' => '',
-        'postal_code' => '',
-        'postal_city' => '',
-        'region' => 'Wielkopolska',
-        'country' => 'Polska',
-        'latitude' => null,
-        'longitude' => null,
-        'distance' => null,
-        'distance_time' => null,
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

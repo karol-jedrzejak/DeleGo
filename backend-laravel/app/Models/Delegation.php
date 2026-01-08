@@ -28,20 +28,6 @@ class Delegation extends Model
         'settled'
     ];
 
-    protected $attributes = [
-        'number' => null,
-        'year' => null,
-        'user_id' => null,
-        'car_id' => null,
-        'company_id' => null,
-        'custom_address' => null,
-        'description' => "",
-        'total_distance' => 0,
-        'departure' => null,
-        'return' => null,
-        'settled' => false
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

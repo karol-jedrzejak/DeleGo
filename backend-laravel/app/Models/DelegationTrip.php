@@ -21,16 +21,6 @@ class DelegationTrip extends Model
         'arrival',
     ];
 
-    protected $attributes = [
-        'delegation_id' => null,
-        'starting_point' => "",
-        'destination' => "",
-        'description' => "",
-        'distance' => 0,
-        'departure' => null,
-        'arrival' => null,
-    ];
-
     // --------------------------------------------------------- //
     // Relacje
     // --------------------------------------------------------- //

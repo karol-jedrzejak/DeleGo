@@ -40,11 +40,7 @@ class DelegationController extends Controller
         $query->with([
             'car:id,registration_number,brand,model',
             'company:id,name_short',
-/*             'delegationTrips', */
         ]);
-
-        // delegationBills razem z type
-/*         $query->with('delegationBills.delegationBillType'); */
 
         $items = $query->paginate($request->query('perPage', 10));
 
@@ -80,13 +76,13 @@ class DelegationController extends Controller
             $delegation->load('user');
         }
 
-        $delegation->load([
+        $delegation->loadMissing([
             'car:id,registration_number,brand,model',
-            'company:id,name_short',
-          'delegationTrips',
+            'company:id,name_short,name_complete,street,house_number,city,postal_code,postal_city,region,country',
+            'delegationTrips',
         ]);
 
-        $delegation->load('delegationBills.delegationBillType');
+        $delegation->loadMissing('delegationBills.delegationBillType');
 
         return new DelegationShowResource($delegation);
     }
