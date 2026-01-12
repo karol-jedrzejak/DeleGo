@@ -5,8 +5,6 @@ namespace App\Http\Resources\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\User\UserPermissionResource;
-
 class UserBasicResource extends JsonResource
 {
     /**
@@ -19,8 +17,13 @@ class UserBasicResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'surname' => $this->surname,
+            'names' => [
+                'name' => $this->name,
+                'surname' => $this->surname,
+            ],
+            'meta' => [
+                'deleted_at' => $this->deleted_at,
+            ],
         ];
     }
 }

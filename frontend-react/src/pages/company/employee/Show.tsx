@@ -80,10 +80,10 @@ const Show = () => {
             lines.push("Szanowny/a Pan/Pani");
 
             const fullName = [
-                child.academic_titles.academic_titles_before?.trim(),
+                child.academic_titles.before?.trim(),
                 child.names.name,
                 child.names.surname,
-                child.academic_titles.academic_titles_after?.trim(),
+                child.academic_titles.after?.trim(),
             ].join(" ");
 
             lines.push(fullName);
@@ -140,7 +140,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Imię i Nazwisko:</td>
                                         <td className="p-2 flex items-center">
-                                            <div>{item.academic_titles.academic_titles_before} {item.names.name} {item.names.surname} {item.academic_titles.academic_titles_after}</div>
+                                            <div>{item.academic_titles.before} {item.names.name} {item.names.surname} {item.academic_titles.after}</div>
                                             <Link to={ROUTES.COMPANY.EMPLOYEE.EDIT.LINK(item.id)} className="ps-2">
                                                 <Button
                                                 size={1} color="yellow" className="flex flex-row items-center">

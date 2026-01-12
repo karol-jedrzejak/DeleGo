@@ -14,7 +14,7 @@ import { useBackend } from '@/hooks/useLaravelBackend';
 import { userService } from "@/api/services/backend/user/user.service";
 
 type Props = {
-    onSelect: (item: ItemLookupType ) => void;
+    onSelect: (item: ItemLookupType | null ) => void;
     initialValue?: string | null;
     disabled?: boolean;
     onError?: () => void;
@@ -67,6 +67,10 @@ export default function UserSelect({
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         isTyping.current = true;
         setQuery(e.target.value);
+        if(e.target.value == "")
+        {
+            onSelect(null);
+        }
     };
 
     const handleSelect = (item: ItemLookupType) => {

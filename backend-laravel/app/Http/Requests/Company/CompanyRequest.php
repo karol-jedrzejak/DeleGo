@@ -60,6 +60,8 @@ class CompanyRequest extends FormRequest
     {
         $rules = $this->baseRules();
 
+        
+
         if ($this->isMethod('post')) {   // create
             $rules['name_short'][] = 'unique:companies';
             $rules['name_complete'][] = 'unique:companies';
@@ -69,11 +71,12 @@ class CompanyRequest extends FormRequest
         }
 
         if ($this->isMethod('put') || $this->isMethod('patch')) {  // update
-            $rules['name_short'][] = Rule::unique('companies')->ignore($this->request->get('id'));
-            $rules['name_complete'][] = Rule::unique('companies')->ignore($this->request->get('id'));
-            $rules['nip'][] = Rule::unique('companies')->ignore($this->request->get('id'));
-            $rules['krs'][] = Rule::unique('companies')->ignore($this->request->get('id'));
-            $rules['regon'][] = Rule::unique('companies')->ignore($this->request->get('id'));
+            $companyId = $this->route('company')->id;
+            $rules['name_short'][] = Rule::unique('companies')->ignore($companyId);
+            $rules['name_complete'][] = Rule::unique('companies')->ignore($companyId);
+            $rules['nip'][] = Rule::unique('companies')->ignore($companyId);
+            $rules['krs'][] = Rule::unique('companies')->ignore($companyId);
+            $rules['regon'][] = Rule::unique('companies')->ignore($companyId);
         }
 
         return $rules;

@@ -12,7 +12,7 @@ import { Card, Button,Error, PopUp,Spinner,Loading } from '@/components';
 // Model //
 
 import { DEFAULT_FORM_DATA} from '@/models/Car.tsx';
-import type { FormDataType, ItemType } from '@/models/Car.tsx';
+import type { FormDataType, ItemFullType } from '@/models/Car.tsx';
 
 import Form from './Form.tsx';
 
@@ -44,15 +44,20 @@ export default function Edit() {
     // Get Users For Admin
     // -------------------------------------------------------------------------- //
 
-    const handleUserChange = (user: UserLookupType  ) => {
-        setFormData((p) => ({ ...p, user_id: user.id}));
+    const handleUserChange = (user: UserLookupType | null) => {
+        if(user)
+        {
+            setFormData((p) => ({ ...p, user_id: user.id}));
+        } else {
+            setFormData((p) => ({ ...p, user_id: null}));
+        }
     };
 
     // -------------------------------------------------------------------------- //
     // Get
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", carService.paths.getById(id ?? ""),{ initialLoading: true });
+    const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemFullType>("get", carService.paths.getById(id ?? ""),{ initialLoading: true });
 
     useEffect(() => {
         mutateGet()
@@ -60,7 +65,7 @@ export default function Edit() {
             setFormData(res.data);
             if(res.data.user?.id)
             {
-                selectedUser.current = (res.data.user?.name+" "+res.data.user?.surname);
+                selectedUser.current = (res.data.user?.names.name+" "+res.data.user?.names.surname);
             }
             if(res.data.deleted_at)
             {

@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Http\Requests\User\SetUserPermissionsRequest;
 
 use App\Http\Resources\User\UserShowResource;
-use App\Http\Resources\User\UserIndexResource;
+use App\Http\Resources\User\UserOptionsResource;
 
 use App\Services\User\UserPermissionService;
 use App\Services\User\LoginService;
@@ -97,7 +97,7 @@ class AuthenticationController extends Controller
                 ->limit(10)
                 ->get();
 
-        return UserIndexResource::collection($users);
+        return UserOptionsResource::collection($users);
 
 /*         $users = User::with('permissions.type')
                 ->orderBy('name')

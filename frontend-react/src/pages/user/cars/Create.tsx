@@ -40,8 +40,13 @@ export default function Create() {
     // Get Users For Admin
     // -------------------------------------------------------------------------- //
 
-    const handleUserChange = (user: UserLookupType  ) => {
-        setFormData((p) => ({ ...p, user_id: user.id}));
+    const handleUserChange = (user: UserLookupType | null  ) => {
+        if(user)
+        {
+            setFormData((p) => ({ ...p, user_id: user.id}));
+        } else {
+            setFormData((p) => ({ ...p, user_id: null}));
+        }
     };
 
     // -------------------------------------------------------------------------- //

@@ -11,8 +11,7 @@ import { Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMe
 
 // Model //
 
-import type { DataType } from '@/models/Car.tsx';
-import {DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE} from '@/models/Car.tsx';
+import type { ItemFullType } from '@/models/Car.tsx';
 
 // API //
 
@@ -28,12 +27,27 @@ import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 
 const Index = () => {
 
+    const DEFAULT_SORT:SortType = [{
+        sortBy: 'registration_number',
+        sortDir: 'asc',
+    }];
+
+    const DEFAULT_SEARCH:SearchType = {
+        search: null,
+        searchBy: null,
+    };
+
+    const DEFAULT_PAGE:string = "1";
+
+    const DEFAULT_PER_PAGE:number = 10;
+
+
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
     const authData = useContext(AuthContext);
 
-    const [items, setItems] = useState<DataType | null>(null);
+    const [items, setItems] = useState<ItemFullType[] | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
     const [perPage, setPerPage] = useState<number>(DEFAULT_PER_PAGE);
@@ -46,7 +60,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<DataType>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemFullType[]>>(
         "get",
         carService.paths.getAll
     );
@@ -132,7 +146,7 @@ const Index = () => {
                                     <td className="p-2">{item.brand}</td>
                                     <td className="p-2">{item.model}</td>
                                     {authData.hasPermission('admin','admin') && (
-                                        <td className="p-2">{item.user?.name} {item.user?.surname}</td>
+                                        <td className="p-2">{item.user ? `${item.user.names.name} ${item.user.names.surname}` : '-'}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                         <div className="flex flex-row justify-center gap-1">

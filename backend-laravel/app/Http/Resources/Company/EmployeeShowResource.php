@@ -20,12 +20,11 @@ class EmployeeShowResource extends JsonResource
             'names' => [
                 'name' => $this->name,
                 'surname' => $this->surname,
-                
             ],
             'position' => $this->position,
             'academic_titles' => [
-                'academic_titles_before' => $this->academic_titles_before,
-                'academic_titles_after' => $this->academic_titles_after,
+                'before' => $this->academic_titles_before,
+                'after' => $this->academic_titles_after,
             ],
             'contact' => [
                 'phone_mobile' => $this->phone_mobile,

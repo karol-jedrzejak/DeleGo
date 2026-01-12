@@ -42,7 +42,7 @@ export default function Edit() {
         mutateGet()
         .then((res) => {
             setFormData(apiToForm(res.data));
-            if(res.data.meta.deleted_at)
+            if(res.data.meta)
             {
                 setIsDeleted(true);
             }

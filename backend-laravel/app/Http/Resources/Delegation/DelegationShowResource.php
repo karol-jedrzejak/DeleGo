@@ -5,7 +5,7 @@ namespace App\Http\Resources\Delegation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\Company\CompanyBasicResource;
+use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\User\CarBasicResource;
 
@@ -20,14 +20,18 @@ class DelegationShowResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => $this->number,
-            'year' => $this->year,
+            'number' => [
+                'number' => $this->number,
+                'year' => $this->year,
+            ],
             'settled' => $this->settled,
-            'return' => $this->return,
-            'departure' => $this->departure,
+            'dates' => [
+                'return' => $this->return,
+                'departure' => $this->departure,
+            ],
             'custom_address' => $this->custom_address,
             'description' => $this->description,
-
+            
             // belongsTo
             'user' => $this->whenLoaded('user', function () {
                 if ($this->user && $this->user->id) {
@@ -39,7 +43,7 @@ class DelegationShowResource extends JsonResource
             // belongsTo
             'company' => $this->whenLoaded('company', function () {
                 if ($this->company && $this->company->id) {
-                    return new CompanyBasicResource($this->company);
+                    return new CompanyIndexResource($this->company);
                 }
                 return [];
             }),

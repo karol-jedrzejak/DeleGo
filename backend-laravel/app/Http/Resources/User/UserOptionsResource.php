@@ -5,9 +5,7 @@ namespace App\Http\Resources\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\User\UserPermissionResource;
-
-class UserIndexResource extends JsonResource
+class UserOptionsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +16,7 @@ class UserIndexResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name_surname' => $this->name.' '.$this->surname,
+            'name_surname' => "{$this->name} {$this->surname}" . ($this->deleted_at ? ' (USUNIĘTY/A)' : ''),
         ];
     }
 }

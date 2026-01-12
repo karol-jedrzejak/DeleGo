@@ -1,18 +1,44 @@
-export type ItemType = {
-    academic_titles_after: string,
-    academic_titles_before: string,
-    email: string,
+
+// -------------------------------------------------------------------------- //
+// Subtypy danych
+// -------------------------------------------------------------------------- //
+
+export type UserNames = {
+  name: string;
+  surname: string;
+};
+
+export type UserAcademicTitles = {
+  before: string | null;
+  after: string | null;
+};
+
+export type UserContact = {
+  phone_mobile: string | null;
+  phone_landline: string | null;
+  email: string;
+};
+
+// -------------------------------------------------------------------------- //
+// Typy odpowiedzi z backendu
+// -------------------------------------------------------------------------- //
+
+export type ItemFullType = {
+    academic_titles: UserAcademicTitles,
+    contact: UserContact,
     id: string,
-    name: string,
-    permissions?: {
+    names: UserNames,
+    permissions: {
         [department: string]: {        
-            [resource: string]: string; 
+            [resource: string]: number; 
         };
     },
-    phone_landline: string,
-    phone_mobile: string,
     position: string,
-    surname: string,
+};
+
+export type ItemBasicType = {
+    id: string,
+    names: UserNames,
 };
 
 export type ItemLookupType = {

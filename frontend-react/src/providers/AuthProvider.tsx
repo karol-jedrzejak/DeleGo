@@ -3,23 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from "@/routes/Routes.tsx";
 
+import type { ItemFullType as User } from '@/models/User';
 import axiosTsBackend from '@/api/axiosInstances/axiosLaravelBackend';
-
-type User = {
-    id: number,
-    name: string,
-    surname: string,
-    phone_mobile: string,
-    phone_landline: string,
-    academic_titles_before: string,
-    academic_titles_after: string,
-    email: string,
-    permissions: {
-        [module: string]: {
-            [permission: string]: number;
-        };
-    }
-}
 
 type AuthContextType = {
   user: User | null,

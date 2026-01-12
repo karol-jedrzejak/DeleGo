@@ -23,11 +23,12 @@ class CarShowResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             
             // belongsTo
-            'user' => $this->whenLoaded('user', fn () => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'surname' => $this->user->surname,
-            ]),
+            'user' => $this->whenLoaded('user', function () {
+                if ($this->user && $this->user->id) {
+                    return new UserBasicResource($this->user);
+                }
+                return null;
+            }),
 
         ];
     }

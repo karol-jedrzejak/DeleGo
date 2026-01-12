@@ -5,6 +5,10 @@ namespace App\Http\Resources\Delegation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Http\Resources\Company\CompanyIndexResource;
+use App\Http\Resources\User\UserBasicResource;
+use App\Http\Resources\User\CarBasicResource;
+
 class DelegationIndexResource extends JsonResource
 {
     /**
@@ -16,38 +20,41 @@ class DelegationIndexResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => $this->number,
-            'year' => $this->year,
+            'number' => [
+                'number' => $this->number,
+                'year' => $this->year,
+            ],
             'settled' => $this->settled,
-            'return' => $this->return,
-            'departure' => $this->departure,
+            'dates' => [
+                'return' => $this->return,
+                'departure' => $this->departure,
+            ],
             'custom_address' => $this->custom_address,
             'description' => $this->description,
 
             // belongsTo
-            'user' => $this->whenLoaded('user', fn () => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'surname' => $this->user->surname,
-            ]),
+            'user' => $this->whenLoaded('user', function () {
+                if ($this->user && $this->user->id) {
+                    return new UserBasicResource($this->user);
+                }
+                return [];
+            }),
 
-            'company' => $this->whenLoaded('company', fn () => [
-                'id' => $this->company->id,
-                'name_short' => $this->company->name_short,
-            ]),
+            // belongsTo
+            'company' => $this->whenLoaded('company', function () {
+                if ($this->company && $this->company->id) {
+                    return new CompanyIndexResource($this->company);
+                }
+                return [];
+            }),
 
-            'car' => $this->whenLoaded('car', fn () => [
-                'id' => $this->car->id,
-                'registration_number' => $this->car->registration_number,
-                'brand' => $this->car->brand,
-                'model' => $this->car->model,
-            ]),
-
-            // hasMany
-            /*
-            'delegationTrips' => $this->whenLoaded('delegationTrips'),
-            'delegationBills' => $this->whenLoaded('delegationBills'),
-            */
+            // belongsTo
+            'car' => $this->whenLoaded('car', function () {
+                if ($this->car && $this->car->id) {
+                    return new CarBasicResource($this->car);
+                }
+                return [];
+            }),
         ];
     }
 }

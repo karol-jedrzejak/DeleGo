@@ -16,7 +16,7 @@ class EmployeeOptionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name_surname' => "{$this->name} {$this->surname}" . ($this->deleted_at ? ' (USUNIĘTY)' : ''),
+            'name_surname' => "{$this->name} {$this->surname}" . ($this->deleted_at ? ' (USUNIĘTY/A)' : ''),
         ];
     }
 }
