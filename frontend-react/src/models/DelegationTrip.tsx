@@ -1,77 +1,69 @@
-import type { ValidationErrorsType } from '@/api/response/types'
+// -------------------------------------------------------------------------- //
+// Typy odpowiedzi z backendu
+// -------------------------------------------------------------------------- //
+
+export type ItemFullType = {
+  id: number,
+  delegation_id: number,
+  starting_point: string,
+  destination: string,
+  description: string,
+  distance: number,
+  departure: string,
+  arrival: string,
+};
+
+// -------------------------------------------------------------------------- //
+// Mapper Backend -> Formularz
+// -------------------------------------------------------------------------- //
+
+export function apiToForm(
+  api: ItemFullType
+): FormDataType {
+  return {
+    id: api.id,
+    delegation_id: api.delegation_id,
+    starting_point: api.starting_point,
+    destination: api.destination,
+    description: api.description,
+    distance: api.distance,
+    departure: api.departure,
+    arrival: api.arrival,
+  };
+}
+
 
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
 
-export const formDataKeys = [
-    'starting_point',
-    'destination',
-    'description',
-    'distance',
-    'departure',
-    'arrival',
-] as const;
-
-
 export type FormDataType = {
-  [K in typeof formDataKeys[number]]: 
-    K extends "distance" ? number :
-    K extends "departure" | 'arrival' ? string :
-    string; // domyślnie string
-};
+  id: number | null,
+  delegation_id: number | null,
+  starting_point: string,
+  destination: string,
+  description: string,
+  distance: number,
+  departure: string,
+  arrival: string,
+}
 
 // -------------------------------------------------------------------------- //
 // Domyślne wartośći formularza
 // -------------------------------------------------------------------------- //
 
 export const DEFAULT_FORM_DATA = {
-    starting_point: "",
-    destination: "",
-    description: "",
-    distance: 1,
-    departure: "",
-    arrival: "",
+  id: null,
+  delegation_id: null,
+  starting_point: "",
+  destination: "",
+  description: "",
+  distance: 1,
+  departure: "",
+  arrival: "",
 };
 
-// -------------------------------------------------------------------------- //
-// Typy danych Obektów i odpowiedzi z backendu
-// -------------------------------------------------------------------------- //
 
-export type ItemType = FormDataType & {
-    id: number,
-    delegation_id: number,
-    created_at: string,
-    updated_at: string,
-};
 
-export type DataType = ItemType[];
 
-// -------------------------------------------------------------------------- //
-// GENEROWANE AUTOMATYCZNIE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// -------------------------------------------------------------------------- //
 
-// -------------------------------------------------------------------------- //
-// Typy błędów formularza
-// -------------------------------------------------------------------------- //
-
-export type FormErrorType = {
-  [K in keyof FormDataType]: string[] | null
-}
-
-// -------------------------------------------------------------------------- //
-// Props dla komponentu formularza
-// -------------------------------------------------------------------------- //
-
-export type FormPropsType = {
-  formData: FormDataType,
-  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>,
-  formError: ValidationErrorsType,
-};
-
-// -------------------------------------------------------------------------- //
-// Puste, inicjalne błędy formularza
-// -------------------------------------------------------------------------- //
-
-export const DEFAULT_FORM_ERRORS: FormErrorType =
-  Object.fromEntries(formDataKeys.map((key) => [key, null])) as FormErrorType;

@@ -13,8 +13,7 @@ import { Card, Button , Pagination , HeaderSorting,HeaderSearchMeany,Error,Table
 
 // Model //
 
-import type { DataType} from '@/models/Delegation.tsx';
-import { DEFAULT_SEARCH, DEFAULT_SORT,DEFAULT_PAGE,DEFAULT_PER_PAGE } from '@/models/Delegation.tsx';
+import type { FormDataType } from '@/models/Delegation.tsx';
 
 // API //
 
@@ -30,12 +29,27 @@ import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 
 const Index = () => {
 
+    const DEFAULT_SORT:SortType = [{
+        sortBy: 'return',
+        sortDir: 'asc',
+    }];
+
+    const DEFAULT_SEARCH:SearchType = {
+        search: null,
+        searchBy: null,
+    };
+
+    const DEFAULT_PAGE:string = "1";
+
+    const DEFAULT_PER_PAGE:number = 10;
+
+
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
     const authData = useContext(AuthContext);
 
-    const [items, setItems] = useState<DataType | null>(null);
+    const [items, setItems] = useState<FormDataType | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
     const [perPage, setPerPage] = useState<number>(DEFAULT_PER_PAGE);
@@ -48,7 +62,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<DataType>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<FormDataType>>(
         "get",
         delegationService.paths.getAll
     );

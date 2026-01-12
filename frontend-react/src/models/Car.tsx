@@ -9,10 +9,25 @@ export type ItemFullType = {
     brand: string,
     model: string,
     registration_number: string,
-    user_id: null,
     user: UserType | null,
     deleted_at: string,
 };
+
+// -------------------------------------------------------------------------- //
+// Mapper Backend -> Formularz
+// -------------------------------------------------------------------------- //
+
+export function apiToForm(
+  api: ItemFullType
+): FormDataType {
+  return {
+    brand: api.brand,
+    model: api.model,
+    registration_number: api.registration_number,
+    user_id: api.user?.id ?? null,
+  };
+}
+
 
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
@@ -22,7 +37,7 @@ export type FormDataType = {
     brand: string,
     model: string,
     registration_number: string,
-    user_id: string | null,
+    user_id: number | null,
 }
 
 // -------------------------------------------------------------------------- //

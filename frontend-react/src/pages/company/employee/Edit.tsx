@@ -261,9 +261,6 @@ export default function Edit() {
                                 )}
                             </div>
                             <div className='flex justify-between items-center gap-2'>
-                                {loadingPut && (
-                                    <Spinner/>
-                                )}
                                 <Button
                                     className='flex items-center'
                                     disabled={loadingPut || loadingRestore}

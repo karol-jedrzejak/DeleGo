@@ -26,7 +26,7 @@ export type UserContact = {
 export type ItemFullType = {
     academic_titles: UserAcademicTitles,
     contact: UserContact,
-    id: string,
+    id: number,
     names: UserNames,
     permissions: {
         [department: string]: {        
@@ -37,11 +37,11 @@ export type ItemFullType = {
 };
 
 export type ItemBasicType = {
-    id: string,
+    id: number,
     names: UserNames,
 };
 
 export type ItemLookupType = {
-    id: string,
+    id: number,
     name_surname: string,
 };

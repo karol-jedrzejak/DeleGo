@@ -1,126 +1,111 @@
-import type { SearchType, SortType } from '@/api/queryParams/types'
-import type { ValidationErrorsType } from '@/api/response/types'
-
-import type { ItemType as CarType } from '@/models/Car';
-import type { ItemType as UserType } from '@/models/User';
-import type { ItemType as CompanyType } from '@/models/Company';
+import type { ItemFullType as CarType } from '@/models/Car';
+import type { ItemBasicType as UserType } from '@/models/User';
+import type { ItemWithAddressType as CompanyType } from '@/models/Company';
 
 import type { FormDataType as DelegationBillType } from '@/models/DelegationBill';
 import type { FormDataType as DelegationTripType } from '@/models/DelegationTrip';
 
-import { DEFAULT_FORM_DATA as DELEGATION_BILL_DEFAULT_FORM_DATA } from '@/models/DelegationBill';
-import { DEFAULT_FORM_DATA as DELEGATION_TRIP_DEFAULT_FORM_DATA } from '@/models/DelegationTrip';
+// -------------------------------------------------------------------------- //
+// Subtypy danych
+// -------------------------------------------------------------------------- //
+
+export type NumberWithYear = {
+  number: number;
+  year: number;
+};
+
+export type Dates = {
+  return: string;
+  departure: string;
+};
+
+// -------------------------------------------------------------------------- //
+// Typy odpowiedzi z backendu
+// -------------------------------------------------------------------------- //
+
+export type ItemFullType = {
+  id: number;
+  numbers: NumberWithYear;
+  settled: boolean;
+  dates: Dates;
+  custom_address: string | null;
+  description: string;
+  user: UserType;
+  car: CarType | null;  
+  company: CompanyType | null;
+  total_distance: number;
+  delegation_bills: DelegationBillType[];
+  delegation_trips: DelegationTripType[];
+};
+
+export type ItemBasicType = {
+  id: number;
+  numbers: NumberWithYear;
+  settled: boolean;
+  dates: Dates;
+  custom_address: string | null;
+  description: string;
+  user: UserType;
+  car: CarType | null;  
+  company: CompanyType | null;
+};
+
+// -------------------------------------------------------------------------- //
+// Mapper Backend -> Formularz
+// -------------------------------------------------------------------------- //
+
+export function apiToForm(
+  api: ItemFullType
+): FormDataType {
+  return {
+    settled: api.settled,
+    return: api.dates.return,
+    departure: api.dates.departure,
+    custom_address: api.custom_address,
+    description: api.description,
+    user_id: api.user.id,
+    car_id: api.car?.id ?? null,
+    company_id: api.company?.id ?? null,
+    total_distance: api.total_distance,
+    delegation_bills: api.delegation_bills,
+    delegation_trips: api.delegation_trips,
+  };
+}
+
 
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
 
-export const formDataKeys = [
-  'user_id',
-  'car_id',
-  'company_id',
-  'custom_address',
-  'description',
-  'total_distance',
-  'departure',
-  'return',
-  'settled',
-  'delegation_bills',
-  'delegation_trips',
-] as const;
-
-
 export type FormDataType = {
-  [K in typeof formDataKeys[number]]: 
-    K extends "custom_address" ? string | null :
-    K extends "user_id" | "car_id" | "company_id" ? string | null :
-    K extends "total_distance" ? number :
-    K extends "departure" | 'return' ? string :
-    K extends "settled" ? boolean :
-    K extends "delegation_bills" ? DelegationBillType :
-    K extends "delegation_trips" ? DelegationTripType :
-    string; // domyślnie string
-};
+  settled: boolean;
+  return: string;
+  departure: string;
+  custom_address: string | null;
+  description: string;
+  user_id: number | null;
+  car_id: number | null;
+  company_id: number | null;
+  total_distance: number;
+  delegation_bills: DelegationBillType[];
+  delegation_trips: DelegationTripType[];
+}
 
 // -------------------------------------------------------------------------- //
 // Domyślne wartośći formularza
 // -------------------------------------------------------------------------- //
 
 export const DEFAULT_FORM_DATA = {
-    user_id: null,
-    car_id: null,
-    company_id: null,
-    custom_address: "",
-    description: "",
-    total_distance: 1,
-    departure: "",
-    return: "",
-    settled: false,
-    delegation_bills: DELEGATION_BILL_DEFAULT_FORM_DATA,
-    delegation_trips: DELEGATION_TRIP_DEFAULT_FORM_DATA,
+  settled: false,
+  return: "",
+  departure: "",
+  custom_address: null,
+  description: "",
+  user_id: null,
+  car_id:  null,
+  company_id: null,
+  total_distance: null,
+  delegation_bills: [],
+  delegation_trips: [],
 };
 
-// -------------------------------------------------------------------------- //
-// Domyślne SORTOWANIE I WYSZUKIWANIE
-// -------------------------------------------------------------------------- //
-
-export const DEFAULT_SORT:SortType = [{
-  sortBy: 'return',
-  sortDir: 'desc',
-}];
-
-export const DEFAULT_SEARCH:SearchType = {
-  search: null,
-  searchBy: null,
-};
-
-export const DEFAULT_PAGE:string = "1";
-
-export const DEFAULT_PER_PAGE:number = 10;
-
-// -------------------------------------------------------------------------- //
-// Typy danych Obektów i odpowiedzi z backendu
-// -------------------------------------------------------------------------- //
-
-export type ItemType = FormDataType &{
-    id: number,
-    car?: CarType,
-    user?: UserType,
-    company?: CompanyType,
-/*     delegation_bills?: DelegationBillType,
-    delegation_trips?: DelegationTripType, */
-    created_at: string,
-    updated_at: string,
-};
-
-export type DataType = ItemType[];
-
-
-// -------------------------------------------------------------------------- //
-// GENEROWANE AUTOMATYCZNIE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// -------------------------------------------------------------------------- //
-
-// -------------------------------------------------------------------------- //
-// Typy błędów formularza
-// -------------------------------------------------------------------------- //
-
-export type FormErrorType = {
-  [K in keyof FormDataType]: string[] | null
-}
-
-// -------------------------------------------------------------------------- //
-// Props dla komponentu formularza
-// -------------------------------------------------------------------------- //
-
-export type FormPropsType = {
-  formData: FormDataType,
-  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>,
-  formError: ValidationErrorsType,
-};
-
-// -------------------------------------------------------------------------- //
-// Puste, inicjalne błędy formularza
-// -------------------------------------------------------------------------- //
-
-export const DEFAULT_FORM_ERRORS: FormErrorType =
-  Object.fromEntries(formDataKeys.map((key) => [key, null])) as FormErrorType;

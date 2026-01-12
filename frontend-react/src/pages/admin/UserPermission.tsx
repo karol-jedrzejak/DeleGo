@@ -9,7 +9,7 @@ import { Card, Loading, Button , Input, Error, Spinner} from '@/components';
 // Model //
 
 import UserSelect from "@/features/user/components/UserSelect";
-import type { ItemType,ItemLookupType  } from "@/models/User";
+import type { ItemFullType,ItemLookupType  } from "@/models/User";
 
 // API //
 
@@ -23,13 +23,13 @@ const UserPermission = () => {
   // -------------------------------------------------------------------------- //
   
   const { setMessage } = useContext(MessageContext);
-  const [item, setItem] = useState<ItemType | null>(null);
+  const [item, setItem] = useState<ItemFullType | null>(null);
 
   // -------------------------------------------------------------------------- //
   // Get
   // -------------------------------------------------------------------------- //
 
-  const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemType>("get", userService.paths.getById(""));
+  const { loading:loadingGet, error:errorGet, mutate:mutateGet } = useBackend<ItemFullType>("get", userService.paths.getById(""));
 
   // -------------------------------------------------------------------------- //
   // Update
@@ -53,24 +53,25 @@ const UserPermission = () => {
       const { name, value } = e.target;
 
       if (!item) return;
-      let new_item: ItemType = {...item};
+      let new_item: ItemFullType = {...item};
       let department = name.split(".")[0];
       let resource = name.split(".")[1];
       
       if (new_item.permissions) {
-        new_item.permissions[department][resource] = value;
+        new_item.permissions[department][resource] = Number(value);
       }
 
       setItem(new_item);
   };
 
-  const handleUserSelect = (user: ItemLookupType  ) => {
-    console.log("Wybrano użytkownika o ID:", user.id);
-    mutateGet({ url: userService.paths.getById(user.id) })
-      .then((res) => {
-          setItem(res.data);
-      })
-      .catch(() => {});
+  const handleUserSelect = (user: ItemLookupType | null ) => {
+    if(user) {
+      mutateGet({ url: userService.paths.getById(String(user.id)) })
+        .then((res) => {
+            setItem(res.data);
+        })
+        .catch(() => {});
+    }
   };
 
   // -------------------------------------------------------------------------- //
@@ -86,16 +87,16 @@ const UserPermission = () => {
           lines.push("Szanowny/a Pan/Pani");
 
           const fullName = [
-              item.academic_titles_before?.trim(),
-              item.name,
-              item.surname,
-              item.academic_titles_after?.trim(),
+              item.academic_titles.before?.trim(),
+              item.names.name,
+              item.names.surname,
+              item.academic_titles.after?.trim(),
           ].join(" ");
 
           lines.push(fullName);
-          if (item.email) lines.push(`E-mail: ${item.email}`);
-          if (item.phone_mobile) lines.push(`Kom: ${item.phone_mobile}`);
-          if (item.phone_landline) lines.push(`Tel: ${item.phone_landline}`);
+          if (item.contact.email) lines.push(`E-mail: ${item.contact.email}`);
+          if (item.contact.phone_mobile) lines.push(`Kom: ${item.contact.phone_mobile}`);
+          if (item.contact.phone_landline) lines.push(`Tel: ${item.contact.phone_landline}`);
         }
         await navigator.clipboard.writeText(lines.join("\n"));
         setMessage({status: "success", text: "Skopiowano tekst do schowka."})
@@ -137,7 +138,7 @@ const UserPermission = () => {
                     <tbody>
                       <tr className="custom-table-row">
                         <td className="p-2">Użytkownik:</td>
-                        <td className="p-2">{item.academic_titles_before} {item.name} {item.surname} {item.academic_titles_after}</td>
+                        <td className="p-2">{item.academic_titles.before} {item.names.name} {item.names.surname} {item.academic_titles.after}</td>
                       </tr>
                       <tr className="custom-table-row">
                         <td className="p-2">Stanowisko:</td>
@@ -147,22 +148,22 @@ const UserPermission = () => {
                         <td className="p-2">E-mail:</td>
                         <td className="p-2">
                           <Button
-                          onClick={() => {window.location.href = "mailto:"+item.email+"?subject=Temat";}}
+                          onClick={() => {window.location.href = "mailto:"+item.contact.email+"?subject=Temat";}}
                           size={1} color="teal" className="flex flex-row items-center"
                           >
                               <Mail size={16}/>
-                              <div className="ps-1">{item.email}</div>
+                              <div className="ps-1">{item.contact.email}</div>
                           </Button></td>
                       </tr>
                       <tr className="custom-table-row">
                         <td className="p-2">Telefon Stacjonarny:</td>
                         <td className="p-2">
                           <Button
-                          onClick={() => {window.location.href = "tel:"+item.phone_landline;}}
+                          onClick={() => {window.location.href = "tel:"+item.contact.phone_landline;}}
                           size={1} color="lime" className="flex flex-row items-center"
                           >
                               <Phone size={16}/>
-                              <div className="ps-1">{item.phone_landline}</div>
+                              <div className="ps-1">{item.contact.phone_landline}</div>
                               
                           </Button>
                         </td>
@@ -171,11 +172,11 @@ const UserPermission = () => {
                         <td className="p-2">Telefon Komórkowy:</td>
                         <td className="p-2">
                           <Button
-                          onClick={() => {window.location.href = "tel:"+item.phone_mobile;}}
+                          onClick={() => {window.location.href = "tel:"+item.contact.phone_mobile;}}
                           size={1} color="lime" className="flex flex-row items-center"
                           >
                               <Phone size={16}/>
-                              <div className="ps-1">{item.phone_mobile}</div>
+                              <div className="ps-1">{item.contact.phone_mobile}</div>
                               
                           </Button>
                         </td>

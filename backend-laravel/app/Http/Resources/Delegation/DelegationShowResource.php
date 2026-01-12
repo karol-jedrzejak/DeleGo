@@ -31,13 +31,14 @@ class DelegationShowResource extends JsonResource
             ],
             'custom_address' => $this->custom_address,
             'description' => $this->description,
+            'total_distance' => $this->total_distance,
             
             // belongsTo
             'user' => $this->whenLoaded('user', function () {
                 if ($this->user && $this->user->id) {
                     return new UserBasicResource($this->user);
                 }
-                return [];
+                return null;
             }),
 
             // belongsTo
@@ -45,7 +46,7 @@ class DelegationShowResource extends JsonResource
                 if ($this->company && $this->company->id) {
                     return new CompanyIndexResource($this->company);
                 }
-                return [];
+                return null;
             }),
 
             // belongsTo
@@ -53,7 +54,7 @@ class DelegationShowResource extends JsonResource
                 if ($this->car && $this->car->id) {
                     return new CarBasicResource($this->car);
                 }
-                return [];
+                return null;
             }),
 
             // hasMeany

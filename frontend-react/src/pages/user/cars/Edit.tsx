@@ -11,7 +11,7 @@ import { Card, Button,Error, PopUp,Spinner,Loading } from '@/components';
 
 // Model //
 
-import { DEFAULT_FORM_DATA} from '@/models/Car.tsx';
+import { DEFAULT_FORM_DATA, apiToForm} from '@/models/Car.tsx';
 import type { FormDataType, ItemFullType } from '@/models/Car.tsx';
 
 import Form from './Form.tsx';
@@ -62,7 +62,7 @@ export default function Edit() {
     useEffect(() => {
         mutateGet()
         .then((res) => {
-            setFormData(res.data);
+            setFormData(apiToForm(res.data));
             if(res.data.user?.id)
             {
                 selectedUser.current = (res.data.user?.names.name+" "+res.data.user?.names.surname);
@@ -264,9 +264,6 @@ export default function Edit() {
                                     )}
                                 </div>
                                 <div className='flex justify-between items-center gap-2'>
-                                    {loadingPut && (
-                                        <Spinner/>
-                                    )}
                                     <Button
                                         className='flex items-center'
                                         disabled={loadingPut || loadingRestore}
