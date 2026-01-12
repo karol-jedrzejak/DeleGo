@@ -31,7 +31,10 @@ import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
 const Index = () => {
 
     const DEFAULT_SORT:SortType = [{
-        sortBy: 'name_short',
+        sortBy: 'name',
+        sortDir: 'asc',
+    },{
+        sortBy: 'surname',
         sortDir: 'asc',
     }];
 

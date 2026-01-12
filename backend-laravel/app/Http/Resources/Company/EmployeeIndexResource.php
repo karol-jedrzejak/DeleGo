@@ -20,7 +20,6 @@ class EmployeeIndexResource extends JsonResource
             'names' => [
                 'name' => $this->name,
                 'surname' => $this->surname,
-
             ],
             'position' => $this->position,
             'contact' => [
