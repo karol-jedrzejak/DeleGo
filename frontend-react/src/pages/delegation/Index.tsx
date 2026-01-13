@@ -13,7 +13,7 @@ import { Card, Button , Pagination , HeaderSorting,HeaderSearchMeany,Error,Table
 
 // Model //
 
-import type { FormDataType } from '@/models/Delegation.tsx';
+import type { ItemBasicType } from '@/models/Delegation.tsx';
 
 // API //
 
@@ -49,7 +49,7 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
     const authData = useContext(AuthContext);
 
-    const [items, setItems] = useState<FormDataType | null>(null);
+    const [items, setItems] = useState<ItemBasicType[] | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
     const [perPage, setPerPage] = useState<number>(DEFAULT_PER_PAGE);
@@ -62,7 +62,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<FormDataType>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemBasicType[]>>(
         "get",
         delegationService.paths.getAll
     );
@@ -168,16 +168,16 @@ const Index = () => {
                                             : "bg-white dark:bg-neutral-800"
                                         }`}>
                                     <td className="p-2">
-                                        {item.return.slice(0, 10) == item.departure.slice(0, 10) ? (
-                                            <>{item.return.slice(0, 10)}</>
+                                        {item.dates.return.slice(0, 10) == item.dates.departure.slice(0, 10) ? (
+                                            <>{item.dates.return.slice(0, 10)}</>
                                         ):(
-                                            <>{item.return.slice(0, 10)} - {item.departure.slice(0, 10)}</>
+                                            <>{item.dates.return.slice(0, 10)} - {item.dates.departure.slice(0, 10)}</>
                                         )}
                                     </td>
                                     <td className="p-2">{item.company?.id ? (
                                         <><Link to={ROUTES.COMPANY.SHOW.LINK(item.company.id)}>
                                             <Button color="sky">
-                                                {item.company.name_short}
+                                                {item.company.names.name_short}
                                             </Button>
                                         </Link></>
                                         ):(
@@ -196,7 +196,7 @@ const Index = () => {
                                         </div>
                                     </td>
                                     {authData.hasPermission('admin','admin') && (
-                                        <td className="p-2">{item.user?.name} {item.user?.surname}</td>
+                                        <td className="p-2">{item.user?.names.name} {item.user?.names.surname}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                         <div className="flex flex-row justify-center gap-1">

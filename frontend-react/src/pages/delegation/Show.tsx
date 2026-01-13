@@ -11,7 +11,7 @@ import { Card, Loading, Button , Error } from '@/components';
 
 // Model //
 
-import type { ItemType } from '@/models/Delegation';
+import type { ItemFullType } from '@/models/Delegation';
 
 // API //
 
@@ -28,13 +28,13 @@ const Show = () => {
     const { setMessage } = useContext(MessageContext);
 
     const { id } = useParams<{ id: string }>();
-    const [item, setItem] = useState<ItemType | null>(null);
+    const [item, setItem] = useState<ItemFullType | null>(null);
 
     // -------------------------------------------------------------------------- //
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<ItemType>("get", delegationService.paths.getById(id ?? ""));
+    const { loading, error, mutate } = useBackend<ItemFullType>("get", delegationService.paths.getById(id ?? ""));
 
     useEffect(() => {
         mutate()
@@ -77,7 +77,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Address:</td>
                                         <td className="p-2 flex items-center">
-                                            {item.company?.id ? item.company?.name_short : ""}
+                                            {item.company?.id ? item.company?.names.name_short : ""}
                                             {!item.company?.id ? item.custom_address : ""}
                                         </td>
                                     </tr>

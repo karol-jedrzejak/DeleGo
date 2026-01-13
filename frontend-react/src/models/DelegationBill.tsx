@@ -22,7 +22,6 @@ export function apiToForm(
 ): FormDataType {
   return {
     id: api.id,
-    delegation_id: api.delegation_id,
     delegation_bill_type_id: api.delegation_bill_type.id,
     description: api.description,
     amount: api.amount,
@@ -36,7 +35,6 @@ export function apiToForm(
 
 export type FormDataType = {
   id: number | null,
-  delegation_id: number | null,
   delegation_bill_type_id: number,
   description: string,
   amount: number,
@@ -48,7 +46,6 @@ export type FormDataType = {
 
 export const DEFAULT_FORM_DATA = {
   id: null,
-  delegation_id: null,
   delegation_bill_type_id: null,
   description: "",
   amount: 0.01,

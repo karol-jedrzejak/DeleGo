@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\User\CarBasicResource;
+use App\Http\Resources\Delegation\DelegationBillShowResource;
+use App\Http\Resources\Delegation\DelegationTripShowResource;
 
 class DelegationShowResource extends JsonResource
 {
@@ -40,16 +42,12 @@ class DelegationShowResource extends JsonResource
                 }
                 return null;
             }),
-
-            // belongsTo
             'company' => $this->whenLoaded('company', function () {
                 if ($this->company && $this->company->id) {
                     return new CompanyIndexResource($this->company);
                 }
                 return null;
             }),
-
-            // belongsTo
             'car' => $this->whenLoaded('car', function () {
                 if ($this->car && $this->car->id) {
                     return new CarBasicResource($this->car);
@@ -58,8 +56,12 @@ class DelegationShowResource extends JsonResource
             }),
 
             // hasMeany
-            'delegationTrips' => $this->whenLoaded('delegationTrips'),
-            'delegationBills' => $this->whenLoaded('delegationBills'),
+            'delegationTrips' => $this->whenLoaded('delegationTrips', function () {
+                return DelegationTripShowResource::collection($this->delegationTrips);
+            }),
+            'delegationBills' => $this->whenLoaded('delegationBills', function () {
+                return DelegationBillShowResource::collection($this->delegationBills);
+            }),
 
         ];
     }

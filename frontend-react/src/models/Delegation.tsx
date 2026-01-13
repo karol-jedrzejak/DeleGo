@@ -30,7 +30,7 @@ export type ItemFullType = {
   dates: Dates;
   custom_address: string | null;
   description: string;
-  user: UserType;
+  user: UserType | null;
   car: CarType | null;  
   company: CompanyType | null;
   total_distance: number;
@@ -45,7 +45,7 @@ export type ItemBasicType = {
   dates: Dates;
   custom_address: string | null;
   description: string;
-  user: UserType;
+  user: UserType | null;
   car: CarType | null;  
   company: CompanyType | null;
 };
@@ -63,7 +63,7 @@ export function apiToForm(
     departure: api.dates.departure,
     custom_address: api.custom_address,
     description: api.description,
-    user_id: api.user.id,
+    user_id: api.user?.id ?? null,
     car_id: api.car?.id ?? null,
     company_id: api.company?.id ?? null,
     total_distance: api.total_distance,
