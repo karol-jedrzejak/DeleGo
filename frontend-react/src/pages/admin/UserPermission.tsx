@@ -64,9 +64,9 @@ const UserPermission = () => {
       setItem(new_item);
   };
 
-  const handleUserSelect = (user: ItemLookupType | null ) => {
-    if(user) {
-      mutateGet({ url: userService.paths.getById(String(user.id)) })
+  const handleUserSelect = (user_id: number | null ) => {
+    if(user_id) {
+      mutateGet({ url: userService.paths.getById(String(user_id)) })
         .then((res) => {
             setItem(res.data);
         })

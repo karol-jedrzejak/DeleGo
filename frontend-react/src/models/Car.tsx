@@ -1,4 +1,4 @@
-import type { ItemFullType as UserType } from "@/models/User"
+import type { ItemBasicType as UserType } from "@/models/User"
 
 // -------------------------------------------------------------------------- //
 // Typy odpowiedzi z backendu

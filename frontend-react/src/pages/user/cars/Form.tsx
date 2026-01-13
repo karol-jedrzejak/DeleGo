@@ -1,15 +1,34 @@
 
-import React from 'react';
-import { Input } from '@/components';
-import type { FormDataType } from '@/models/Car.tsx';
+import React, { useState,useContext } from 'react';
+import { AuthContext } from "@/providers/AuthProvider.js";
+
+// Komponenty UI //
+
+import { Input , Error } from '@/components';
+
+// Model //
+
+import type { ItemFullType,FormDataType } from '@/models/Car.tsx';
+
+// USERS //
+
+import UserSelect from '@/features/user/components/UserSelect.tsx';
 
 type FormProps = {
+  itemData?: ItemFullType
   formData: FormDataType
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
   formError: Partial<Record<keyof FormDataType, string[]>> | null
 }
 
-export default function Form({formData,setFormData,formError}:FormProps) {
+export default function Form({formData,setFormData,formError,itemData}:FormProps) {
+
+    // -------------------------------------------------------------------------- //
+    // Definicje standardowych stanów i kontekstów
+    // -------------------------------------------------------------------------- //
+
+    const authData = useContext(AuthContext);
+    const [errorUsers, setErrorUsers] = useState<string | null>(null);
 
     // -------------------------------------------------------------------------- //
     // Change Handler
@@ -23,11 +42,30 @@ export default function Form({formData,setFormData,formError}:FormProps) {
     };
 
     // -------------------------------------------------------------------------- //
+    // Change user (For Admin)
+    // -------------------------------------------------------------------------- //
+
+    const handleUserChange = (user_id: number | null  ) => {
+        setFormData((p) => ({ ...p, user_id: user_id ?? null}));
+    };
+
+    // -------------------------------------------------------------------------- //
+    // Wyświetlanie błędów
+    // -------------------------------------------------------------------------- //
+
+    if(errorUsers) { return <Error><Error.Text>{errorUsers}</Error.Text></Error>; }
+
+    // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
 
     return (
         <>
+            <div className='w-full'>
+            {authData.hasPermission('admin','admin') && (
+                <UserSelect onSelect={handleUserChange} initialUser={itemData?.user} onError={() => setErrorUsers("Bład połączenia z serverem")}/>
+            )}
+            </div>
             <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>
                 <Input
                     label="Marka:"   

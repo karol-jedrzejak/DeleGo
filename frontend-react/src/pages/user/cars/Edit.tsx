@@ -1,8 +1,7 @@
 
-import { useState, useEffect,useContext,useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate,useParams } from "react-router-dom"
 import { ROUTES } from "@/routes/Routes.tsx";
-import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
@@ -16,42 +15,23 @@ import type { FormDataType, ItemFullType } from '@/models/Car.tsx';
 
 import Form from './Form.tsx';
 
-import type { ItemLookupType as UserLookupType } from "@/models/User";
-
 // API //
 
 import { carService } from "@/api/services/backend/user/car.service.ts";
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 
-// USERS //
-import UserSelect from '@/features/user/components/UserSelect.tsx';
 
 export default function Edit() {
 
     // -------------------------------------------------------------------------- //
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
-    const authData = useContext(AuthContext);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [deletePopUp, setDeletePopUp] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
+    const [itemData, setItemData] = useState<ItemFullType | undefined>(undefined);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
-    const selectedUser = useRef<string>("");
-    const [errorUsers, setErrorUsers] = useState<string | null>(null);
-    
-    // -------------------------------------------------------------------------- //
-    // Change user (For Admin)
-    // -------------------------------------------------------------------------- //
-
-    const handleUserChange = (user: UserLookupType | null) => {
-        if(user)
-        {
-            setFormData((p) => ({ ...p, user_id: user.id}));
-        } else {
-            setFormData((p) => ({ ...p, user_id: null}));
-        }
-    };
 
     // -------------------------------------------------------------------------- //
     // Get
@@ -62,11 +42,8 @@ export default function Edit() {
     useEffect(() => {
         mutateGet()
         .then((res) => {
+            setItemData(res.data);
             setFormData(apiToForm(res.data));
-            if(res.data.user)
-            {
-                selectedUser.current = (res.data.user.names.name+" "+res.data.user.names.surname);
-            }
             if(res.data.deleted_at)
             {
                 setIsDeleted(true);
@@ -138,10 +115,9 @@ export default function Edit() {
     // Wyświetlanie błędu i Loading
     // -------------------------------------------------------------------------- //
 
-    if(loadingGet || !selectedUser) { return <Loading/>; }
+    if(loadingGet) { return <Loading/>; }
 
     if(errorGet) { return <Error><Error.Text type={errorGet.type}>{errorGet.text}</Error.Text></Error>; }
-    if(errorUsers) { return <Error><Error.Text>{errorUsers}</Error.Text></Error>; }
     if(errorPut) { return <Error><Error.Text type={errorPut.type}>{errorPut.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
     if(errorDel) { return <Error><Error.Text type={errorDel.type}>{errorDel.text}</Error.Text><Error.Special><Button onClick={() => navigate(0)}>Wróc do edycji</Button></Error.Special></Error>; }
     
@@ -220,10 +196,7 @@ export default function Edit() {
                     </Card.Header>
                     <Card.Body>
                         <form onSubmit={handleUpdate} className='w-full'>
-                            {authData.hasPermission('admin','admin') && (
-                                <UserSelect onSelect={handleUserChange} initialValue={selectedUser.current} onError={() => setErrorUsers("Bład połączenia z serverem")}/>
-                            )}
-                            <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
+                            <Form formData={formData} itemData={itemData} setFormData={setFormData} formError={validationErrors}/>
                             <div className='w-full flex justify-between items-center pt-4'>
                                 <div>
                                     {isDeleted ? (
