@@ -3,9 +3,17 @@ import React from 'react';
 
 import { Input } from '@/components';
 
-import type { FormPropsType } from '@/models/Delegation';
+// Model //
 
-export default function Form({formData,setFormData,formError}:FormPropsType) {
+import type { FormDataType } from '@/models/Delegation';
+
+type FormProps = {
+  formData: FormDataType
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
+  formError: Partial<Record<keyof FormDataType, string[]>> | null
+}
+
+export default function Form({formData,setFormData,formError}:FormProps) {
 
     // -------------------------------------------------------------------------- //
     // Change Handler

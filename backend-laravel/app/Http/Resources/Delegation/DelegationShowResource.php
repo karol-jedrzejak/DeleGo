@@ -4,6 +4,7 @@ namespace App\Http\Resources\Delegation;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
@@ -20,6 +21,9 @@ class DelegationShowResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         return [
             'id' => $this->id,
             'number' => [
@@ -36,12 +40,9 @@ class DelegationShowResource extends JsonResource
             'total_distance' => $this->total_distance,
             
             // belongsTo
-            'user' => $this->whenLoaded('user', function () {
-                if ($this->user && $this->user->id) {
-                    return new UserBasicResource($this->user);
-                }
-                return null;
-            }),
+            'user' => $user?->isAdmin()
+                ? new UserBasicResource($this->user)
+                : null,
             'company' => $this->whenLoaded('company', function () {
                 if ($this->company && $this->company->id) {
                     return new CompanyIndexResource($this->company);
@@ -56,13 +57,24 @@ class DelegationShowResource extends JsonResource
             }),
 
             // hasMeany
-            'delegationTrips' => $this->whenLoaded('delegationTrips', function () {
-                return DelegationTripShowResource::collection($this->delegationTrips);
+            'delegationTrips' => DelegationTripShowResource::collection(
+                $this->whenLoaded('delegationTrips')
+            ),
+            'delegationBills' => DelegationBillShowResource::collection(
+                $this->whenLoaded('delegationBills')
+            ),
+
+            // hasMeany - alternative null if empty
+/*             'delegationTrips' => $this->whenLoaded('delegationTrips', function () {
+                return $this->delegationTrips->isNotEmpty()
+                ? DelegationTripShowResource::collection($this->delegationTrips)
+                : null;
             }),
             'delegationBills' => $this->whenLoaded('delegationBills', function () {
-                return DelegationBillShowResource::collection($this->delegationBills);
-            }),
-
+                return $this->delegationBills->isNotEmpty()
+                ? DelegationBillShowResource::collection($this->delegationBills)
+                : null;
+            }), */
         ];
     }
 }

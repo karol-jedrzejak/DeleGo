@@ -104,7 +104,7 @@ export const DEFAULT_FORM_DATA = {
   user_id: null,
   car_id:  null,
   company_id: null,
-  total_distance: null,
+  total_distance: 0,
   delegation_bills: [],
   delegation_trips: [],
 };

@@ -41,7 +41,7 @@ export default function Edit() {
     const [errorUsers, setErrorUsers] = useState<string | null>(null);
     
     // -------------------------------------------------------------------------- //
-    // Get Users For Admin
+    // Change user (For Admin)
     // -------------------------------------------------------------------------- //
 
     const handleUserChange = (user: UserLookupType | null) => {
@@ -63,9 +63,9 @@ export default function Edit() {
         mutateGet()
         .then((res) => {
             setFormData(apiToForm(res.data));
-            if(res.data.user?.id)
+            if(res.data.user)
             {
-                selectedUser.current = (res.data.user?.names.name+" "+res.data.user?.names.surname);
+                selectedUser.current = (res.data.user.names.name+" "+res.data.user.names.surname);
             }
             if(res.data.deleted_at)
             {

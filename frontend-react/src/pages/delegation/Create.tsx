@@ -26,7 +26,6 @@ import { carService } from '@/api/services/backend/user/car.service.ts';
 import UserSelect from '@/features/user/components/UserSelect.tsx';
 
 
-
 export default function Create() {
 
     // -------------------------------------------------------------------------- //
@@ -40,11 +39,16 @@ export default function Create() {
     const [errorUsers, setErrorUsers] = useState<string | null>(null);
     
     // -------------------------------------------------------------------------- //
-    // Get Users For Admin
+    // Change user (For Admin)
     // -------------------------------------------------------------------------- //
 
-    const handleUserChange = (user: UserLookupType  ) => {
-        setFormData((p) => ({ ...p, user_id: user.id}));
+    const handleUserChange = (user: UserLookupType | null  ) => {
+        if(user)
+        {
+            setFormData((p) => ({ ...p, user_id: user.id}));
+        } else {
+            setFormData((p) => ({ ...p, user_id: null}));
+        }
     };
 
     // -------------------------------------------------------------------------- //
@@ -76,7 +80,7 @@ export default function Create() {
     <div className='flex items-center justify-center'>
         <Card className='w-full xl:w-3/4'>
             <Card.Header>
-                <div>Formularz dodania auta</div>
+                <div>Formularz dodania delegacji</div>
             </Card.Header>
             <Card.Body>
                 <form onSubmit={handleSubmit} className='w-full'>

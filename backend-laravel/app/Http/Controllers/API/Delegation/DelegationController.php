@@ -79,10 +79,26 @@ class DelegationController extends Controller
         $delegation->loadMissing([
             'car:id,registration_number,brand,model',
             'company:id,name_short,name_complete,street,house_number,city,postal_code,postal_city,region,country',
-            'delegationTrips',
+            'delegationTrips:id,delegation_id,arrival,departure,description,destination,distance,starting_point',
         ]);
 
-        $delegation->loadMissing('delegationBills.delegationBillType');
+        //$delegation->loadMissing('delegationBills.delegationBillType');
+        $delegation->loadMissing([
+            'delegationBills' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'amount',
+                    'delegation_bill_type_id',
+                ]);
+            },
+            'delegationBills.delegationBillType' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                ]);
+            },
+        ]);
 
         return new DelegationShowResource($delegation);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Delegation;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
@@ -18,6 +19,9 @@ class DelegationIndexResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         return [
             'id' => $this->id,
             'numbers' => [
@@ -34,12 +38,9 @@ class DelegationIndexResource extends JsonResource
             'total_distance' => $this->total_distance,
 
             // belongsTo
-            'user' => $this->whenLoaded('user', function () {
-                if ($this->user && $this->user->id) {
-                    return new UserBasicResource($this->user);
-                }
-                return null;
-            }),
+            'user' => $user?->isAdmin()
+                ? new UserBasicResource($this->user)
+                : null,
 
             // belongsTo
             'company' => $this->whenLoaded('company', function () {

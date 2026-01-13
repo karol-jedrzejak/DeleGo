@@ -5,6 +5,7 @@ namespace App\Http\Resources\Delegation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Http\Resources\Delegation\DelegationBillTypeShowResource;
 
 class DelegationBillShowResource extends JsonResource
 {

@@ -37,7 +37,7 @@ export default function Create() {
     const [errorUsers, setErrorUsers] = useState<string | null>(null);
     
     // -------------------------------------------------------------------------- //
-    // Get Users For Admin
+    // Change user (For Admin)
     // -------------------------------------------------------------------------- //
 
     const handleUserChange = (user: UserLookupType | null  ) => {
