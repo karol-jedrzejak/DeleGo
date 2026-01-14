@@ -10,7 +10,7 @@ import type { ItemBasicType,ItemLookupType  } from "@/models/User";
 
 // API //
 
-import { useBackend } from '@/hooks/useLaravelBackend';
+import { useBackend, mapErrorToInputErrors } from '@/hooks/useLaravelBackend';
 import { userService } from "@/api/services/backend/user/user.service";
 
 type Props = {
@@ -27,12 +27,20 @@ export default function UserSelect({
     onError 
 }:Props) {
 
+    // -------------------------------------------------------------------------- //
+    // Definicje standardowych stanów i kontekstów
+    // -------------------------------------------------------------------------- //
+
     const [query, setQuery] = useState<string>(initialUser ? initialUser.names.name+" "+initialUser.names.surname : "");
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
 
     const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", userService.paths.getAll);
+    
+    // -------------------------------------------------------------------------- //
+    // Use Effects
+    // -------------------------------------------------------------------------- //
 
     useEffect(() => {
         if (errorGetSearch) {
@@ -64,6 +72,10 @@ export default function UserSelect({
         return () => clearTimeout(timeout);
     }, [query]);
 
+    // -------------------------------------------------------------------------- //
+    // Change Handlers
+    // -------------------------------------------------------------------------- //
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         isTyping.current = true;
         setQuery(e.target.value);
@@ -81,36 +93,39 @@ export default function UserSelect({
         onSelect(item.id);
     };
 
-    if(!errorGetSearch){
-        return (
-            <div className='relative w-full'>                
-                <Input
-                    label="Użytkownik:"   
-                    type = "text"
-                    name="user_id"
-                    value={query}
-                    disabled={disabled} 
-                    classNameContainer=''
-                    classNameInput='w-full'
-                    placeholder = "Wyszukaj"   
-                    errors={null}
-                    onChange={handleChange}
-                ></Input>
-                {loadingGetSearch && <div className="absolute z-10 bottom-0 right-0 p-3"><Spinner/></div>}
-                {showDropdown && results.length > 0 && (
-                    <ul className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1 left-0 text-black">
-                    {results.map((item) => (
-                        <li 
-                        key={item.id} 
-                        onClick={() => handleSelect(item)}
-                        className="p-2 hover:bg-blue-100 cursor-pointer  rounded-md"
-                        >
-                        {item.name_surname}
-                        </li>
-                    ))}
-                    </ul>
-                )}
-            </div>
-        );
-    }
+    // -------------------------------------------------------------------------- //
+    // Renderowanie
+    // -------------------------------------------------------------------------- //
+
+    return (
+        <div className='relative w-full'>                
+            <Input
+                label="Użytkownik:"   
+                type = "text"
+                name="user_id"
+                value={query}
+                disabled={disabled} 
+                classNameContainer=''
+                classNameInput='w-full'
+                placeholder = "Wyszukaj"   
+                errors={mapErrorToInputErrors(errorGetSearch)}
+                onChange={handleChange}
+            ></Input>
+            {loadingGetSearch && <div className="absolute z-10 bottom-0 right-0 p-3"><Spinner/></div>}
+            {showDropdown && results.length > 0 && (
+                <ul className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1 left-0 text-black">
+                {results.map((item) => (
+                    <li 
+                    key={item.id} 
+                    onClick={() => handleSelect(item)}
+                    className="p-2 hover:bg-blue-100 cursor-pointer  rounded-md"
+                    >
+                    {item.name_surname}
+                    </li>
+                ))}
+                </ul>
+            )}
+        </div>
+    );
+
 }

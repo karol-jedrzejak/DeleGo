@@ -9,10 +9,19 @@ type UseBackendOptions = {
   initialLoading?: boolean; // domyślnie false
 };
 
-type ErrorType = {
+export type ErrorType = {
   type: "standard" | "authorization";
   text: string
 };
+
+export function mapErrorToInputErrors(
+  error: ErrorType | null
+  ): string[] | null {
+  if (!error) return null;
+
+  return [error.text];
+}
+
 
 type ValidationErrorsType<TFields extends string = string> = {
   [K in TFields]?: string[];

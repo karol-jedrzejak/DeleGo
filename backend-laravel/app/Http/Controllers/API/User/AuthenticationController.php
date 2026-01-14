@@ -98,12 +98,6 @@ class AuthenticationController extends Controller
                 ->get();
 
         return UserOptionsResource::collection($users);
-
-/*         $users = User::with('permissions.type')
-                ->orderBy('name')
-                ->orderBy('surname')
-                ->get();
-        return UserIndexResource::collection($users); */
     }
 
     /**
