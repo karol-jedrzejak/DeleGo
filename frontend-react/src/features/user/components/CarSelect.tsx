@@ -102,7 +102,7 @@ export default function CarSelect({
                 type = "text"
                 name="car_id"
                 value={query}
-                disabled={disabled || user_id === null} 
+                disabled={disabled} 
                 classNameContainer=''
                 classNameInput='w-full'
                 placeholder = "wyszukaj"   

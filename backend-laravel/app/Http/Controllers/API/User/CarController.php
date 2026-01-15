@@ -54,13 +54,24 @@ class CarController extends Controller
         $user = Auth::user();
 
         $search = $request->query('search');
-        $user_id = $request->query('user_id');
+        
 
         $query = Car::query()
-            ->select(['id','brand','model','registration_number','deleted_at']);
+            ->select(['id','user_id','brand','model','registration_number','deleted_at']);
 
         if ($user->isAdmin()) {
             $query->withTrashed();
+
+            $user_id = $request->query('user_id');
+            $query->where(function ($q) use ($user_id) {
+                $q->where('user_id', $user_id)
+                ->orWhereNull('user_id');
+            });     
+        } else{
+            $query->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                ->orWhereNull('user_id');
+            }); 
         }
 
         $query->when($search, function ($q, $search) {
@@ -79,11 +90,6 @@ class CarController extends Controller
                     });
                 }
             });
-        });
-
-        $query->where(function ($q) use ($user_id) {
-            $q->where('user_id', $user_id)
-            ->orWhereNull('user_id');
         });
 
         $cars = $query
