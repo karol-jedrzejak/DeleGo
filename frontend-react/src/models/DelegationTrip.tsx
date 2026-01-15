@@ -13,12 +13,22 @@ export type ItemFullType = {
   arrival: string,
 };
 
+export type ItemBasicType = {
+  id: number,
+  starting_point: string,
+  destination: string,
+  description: string,
+  distance: number,
+  departure: string,
+  arrival: string,
+};
+
 // -------------------------------------------------------------------------- //
 // Mapper Backend -> Formularz
 // -------------------------------------------------------------------------- //
 
 export function apiToForm(
-  api: ItemFullType
+  api: ItemBasicType
 ): FormDataType {
   return {
     id: api.id,

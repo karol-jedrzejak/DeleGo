@@ -67,8 +67,8 @@ const Show = () => {
         <>
         {item && (
             <div>
-                <div className="flex-wrap grid lg:grid-cols-2">
-                    <Card className="lg:col-span-2">
+                <div className="flex flex-col">
+                    <Card>
                         <Card.Header>
                             <div>Dane Delegacji</div>
                         </Card.Header>
@@ -152,14 +152,23 @@ const Show = () => {
                             <table className="table-auto w-full">
                                 <thead>
                                     <tr className="font-normal">
-                                        <th className="p-2 w-[250px]">Zasób</th>
-                                        <th className="p-2">Wartość</th>
+                                        <th className="p-2">Wyjazd</th>
+                                        <th className="p-2">Przyjazd</th>
+                                        <th className="p-2">Z</th>
+                                        <th className="p-2">Do</th>
+                                        <th className="p-2">Dystans</th>
+                                        <th className="p-2">Opis</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {item.delegation_trips.map((trip) => (
                                         <tr key={trip.id} className="custom-table-row">
+                                            <td className="p-2">{trip.departure}</td>  
                                             <td className="p-2">{trip.arrival}</td>  
+                                            <td className="p-2">{trip.starting_point}</td> 
+                                            <td className="p-2">{trip.destination}</td>  
+                                            <td className="p-2">{trip.distance} km</td>  
+                                            <td className="p-2">{trip.description}</td>   
                                         </tr>
                                     ))}
                                 </tbody>
@@ -184,7 +193,9 @@ const Show = () => {
                                         <tr key={bill.id} className="custom-table-row">
                                             <td className="p-2">{bill.delegation_bill_type.name}</td>
                                             <td className="p-2">{bill.description}</td>
-                                            <td className="p-2 text-right tabular-nums font-sans">{formatter.format(bill.amount)}</td>       
+                                            <td className="p-2 text-right tabular-nums font-sans">
+                                                {formatter.format(bill.amount)}
+                                            </td>          
                                         </tr>
                                     ))}
                                     <tr className="custom-table-sum">

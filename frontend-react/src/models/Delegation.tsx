@@ -3,7 +3,7 @@ import type { ItemBasicType as UserType } from '@/models/User';
 import type { ItemWithAddressType as CompanyType } from '@/models/Company';
 
 import type { ItemBasicType as DelegationBillType } from '@/models/DelegationBill';
-import type { ItemFullType as DelegationTripType } from '@/models/DelegationTrip';
+import type { ItemBasicType as DelegationTripType } from '@/models/DelegationTrip';
 
 import type { FormDataType as FormDelegationBillType } from '@/models/DelegationBill';
 import type { FormDataType as FormDelegationTripType } from '@/models/DelegationTrip';
