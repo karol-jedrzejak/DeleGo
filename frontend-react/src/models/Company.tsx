@@ -136,7 +136,7 @@ export const DEFAULT_FORM_DATA = {
   city: "",
   postal_code: "",
   postal_city: "",
-  region: "Wielkopolskie",
+  region: "",
   country: "Polska",
   latitude: null,
   longitude: null,

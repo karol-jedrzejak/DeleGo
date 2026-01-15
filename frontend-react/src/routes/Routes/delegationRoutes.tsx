@@ -1,6 +1,7 @@
 // Companies
 import DelegationIndex from "@/pages/delegation/Index";
 import DelegationShow from "@/pages/delegation/Show";
+import DelegationCreate from "@/pages/delegation/Create";
 
 export const DELEGATION = {
     INDEX: {
@@ -12,7 +13,7 @@ export const DELEGATION = {
     CREATE: {
         PATH:  '/delegation/create',
         LINK:  '/delegation/create',
-        COMPONENT: DelegationIndex,
+        COMPONENT: DelegationCreate,
         PERMISSIONS: {misc:{delegations: 1}}
     },
     SHOW: {

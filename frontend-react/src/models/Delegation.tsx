@@ -39,7 +39,7 @@ export type ItemFullType = {
   user: UserType | null;
   car: CarType | null;  
   company: CompanyType | null;
-  total_distance: number;
+  total_distance: number | null;
   delegation_bills: DelegationBillType[];
   delegation_trips: DelegationTripType[];
 };
@@ -78,7 +78,6 @@ export function apiToForm(
   };
 }
 
-
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
@@ -92,7 +91,7 @@ export type FormDataType = {
   user_id: number | null;
   car_id: number | null;
   company_id: number | null;
-  total_distance: number;
+  total_distance: number | null;
   delegation_bills: FormDelegationBillType[];
   delegation_trips: FormDelegationTripType[];
 }
@@ -110,7 +109,7 @@ export const DEFAULT_FORM_DATA = {
   user_id: null,
   car_id:  null,
   company_id: null,
-  total_distance: 0,
+  total_distance: null,
   delegation_bills: [],
   delegation_trips: [],
 };

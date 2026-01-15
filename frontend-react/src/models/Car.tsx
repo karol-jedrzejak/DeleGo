@@ -13,6 +13,19 @@ export type ItemFullType = {
     deleted_at: string,
 };
 
+export type ItemBasicType = {
+    id: number,
+    brand: string,
+    model: string,
+    registration_number: string,
+    user: UserType | null,
+};
+
+export type ItemLookupType = {
+    id: number,
+    name: string,
+};
+
 // -------------------------------------------------------------------------- //
 // Mapper Backend -> Formularz
 // -------------------------------------------------------------------------- //

@@ -1,14 +1,9 @@
 import { useState,useEffect } from "react";
-import { Link,useParams } from "react-router-dom"
-
-// Pages //
-
-import { ROUTES } from "@/routes/Routes.tsx";
+import { useParams } from "react-router-dom"
 
 // Komponenty UI //
 
-import { Card, Loading , Error, Button } from '@/components';
-import { Search } from "lucide-react";
+import { Card, Loading , Error } from '@/components';
 import { CompanyButtons } from "@/features/company/components/CompanyButtons";
 
 // Model //
@@ -23,12 +18,14 @@ import { useBackend } from "@/hooks/useLaravelBackend";
 
 const Show = () => {
 
+    // -------------------------------------------------------------------------- //
+    // Formatter kwot walutowych
+    // -------------------------------------------------------------------------- //
 
     const formatter = new Intl.NumberFormat("pl-PL", {
         style: 'currency', // Określenie stylu jako waluta
         currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
     });
-
 
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów

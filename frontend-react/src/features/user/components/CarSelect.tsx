@@ -6,22 +6,22 @@ import { Input,Spinner } from '@/components';
 
 // Model //
 
-import type { ItemBasicType,ItemLookupType  } from "@/models/User";
+import type { ItemBasicType,ItemLookupType  } from "@/models/Car";
 
 // API //
 
 import { useBackend, mapErrorToInputErrors } from '@/hooks/useLaravelBackend';
-import { userService } from "@/api/services/backend/user/user.service";
+import { carService } from "@/api/services/backend/user/car.service";
 
 type Props = {
     onSelect: (item: number | null ) => void;
-    initialUser?: ItemBasicType | null;
+    initialValue?: ItemBasicType | null;
     disabled?: boolean;
 };
 
-export default function UserSelect({
+export default function CarSelect({
     disabled=false,
-    initialUser = null,
+    initialValue = null,
     onSelect,
 }:Props) {
 
@@ -29,12 +29,12 @@ export default function UserSelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialUser ? initialUser.names.name+" "+initialUser.names.surname : "");
+    const [query, setQuery] = useState<string>(initialValue ? initialValue.brand+" "+initialValue.model : "");
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
 
-    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", userService.paths.getAll);
+    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", carService.paths.getOptions);
     
     // -------------------------------------------------------------------------- //
     // Use Effects
@@ -78,7 +78,7 @@ export default function UserSelect({
     };
 
     const handleSelect = (item: ItemLookupType) => {
-        setQuery(item.name_surname);
+        setQuery(item.name);
         setResults([]);
         setShowDropdown(false);
         isTyping.current = false;
@@ -92,9 +92,9 @@ export default function UserSelect({
     return (
         <div className='relative w-full'>                
             <Input
-                label="Użytkownik:"   
+                label="Auto:"   
                 type = "text"
-                name="user_id"
+                name="car_id"
                 value={query}
                 disabled={disabled} 
                 classNameContainer=''
@@ -112,7 +112,7 @@ export default function UserSelect({
                     onClick={() => handleSelect(item)}
                     className="p-2 hover:bg-blue-100 cursor-pointer  rounded-md"
                     >
-                    {item.name_surname}
+                    {item.name}
                     </li>
                 ))}
                 </ul>
