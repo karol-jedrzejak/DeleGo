@@ -16,7 +16,7 @@ class CompanyOptionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name_short' => "{$this->name_short}" . ($this->deleted_at ? ' (USUNIĘTA)' : ''),
+            'name' => "{$this->name_short}"." - "."{$this->name_complete}" . ($this->deleted_at ? ' (USUNIĘTA)' : ''),
         ];
     }
 }

@@ -1,6 +1,6 @@
-import type { ItemFullType as CarType } from '@/models/Car';
-import type { ItemBasicType as UserType } from '@/models/User';
-import type { ItemWithAddressType as CompanyType } from '@/models/Company';
+import type { ItemBasicType as CarBasicType } from '@/models/Car';
+import type { ItemBasicType as UserBasicType } from '@/models/User';
+import type { ItemWithAddressType as CompanyType, ItemNamesOnlyType as CompanyNamesOnlyType } from '@/models/Company';
 
 import type { ItemBasicType as DelegationBillType } from '@/models/DelegationBill';
 import type { ItemBasicType as DelegationTripType } from '@/models/DelegationTrip';
@@ -36,8 +36,8 @@ export type ItemFullType = {
   dates: Dates;
   custom_address: string | null;
   description: string;
-  user: UserType | null;
-  car: CarType | null;  
+  user: UserBasicType | null;
+  car: CarBasicType | null;  
   company: CompanyType | null;
   total_distance: number | null;
   delegation_bills: DelegationBillType[];
@@ -51,9 +51,9 @@ export type ItemBasicType = {
   dates: Dates;
   custom_address: string | null;
   description: string;
-  user: UserType | null;
-  car: CarType | null;  
-  company: CompanyType | null;
+  user: UserBasicType | null;
+  car: CarBasicType | null;  
+  company: CompanyNamesOnlyType | null;
 };
 
 // -------------------------------------------------------------------------- //

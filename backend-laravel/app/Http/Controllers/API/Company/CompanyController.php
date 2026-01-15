@@ -55,15 +55,30 @@ class CompanyController extends Controller
         $search = $request->query('search');
 
         $query = Company::query()
-            ->select(['id', 'name_short']);
+            ->select(['id', 'name_short', 'name_complete','deleted_at']);
 
         if ($user->isAdmin()) {
             $query->withTrashed();
         }
 
-        $companies = $query->when($search, function ($query, $search) {
-                $query->where('name_short', 'LIKE', "{$search}%");
-            })
+        $query->when($search, function ($q, $search) {
+            // 1. Rozbijamy string po spacjach i usuwamy puste elementy
+            $words = explode(' ', $search);
+            $words = array_filter($words);
+
+            // 2. Tworzymy grupę warunków ( nested where )
+            $q->where(function ($innerQuery) use ($words) {
+                foreach ($words as $word) {
+                    // Każde słowo musi pasować do imienia LUB nazwiska
+                    $innerQuery->where(function ($subQuery) use ($word) {
+                        $subQuery->where('name_short', 'LIKE', "%{$word}%")
+                                ->orWhere('name_complete', 'LIKE', "%{$word}%");
+                    });
+                }
+            });
+        });
+
+        $companies = $query
             ->orderBy('name_short')
             ->limit(10)
             ->get();

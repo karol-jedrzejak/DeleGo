@@ -8,13 +8,15 @@ import { Input,Select } from '@/components';
 import type { ItemFullType,FormDataType } from '@/models/Delegation';
 
 import UserSelect from '@/features/user/components/UserSelect.tsx';
+import CarSelect from '@/features/user/components/CarSelect.tsx';
+import CompanySelect from '@/features/company/components/CompanySelect.tsx';
 
 
 type FormProps = {
-itemData?: ItemFullType
-  formData: FormDataType
-  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
-  formError: Partial<Record<keyof FormDataType, string[]>> | null
+    itemData?: ItemFullType
+    formData: FormDataType
+    setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
+    formError: Partial<Record<keyof FormDataType, string[]>> | null
 }
 
 export default function Form({formData,setFormData,formError,itemData}:FormProps) {
@@ -40,10 +42,24 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     // Change user (For Admin)
     // -------------------------------------------------------------------------- //
 
-    const handleUserChange = (user_id: number | null  ) => {
-        setFormData((p) => ({ ...p, user_id: user_id ?? null}));
+    const handleUserChange = (user_id: number | null ) => {
+        setFormData((p) => ({ ...p, user_id: user_id ?? null, car_id: null}));
     };
 
+    // -------------------------------------------------------------------------- //
+    // Change Car
+    // -------------------------------------------------------------------------- //
+
+    const handleCarChange = (car_id: number | null ) => {
+        setFormData((p) => ({ ...p, car_id: car_id ?? null}));
+    };
+    // -------------------------------------------------------------------------- //
+    // Change Car
+    // -------------------------------------------------------------------------- //
+
+    const handleCompanyChange = (company_id: number | null ) => {
+        setFormData((p) => ({ ...p, company_id: company_id ?? null}));
+    };
 
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
@@ -53,14 +69,15 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         <>
             <div className='w-full'>
             {authData.hasPermission('admin','admin') && (
-                <UserSelect onSelect={handleUserChange} initialUser={itemData?.user} />
+                <UserSelect onSelect={handleUserChange} initialValue={itemData?.user} />
             )}
             </div>
-
-            {/* Car ID */}
-
-            {/* Company ID */}
-
+            <div className='w-full'>
+                <CarSelect onSelect={handleCarChange} initialValue={itemData?.car} user_id={formData.user_id}/>
+            </div>
+            <div className='w-full'>
+                <CompanySelect onSelect={handleCompanyChange} initialValue={itemData?.company}/>
+            </div>
             <div className='w-full'>
                 <Input
                     label="Adres:"   

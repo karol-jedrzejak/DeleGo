@@ -15,13 +15,13 @@ import { userService } from "@/api/services/backend/user/user.service";
 
 type Props = {
     onSelect: (item: number | null ) => void;
-    initialUser?: ItemBasicType | null;
+    initialValue?: ItemBasicType | null;
     disabled?: boolean;
 };
 
 export default function UserSelect({
     disabled=false,
-    initialUser = null,
+    initialValue = null,
     onSelect,
 }:Props) {
 
@@ -29,7 +29,7 @@ export default function UserSelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialUser ? initialUser.names.name+" "+initialUser.names.surname : "");
+    const [query, setQuery] = useState<string>(initialValue ? initialValue.names.name+" "+initialValue.names.surname : "");
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);

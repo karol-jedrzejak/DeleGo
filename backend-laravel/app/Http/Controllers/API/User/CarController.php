@@ -53,14 +53,33 @@ class CarController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $search = $request->query('search');
         $user_id = $request->query('user_id');
 
         $query = Car::query()
-            ->select(['id', 'brand','model','registration_number','deleted_at']);
+            ->select(['id','brand','model','registration_number','deleted_at']);
 
         if ($user->isAdmin()) {
             $query->withTrashed();
         }
+
+        $query->when($search, function ($q, $search) {
+            // 1. Rozbijamy string po spacjach i usuwamy puste elementy
+            $words = explode(' ', $search);
+            $words = array_filter($words);
+
+            // 2. Tworzymy grupę warunków ( nested where )
+            $q->where(function ($innerQuery) use ($words) {
+                foreach ($words as $word) {
+                    // Każde słowo musi pasować do imienia LUB nazwiska
+                    $innerQuery->where(function ($subQuery) use ($word) {
+                        $subQuery->where('brand', 'LIKE', "{$word}%")
+                                ->orWhere('model', 'LIKE', "{$word}%")
+                                ->orWhere('registration_number', 'LIKE', "{$word}%");
+                    });
+                }
+            });
+        });
 
         $query->where(function ($q) use ($user_id) {
             $q->where('user_id', $user_id)

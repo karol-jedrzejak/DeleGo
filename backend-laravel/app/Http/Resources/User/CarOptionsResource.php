@@ -16,7 +16,7 @@ class CarOptionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => "{$this->brand}"."{$this->model}"."{$this->registration_number}".($this->deleted_at ? ' (USUNIĘTE)' : ''),
+            'name' => "{$this->brand}"." "."{$this->model}"." - "."{$this->registration_number}".($this->deleted_at ? ' (USUNIĘTE)' : ''),
         ];
     }
 }

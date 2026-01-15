@@ -93,8 +93,8 @@ class EmployeeController extends Controller
                 foreach ($words as $word) {
                     // Każde słowo musi pasować do imienia LUB nazwiska
                     $innerQuery->where(function ($subQuery) use ($word) {
-                        $subQuery->where('name', 'LIKE', "{$word}%")
-                                ->orWhere('surname', 'LIKE', "{$word}%");
+                        $subQuery->where('name', 'LIKE', "%{$word}%")
+                                ->orWhere('surname', 'LIKE', "%{$word}%");
                     });
                 }
             });

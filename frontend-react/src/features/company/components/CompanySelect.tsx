@@ -6,24 +6,22 @@ import { Input,Spinner } from '@/components';
 
 // Model //
 
-import type { ItemBasicType,ItemLookupType  } from "@/models/Car";
+import type { ItemWithAddressType,ItemNamesOnlyType   } from "@/models/Company";
 
 // API //
 
 import { useBackend, mapErrorToInputErrors } from '@/hooks/useLaravelBackend';
-import { carService } from "@/api/services/backend/user/car.service";
+import { companyService } from "@/api/services/backend/company/company.service";
 
 type Props = {
     onSelect: (item: number | null ) => void;
-    initialValue?: ItemBasicType | null;
-    user_id: number | null;
+    initialValue?: ItemWithAddressType | null;
     disabled?: boolean;
 };
 
-export default function CarSelect({
+export default function CompanySelect({
     disabled=false,
     initialValue = null,
-    user_id,
     onSelect,
 }:Props) {
 
@@ -31,20 +29,16 @@ export default function CarSelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialValue ? initialValue.brand+" "+initialValue.model+" ("+initialValue.registration_number+")" : "");
-    const [results, setResults] = useState<ItemLookupType[]>([]);
+    const [query, setQuery] = useState<string>(initialValue ? initialValue.names.name_short+" - "+initialValue.names.name_complete : "");
+    const [results, setResults] = useState<ItemNamesOnlyType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
 
-    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", carService.paths.getOptions);
+    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemNamesOnlyType []>("get", companyService.paths.getOptions);
     
     // -------------------------------------------------------------------------- //
     // Use Effects
     // -------------------------------------------------------------------------- //
-
-    useEffect(() => {
-        setQuery("");
-    }, [user_id]);
 
     useEffect(() => {
         if (!isTyping.current) return;
@@ -58,7 +52,7 @@ export default function CarSelect({
         const timeout = setTimeout(() => {
             const params = new URLSearchParams();
             params.set("search", query);
-            params.set("user_id", user_id?.toString() ?? "");
+
             mutateGetSearch({ params })
                 .then(res => {
                     setResults(res.data);
@@ -83,7 +77,7 @@ export default function CarSelect({
         }
     };
 
-    const handleSelect = (item: ItemLookupType) => {
+    const handleSelect = (item: ItemNamesOnlyType) => {
         setQuery(item.name);
         setResults([]);
         setShowDropdown(false);
@@ -98,11 +92,11 @@ export default function CarSelect({
     return (
         <div className='relative w-full'>                
             <Input
-                label="Auto:"   
+                label="Firma:"   
                 type = "text"
-                name="car_id"
+                name="company_id"
                 value={query}
-                disabled={disabled || user_id === null} 
+                disabled={disabled} 
                 classNameContainer=''
                 classNameInput='w-full'
                 placeholder = "wyszukaj"   
