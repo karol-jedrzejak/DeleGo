@@ -8,7 +8,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 import { ArchiveRestore,SquarePen,Undo2,Trash,Trash2 } from "lucide-react";
 import { Card, Button, Loading, Error, PopUp,Spinner} from '@/components';
 
-import { Buttons as ParentButtons } from '@/features/company/components/Buttons.tsx';
+import { CompanyButtons } from '@/features/company/components/CompanyButtons.tsx';
 
 // Model //
 
@@ -218,7 +218,7 @@ export default function Edit() {
                     <div>Formularz edycji Pracownika firmy</div>
                 </Card.Header>
                 <Card.Body>
-                    <ParentButtons company={parent}/>
+                    <CompanyButtons company={parent}/>
                     <form onSubmit={handleUpdate} className='w-full'>
                         <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                         <div className='w-full flex justify-between items-center pt-4'>

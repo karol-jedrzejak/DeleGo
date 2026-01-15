@@ -1,15 +1,15 @@
-import { useState,useEffect,useContext } from "react";
+import { useState,useContext } from "react";
 import { MessageContext } from "@/providers/MessageProvider.js";
 
 // Komponenty UI //
 
 import { Copy,Phone,Mail ,SquarePen} from "lucide-react";
-import { Card, Loading, Button , Input, Error, Spinner} from '@/components';
+import { Card, Button , Input, Error, Spinner} from '@/components';
 
 // Model //
 
 import UserSelect from "@/features/user/components/UserSelect";
-import type { ItemFullType,ItemLookupType  } from "@/models/User";
+import type { ItemFullType  } from "@/models/User";
 
 // API //
 
@@ -68,9 +68,11 @@ const UserPermission = () => {
     if(user_id) {
       mutateGet({ url: userService.paths.getById(String(user_id)) })
         .then((res) => {
-            setItem(res.data);
+          setItem(res.data);
         })
-        .catch(() => {});
+        .catch(() => {
+          setMessage({status: "error", text: "Bład pobierania danych użytkownika."})
+        });
     }
   };
 

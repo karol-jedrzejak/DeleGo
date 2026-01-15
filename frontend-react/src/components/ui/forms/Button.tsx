@@ -33,7 +33,7 @@ const Button = ({
                 border `
                 // Size
                 +(size==0 ? `px-1 py-0 ` : '')
-                +(size==1 ? `px-0.5 py-0.5 ` : '')
+                +(size==1 ? `px-1 py-0.5 ` : '')
                 +(size==2 ? `px-2 py-2 ` : '')
                 +(size==3 ? `px-3 py-3 ` : '')
                 +(size==4 ? `px-4 py-4 ` : '')

@@ -17,32 +17,33 @@ import { formatAddress } from "@/features/company/utilities/formatAddress";
 
 type ButtonsProps = {
   company: ItemWithAddressType | undefined;
+  size?: 1 | 2 | 3;
 };
 
-export const Buttons = ({ company }: ButtonsProps) => {
+export const CompanyButtons = ({ company,size=2 }: ButtonsProps) => {
   return (
     <>
       {company ?
         (
-        <div className="flex flex-row items-center justify-center lg:justify-start gap-2 pb-2">
+        <div className={"flex flex-row items-center justify-center lg:justify-start gap-2"+(size==1 ? "" : size==2 ? " pb-2" : " pb-4")}>
           <Link to={ROUTES.COMPANY.SHOW.LINK(company.id)}>
             <Button
               color="sky"
-              size={2}
+              size={size==1 ? 1 : size==2 ? 2 : 3}
               className="flex flex-row items-center"
             >
-              <Search size={18} />
+              <Search size={size==1 ? 14 : size==2 ? 18 : 22} />
               <div className="ps-1">{company.names.name_short}</div>
             </Button>
           </Link>
 
           <Button
             color="teal"
-            size={2}
+            size={size==1 ? 1 : size==2 ? 2 : 3}
             className="flex flex-row items-center"
             onClick={() => window.open(buildCompanyGoogleMapsUrl(company.address), "_blank")}
           >
-            <Map size={18} />
+            <Map size={size==1 ? 14 : size==2 ? 18 : 22} />
             <div className="ps-1">{formatAddress(company.address)}</div>
           </Button>
         </div>

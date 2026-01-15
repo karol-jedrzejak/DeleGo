@@ -2,8 +2,14 @@ import type { ItemFullType as CarType } from '@/models/Car';
 import type { ItemBasicType as UserType } from '@/models/User';
 import type { ItemWithAddressType as CompanyType } from '@/models/Company';
 
-import type { FormDataType as DelegationBillType } from '@/models/DelegationBill';
-import type { FormDataType as DelegationTripType } from '@/models/DelegationTrip';
+import type { ItemBasicType as DelegationBillType } from '@/models/DelegationBill';
+import type { ItemFullType as DelegationTripType } from '@/models/DelegationTrip';
+
+import type { FormDataType as FormDelegationBillType } from '@/models/DelegationBill';
+import type { FormDataType as FormDelegationTripType } from '@/models/DelegationTrip';
+
+import { apiToForm as apiToFormDelegationBill } from '@/models/DelegationBill';
+import { apiToForm as apiToFormDelegationTrip } from '@/models/DelegationTrip';
 
 // -------------------------------------------------------------------------- //
 // Subtypy danych
@@ -25,7 +31,7 @@ export type Dates = {
 
 export type ItemFullType = {
   id: number;
-  numbers: NumberWithYear;
+  number: NumberWithYear;
   settled: boolean;
   dates: Dates;
   custom_address: string | null;
@@ -40,7 +46,7 @@ export type ItemFullType = {
 
 export type ItemBasicType = {
   id: number;
-  numbers: NumberWithYear;
+  number: NumberWithYear;
   settled: boolean;
   dates: Dates;
   custom_address: string | null;
@@ -67,8 +73,8 @@ export function apiToForm(
     car_id: api.car?.id ?? null,
     company_id: api.company?.id ?? null,
     total_distance: api.total_distance,
-    delegation_bills: api.delegation_bills,
-    delegation_trips: api.delegation_trips,
+    delegation_bills: api.delegation_bills.map(apiToFormDelegationBill),
+    delegation_trips: api.delegation_trips.map(apiToFormDelegationTrip),
   };
 }
 
@@ -87,8 +93,8 @@ export type FormDataType = {
   car_id: number | null;
   company_id: number | null;
   total_distance: number;
-  delegation_bills: DelegationBillType[];
-  delegation_trips: DelegationTripType[];
+  delegation_bills: FormDelegationBillType[];
+  delegation_trips: FormDelegationTripType[];
 }
 
 // -------------------------------------------------------------------------- //

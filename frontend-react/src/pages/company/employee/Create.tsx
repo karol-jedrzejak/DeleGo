@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { SquarePlus,Undo2 } from "lucide-react";
 import { Card, Button,Error, Loading,Spinner} from '@/components';
 
-import { Buttons as ParentButtons } from '@/features/company/components/Buttons.tsx';
+import { CompanyButtons } from '@/features/company/components/CompanyButtons.tsx';
 
 // Model //
 
@@ -80,7 +80,7 @@ export default function Create() {
                 <div>Formularz dodania pracownika do firmy {parent.names.name_complete}</div>
             </Card.Header>
             <Card.Body>
-                <ParentButtons company={parent}/>
+                <CompanyButtons company={parent}/>
                 <form onSubmit={handleSubmit} className='w-full mt-2'>
                 <Form formData={formData} setFormData={setFormData} formError={validationErrors}/>
                 <div className='w-full flex justify-end items-center pt-4 gap-2'>

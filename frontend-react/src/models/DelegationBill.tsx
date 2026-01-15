@@ -13,12 +13,19 @@ export type ItemFullType = {
     amount: number,
 };
 
+export type ItemBasicType = {
+    id: number,
+    delegation_bill_type: DelegationBillTypeType,    
+    description: string,
+    amount: number,
+};
+
 // -------------------------------------------------------------------------- //
 // Mapper Backend -> Formularz
 // -------------------------------------------------------------------------- //
 
 export function apiToForm(
-  api: ItemFullType
+  api: ItemBasicType
 ): FormDataType {
   return {
     id: api.id,

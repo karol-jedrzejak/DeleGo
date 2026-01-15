@@ -49,3 +49,12 @@
 .custom-table-row {
   @apply border-t border-neutral-900 even:bg-white odd:bg-neutral-200 odd:dark:bg-neutral-900/50 even:dark:bg-neutral-800;
 }
+
+.custom-table-sum {
+  @apply border-t border-neutral-900 bg-sky-300 dark:bg-sky-950 ;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+  font-family: Inter, Roboto, system-ui, sans-serif;
+}

@@ -57,10 +57,10 @@ class DelegationShowResource extends JsonResource
             }),
 
             // hasMeany
-            'delegationTrips' => DelegationTripShowResource::collection(
+            'delegation_trips' => DelegationTripShowResource::collection(
                 $this->whenLoaded('delegationTrips')
             ),
-            'delegationBills' => DelegationBillShowResource::collection(
+            'delegation_bills' => DelegationBillShowResource::collection(
                 $this->whenLoaded('delegationBills')
             ),
 

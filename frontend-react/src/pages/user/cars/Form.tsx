@@ -1,10 +1,10 @@
 
-import React, { useState,useContext } from 'react';
+import React, { useContext } from 'react';
 import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
-import { Input , Error } from '@/components';
+import { Input } from '@/components';
 
 // Model //
 
@@ -28,7 +28,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     // -------------------------------------------------------------------------- //
 
     const authData = useContext(AuthContext);
-    const [errorUsers, setErrorUsers] = useState<string | null>(null);
 
     // -------------------------------------------------------------------------- //
     // Change Handler
@@ -50,12 +49,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     };
 
     // -------------------------------------------------------------------------- //
-    // Wyświetlanie błędów
-    // -------------------------------------------------------------------------- //
-
-    if(errorUsers) { return <Error><Error.Text>{errorUsers}</Error.Text></Error>; }
-
-    // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
 
@@ -63,7 +56,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         <>
             <div className='w-full'>
             {authData.hasPermission('admin','admin') && (
-                <UserSelect onSelect={handleUserChange} initialUser={itemData?.user} onError={() => setErrorUsers("Bład połączenia z serverem")}/>
+                <UserSelect onSelect={handleUserChange} initialUser={itemData?.user} />
             )}
             </div>
             <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>

@@ -17,14 +17,12 @@ type Props = {
     onSelect: (item: number | null ) => void;
     initialUser?: ItemBasicType | null;
     disabled?: boolean;
-    onError?: () => void;
 };
 
 export default function UserSelect({
     disabled=false,
     initialUser = null,
     onSelect,
-    onError 
 }:Props) {
 
     // -------------------------------------------------------------------------- //
@@ -41,12 +39,6 @@ export default function UserSelect({
     // -------------------------------------------------------------------------- //
     // Use Effects
     // -------------------------------------------------------------------------- //
-
-    useEffect(() => {
-        if (errorGetSearch) {
-            onError?.();
-        }
-    }, [errorGetSearch]);
 
     useEffect(() => {
         if (!isTyping.current) return;

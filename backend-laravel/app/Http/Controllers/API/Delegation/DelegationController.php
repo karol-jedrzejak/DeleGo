@@ -89,6 +89,7 @@ class DelegationController extends Controller
                     'id',
                     'delegation_id',
                     'amount',
+                    'description',
                     'delegation_bill_type_id',
                 ]);
             },

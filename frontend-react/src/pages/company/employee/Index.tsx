@@ -8,7 +8,7 @@ import { ROUTES } from "@/routes/Routes.tsx";
 import { Search,SquarePlus,SquarePen,Mail,Phone , Trash2} from "lucide-react";
 import { Loading, Card, Button , Pagination , HeaderSorting, HeaderSearch, HeaderSearchMeany,Error,TableDataLoading,Spinner } from '@/components';
 
-import { Buttons as ParentButtons } from '@/features/company/components/Buttons';
+import { CompanyButtons } from '@/features/company/components/CompanyButtons';
 
 // Model //
 import type { ItemFullType } from '@/models/Employee.tsx';
@@ -120,7 +120,7 @@ const Index = () => {
                         {parent && !loadingParent ?
                         (
                         <div className="pb-4 flex flex-col justify-center lg:flex-row lg:justify-between gap-2">
-                            <ParentButtons company={parent}/>
+                            <CompanyButtons company={parent}/>
                             <div className="flex flex-row items-center justify-center lg:justify-end gap-2">
                                 <Link to={ROUTES.COMPANY.EMPLOYEE.CREATE.LINK(parent.id)}>
                                     <Button 
