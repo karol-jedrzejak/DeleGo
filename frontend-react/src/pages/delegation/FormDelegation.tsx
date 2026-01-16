@@ -430,12 +430,12 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <tr key={index} className="custom-table-row">
                             <td className="p-2">{trip.starting_point}</td>
                             <td className="p-2">{trip.destination}</td>
-                            <td className="p-2">{trip.departure}</td>
-                            <td className="p-2">{trip.arrival}</td>
+                            <td className="p-2">{trip.departure.split("T")[0]} - {trip.departure.split("T")[1]}</td>
+                            <td className="p-2">{trip.arrival.split("T")[0]} - {trip.arrival.split("T")[1]}</td>
                             <td className="p-2">{trip.description}</td>
                             <td className="p-2">{trip.distance} km</td>
                             <td className="p-2">
-                                <Button>asd</Button>
+                                <Button>del</Button>
                             </td>
                             </tr>
                         ))}
