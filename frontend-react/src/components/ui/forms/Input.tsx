@@ -44,7 +44,7 @@ const Input = ({
                         placeholder={placeholder}
                         autoComplete={autoComplete}
                         className={`my-2 px-3 py-2 border `
-                            +(disabled ? `text-neutral-800 bg-neutral-200 border-neutral-400 ` : `text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white `)+
+                            +(disabled ? `text-neutral-800 bg-neutral-300 border-neutral-400 ` : `text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-500 bg-white `)+
                             `focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ${classNameInput}` + (unit ? (" rounded-s-md text-right") :(" rounded-md"))}
                     />
                     <>

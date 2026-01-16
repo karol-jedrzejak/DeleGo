@@ -16,13 +16,13 @@ class DelegationBillTypeSeeder extends Seeder
 
         $types = [
             [
-                'name' => 'hotel',
+                'name' => 'Inne',
             ],
             [
-                'name' => 'advance_cash',
+                'name' => 'Hotel',
             ],
             [
-                'name' => 'other',
+                'name' => 'Zaliczka',
             ],
         ];
 

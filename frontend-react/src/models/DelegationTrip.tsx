@@ -41,7 +41,6 @@ export function apiToForm(
   };
 }
 
-
 // -------------------------------------------------------------------------- //
 // Typy danych formularza
 // -------------------------------------------------------------------------- //
@@ -69,6 +68,30 @@ export const DEFAULT_FORM_DATA = {
   departure: "",
   arrival: "",
 };
+
+
+// -------------------------------------------------------------------------- //
+// Typy błedów formularza
+// -------------------------------------------------------------------------- //
+
+export type ErrorDataType = {
+  starting_point: string[] | null,
+  destination: string[] | null,
+  description: string[] | null,
+  distance: string[] | null,
+  departure: string[] | null,
+  arrival: string[] | null,
+}
+
+export const DEFAULT_ERROR_DATA = {
+  starting_point: null,
+  destination: null,
+  description: null,
+  distance: null,
+  departure: null,
+  arrival: null,
+};
+
 
 
 

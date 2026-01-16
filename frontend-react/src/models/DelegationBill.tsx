@@ -53,7 +53,24 @@ export type FormDataType = {
 
 export const DEFAULT_FORM_DATA = {
   id: null,
-  delegation_bill_type_id: null,
+  delegation_bill_type_id: 1,
   description: "",
   amount: 0.01,
 };
+
+// -------------------------------------------------------------------------- //
+// Typy błedów formularza
+// -------------------------------------------------------------------------- //
+
+export type ErrorDataType = {
+  delegation_bill_type_id: string[] | null,
+  description: string[] | null,
+  amount: string[] | null,
+}
+
+export const DEFAULT_ERROR_DATA = {
+  delegation_bill_type_id: null,
+  description: null,
+  amount: null,
+};
+
