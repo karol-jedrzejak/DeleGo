@@ -17,12 +17,14 @@ type Props = {
     onSelect: (item: number | null ) => void;
     initialValue?: ItemWithAddressType | null;
     disabled?: boolean;
+    className?: string;
 };
 
 export default function CompanySelect({
     disabled=false,
     initialValue = null,
     onSelect,
+    className
 }:Props) {
 
     // -------------------------------------------------------------------------- //
@@ -90,7 +92,7 @@ export default function CompanySelect({
     // -------------------------------------------------------------------------- //
 
     return (
-        <div className='relative w-full'>                
+        <div className={`relative w-full ${className ?? ''}`}>                  
             <Input
                 label="Firma:"   
                 type = "text"

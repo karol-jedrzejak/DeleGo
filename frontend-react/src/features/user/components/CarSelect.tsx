@@ -18,6 +18,7 @@ type Props = {
     initialValue?: ItemBasicType | null;
     user_id: number | null;
     disabled?: boolean;
+    className?: string;
 };
 
 export default function CarSelect({
@@ -25,6 +26,7 @@ export default function CarSelect({
     initialValue = null,
     user_id,
     onSelect,
+    className,
 }:Props) {
 
     // -------------------------------------------------------------------------- //
@@ -96,7 +98,7 @@ export default function CarSelect({
     // -------------------------------------------------------------------------- //
 
     return (
-        <div className='relative w-full'>                
+        <div className={`relative w-full ${className ?? ''}`}>                
             <Input
                 label="Auto:"   
                 type = "text"
