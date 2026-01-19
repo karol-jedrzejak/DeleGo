@@ -11,7 +11,8 @@ import { Card, Button,Error,Spinner} from '@/components';
 import { DEFAULT_FORM_DATA } from '@/models/Delegation.tsx';
 import type { FormDataType } from '@/models/Delegation.tsx';
 
-import Form from './FormDelegation.tsx';
+import Form from './Form.tsx';
+
 // API //
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';

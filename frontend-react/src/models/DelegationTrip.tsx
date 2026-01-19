@@ -92,7 +92,32 @@ export const DEFAULT_ERROR_DATA = {
   arrival: null,
 };
 
+// -------------------------------------------------------------------------- //
+// form functions
+// -------------------------------------------------------------------------- //
 
+
+export const hasTripOverlap = (
+    toCheckTrip:FormDataType,
+    trips: FormDataType[]
+    ) => {
+    const newStart = new Date(toCheckTrip.departure).getTime();
+    const newEnd = new Date(toCheckTrip.arrival).getTime();
+
+    return trips.some(trip => {
+        const start = new Date(trip.departure).getTime();
+        const end = new Date(trip.arrival).getTime();
+
+        return newStart < end && newEnd > start;
+    });
+};
+
+export  const hasDateBetween = (toCheckDate: string, delStart: string, delEnd: string) => {
+    const date = new Date(toCheckDate).getTime();
+    const start = new Date(delStart).getTime();
+    const end = new Date(delEnd).getTime();
+    return date <= end && date >= start;
+};
 
 
 
