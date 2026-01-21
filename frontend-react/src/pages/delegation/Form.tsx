@@ -7,10 +7,9 @@ import { SquarePlus } from "lucide-react";
 
 
 import UserSelect from '@/features/user/components/UserSelect.tsx';
-import CarSelect from '@/features/user/components/CarSelect.tsx';
 import CompanySelect from '@/features/company/components/CompanySelect.tsx';
 
-import Create from '@/pages/delegation/delegation_trip/Create.tsx';
+import CreateTrip from '@/pages/delegation/delegation_trip/Create.tsx';
 
 // Model //
 
@@ -32,8 +31,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const authData = useContext(AuthContext);
     const [isCompany, setIsCompany] = useState<boolean>(true);
     const [createDelegationTripPopUp, setCreateDelegationTripPopUp] = useState<boolean>(false);
-
-
+    //const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------- //
     // Basic Change Handlers
@@ -52,10 +50,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
 
     const handleUserChange = (user_id: number | null ) => {
         setFormData((p) => ({ ...p, user_id: user_id ?? null, car_id: null}));
-    };
-
-    const handleCarChange = (car_id: number | null ) => {
-        setFormData((p) => ({ ...p, car_id: car_id ?? null}));
     };
 
     const handleAddressChange = (
@@ -82,7 +76,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <span>Dodanie przejazdu do delegacji</span>
                         </Card.Header>
                         <Card.Body>
-                            <Create delegationData={formData} setDelegationData={setFormData} setPopUp={setCreateDelegationTripPopUp}></Create>
+                            <CreateTrip delegationData={formData} setDelegationData={setFormData} setPopUp={setCreateDelegationTripPopUp}></CreateTrip>
                         </Card.Body>
                     </Card>
                 </PopUp>
@@ -94,28 +88,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             {authData.hasPermission('admin','admin') && (
                 <UserSelect onSelect={handleUserChange} initialValue={itemData?.user} />
             )}
-            </div>
-            <div className='w-full grid grid-cols-3 xl:gap-x-4'>
-                <CarSelect
-                    className='col-span-3 xl:col-span-2'
-                    onSelect={handleCarChange}
-                    initialValue={itemData?.car}
-                    user_id={formData.user_id}/>
-                <Input
-                    label="Przejechanych km (auto służbowe):"   
-                    type = "number"
-                    name="total_distance"
-                    value={formData.total_distance ?? ""}
-                    onChange={handleChange}
-                    classNameContainer='col-span-3 xl:col-span-1'
-                    classNameInput="w-full"
-                    placeholder = "dystans w km"   
-                    errors={formError?.total_distance ?? null}
-                    unit="km"
-                    step="1"
-                    min="1"
-                    max="9999"
-                ></Input>
             </div>
             <div className='w-full xl:flex xl:flex-row xl:items-end'>
                 <label className="inline-flex items-center cursor-pointer p-4">
@@ -145,32 +117,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     ></Input>
                 )}
 
-            </div>
-            <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>
-                <Input
-                    label="Wyjazd:"   
-                    type="datetime-local"
-                    name="departure"
-                    value={formData.departure}
-                    onChange={handleChange}
-                    classNameContainer='col-span-2 xl:col-span-1'
-                    classNameInput="w-full"
-                    errors={formError?.departure ?? null}
-                    required
-                ></Input>
-                <Input
-                    label="Powrót:"   
-                    type="datetime-local"
-                    name="return"
-                    value={formData.return}
-                    onChange={handleChange}
-                    classNameContainer='col-span-2 xl:col-span-1'
-                    classNameInput="w-full" 
-                    errors={formError?.return ?? null}
-                    min={formData.departure}
-                    disabled={formData.departure ? false : true}
-                    required
-                ></Input>
             </div>
             <div className='w-full xl:flex xl:flex-row xl:gap-x-4'>
                 <Input
@@ -205,14 +151,11 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         type="button"
                         color="green"
                         onClick={() => {setCreateDelegationTripPopUp(true)}}
-                        disabled={formData.departure && formData.return ? false : true}
+                        disabled={!formData.user_id}
                     >
                     <SquarePlus size={22}/>
                 </Button>
-
-              
-
-
+             
 {/*                 <Create
                     delegationData={formData}
                     setDelegationData={setFormData}/> */}

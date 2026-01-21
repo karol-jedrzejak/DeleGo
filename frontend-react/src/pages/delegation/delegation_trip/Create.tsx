@@ -9,7 +9,7 @@ import { Button} from '@/components';
 
 import type { FormDataType as DelegationFormDataType } from '@/models/Delegation.tsx';
 
-import { hasDateBetween,hasTripOverlap,DEFAULT_FORM_DATA } from '@/models/DelegationTrip';
+import { hasTripOverlap,DEFAULT_FORM_DATA } from '@/models/DelegationTrip';
 import type { FormDataType } from '@/models/DelegationTrip.tsx';
 import Form from './Form.tsx';
 
@@ -36,14 +36,6 @@ export default function Create({delegationData,setDelegationData,setPopUp}:FormP
     const handleSubmit = async () => {
         let arrival_array: string[] = [];
         let departure_array: string[] = [];
-
-        // Validate overlap with main dates
-        if (!hasDateBetween(formData.arrival,delegationData.departure,delegationData.return)) {
-           arrival_array.push("Data przyjazdu poza zakresem delegacji.");
-        }
-        if (!hasDateBetween(formData.departure,delegationData.departure,delegationData.return)) {
-           departure_array.push("Data wyjazdu poza zakresem delegacji.");
-        }
 
         // Validate overlap with other trip dates
         if (hasTripOverlap(formData, delegationData.delegation_trips)) {
@@ -92,7 +84,7 @@ export default function Create({delegationData,setDelegationData,setPopUp}:FormP
 
     return (
         <div className='w-full'>
-            <Form delStartDate={delegationData.departure} delEndDate={delegationData.return} formData={formData} setFormData={setFormData} formError={formErrors}/>
+            <Form delegationData={delegationData} formData={formData} setFormData={setFormData} formError={formErrors}/>
             <div className='w-full flex justify-end items-center pt-4 gap-2'>
                 <Button
                     className='flex items-center'

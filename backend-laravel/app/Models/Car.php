@@ -43,6 +43,8 @@ class Car extends SoftDeletesModel
     use Filterable;
 
     public static array $sortable = [
+        'user.name',
+        'user.surname',
         'brand',
         'model',
         'registration_number',

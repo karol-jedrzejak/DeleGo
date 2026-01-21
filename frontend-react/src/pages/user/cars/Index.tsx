@@ -109,7 +109,7 @@ const Index = () => {
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["brand"]} text="Marka" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["model"]} text="Model" />
                                 {authData.hasPermission('admin','admin') && (
-                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["user"]} text="Użytkownik" />
+                                    <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
                                 )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                             </tr>

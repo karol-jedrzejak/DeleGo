@@ -5,16 +5,18 @@ import { Input } from '@/components';
 
 // Model //
 import type { FormDataType } from '@/models/DelegationTrip';
+import type { FormDataType as DelegationDataType } from '@/models/Delegation';
+
+import CarSelect from '@/features/user/components/CarSelect.tsx';
 
 type FormProps = {
-    delStartDate: string,
-    delEndDate: string,
+    delegationData: DelegationDataType,
     formData: FormDataType
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
     formError: Partial<Record<keyof FormDataType, string[]>> | null
 }
 
-export default function Form({ delStartDate,delEndDate,formData,setFormData,formError}:FormProps) {
+export default function Form({ delegationData,formData,setFormData,formError}:FormProps) {
 
     // -------------------------------------------------------------------------- //
     // Handlery zmian
@@ -27,7 +29,13 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
         setFormData((p) => ({ ...p, [name]: value }));
     };
 
-   
+    // -------------------------------------------------------------------------- //
+    // Select Handlers
+    // -------------------------------------------------------------------------- //
+
+    const handleCarChange = (car_id: number | null ) => {
+        setFormData((p) => ({ ...p, car_id: car_id ?? null}));
+    };
 
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
@@ -35,6 +43,27 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
 
     return (
         <>
+            <div>
+                <Input
+                    label="Tranport opis:"   
+                    type ="text"
+                    name="custom_transport"
+                    value={formData.custom_transport ?? ""}
+                    onChange={handleChange}
+                    classNameContainer='col-span-4 xl:col-span-2'
+                    classNameInput="w-full"
+                    placeholder = "transport - opis własny"
+                    errors={formError?.custom_transport ?? null}
+                    required
+                ></Input>
+            </div>
+            <div className='w-full grid grid-cols-3 xl:gap-x-4'>
+                <CarSelect
+                    className='col-span-3 xl:col-span-2'
+                    onSelect={handleCarChange}
+                    //initialValue={formData.car_id}
+                    user_id={delegationData.user_id}/>
+            </div>
             <div className='w-full grid grid-cols-4 xl:gap-x-4'>
                 <Input
                     label="Punkt Startowy:"   
@@ -45,7 +74,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     classNameContainer='col-span-4 xl:col-span-2'
                     classNameInput="w-full"
                     placeholder = "miejsce początkowe"
-                    disabled={delStartDate && delEndDate ? false : true}
                     errors={formError?.starting_point ?? null}
                     required
                 ></Input>
@@ -58,7 +86,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     classNameContainer='col-span-4 xl:col-span-2'
                     classNameInput="w-full" 
                     placeholder = "miejsce końcowe"
-                    disabled={delStartDate && delEndDate ? false : true}
                     errors={formError?.destination ?? null}
                     required
                 ></Input>
@@ -70,9 +97,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     onChange={handleChange}
                     classNameContainer='col-span-4 xl:col-span-2'
                     classNameInput="w-full"
-                    disabled={delStartDate && delEndDate ? false : true}
-                    min={delStartDate}
-                    max={delEndDate}
                     errors={formError?.departure ?? null}
                     required
                 ></Input>
@@ -84,9 +108,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     onChange={handleChange}
                     classNameContainer='col-span-4 xl:col-span-2'
                     classNameInput="w-full"
-                    disabled={delStartDate && delEndDate ? false : true} 
-                    min={delStartDate}
-                    max={delEndDate}
                     errors={formError?.arrival ?? null}
                     required
                 ></Input>
@@ -99,7 +120,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     classNameContainer='col-span-4 xl:col-span-3'
                     classNameInput="w-full"
                     placeholder='opis'
-                    disabled={delStartDate && delEndDate ? false : true}
                     errors={formError?.description ?? null}
                     required
                 ></Input>
@@ -112,7 +132,6 @@ export default function Form({ delStartDate,delEndDate,formData,setFormData,form
                     classNameContainer='col-span-4 xl:col-span-1'
                     classNameInput="w-full" 
                     unit={"km"}
-                    disabled={delStartDate && delEndDate ? false : true}
                     errors={formError?.distance ?? null}
                     required
                 ></Input>

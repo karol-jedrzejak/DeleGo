@@ -34,6 +34,9 @@ Route::prefix('v1')->group(function () {
         // Delegations
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
         Route::get('delegation/{id}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
+        
+        Route::get('delegation/trip_options', [DelegationController::class, 'trip_options'])->middleware('permission:misc,delegations,1');
+        Route::get('delegation/bill_options', [DelegationController::class, 'bill_options'])->middleware('permission:misc,delegations,1');
 
         // Admin
         Route::get('admin/user/{user}', [AuthenticationController::class, 'user_info'])->middleware('permission:admin,admin,1');

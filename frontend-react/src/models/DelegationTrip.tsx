@@ -136,13 +136,13 @@ export const hasTripOverlap = (
     });
 };
 
-export  const hasDateBetween = (toCheckDate: string, delStart: string, delEnd: string) => {
+/* export  const hasDateBetween = (toCheckDate: string, delStart: string, delEnd: string) => {
     const date = new Date(toCheckDate).getTime();
     const start = new Date(delStart).getTime();
     const end = new Date(delEnd).getTime();
     return date <= end && date >= start;
 };
 
-
+ */
 
 

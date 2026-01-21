@@ -3,13 +3,20 @@
 namespace App\Http\Controllers\API\Delegation;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Delegation;
+use App\Models\DelegationBillType;
+use App\Models\DelegationTripType;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use App\Http\Resources\Delegation\DelegationIndexResource;
 use App\Http\Resources\Delegation\DelegationShowResource;
+
+use App\Http\Resources\Delegation\DelegationBillTypeShowResource;
+use App\Http\Resources\Delegation\DelegationTripTypeShowResource;
 
 class DelegationController extends Controller
 {
@@ -137,6 +144,30 @@ class DelegationController extends Controller
         ]);
 
         return new DelegationShowResource($delegation);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function trip_options()
+    {
+        $query = DelegationTripType::query()
+            ->select(['id', 'name','requires_car','requires_description'])
+            ->orderBy('name')
+            ->get();
+        return DelegationTripTypeShowResource::collection($query);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function bill_options()
+    {
+        $query = DelegationBillType::query()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+        return DelegationBillTypeShowResource::collection($query);
     }
 
     /**
