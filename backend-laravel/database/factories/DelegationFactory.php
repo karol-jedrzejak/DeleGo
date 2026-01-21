@@ -25,23 +25,12 @@ class DelegationFactory extends Factory
         // Wybór losowego usera
         $user_id = User::inRandomOrder()->first()->id ?? 1;
 
-        // Losowy car_id lub null
-        $car = Car::inRandomOrder()->first();
-        $car_id = fake()->boolean(70) && $car ? $car->id : null; // 70% szans, że będzie car
-
         // Losowy company_id lub null
         $company = Company::inRandomOrder()->first();
-        $company_id = fake()->boolean(80) && $company ? $company->id : null; // 80% szans, że będzie company
+        $company_id = fake()->boolean(70) && $company ? $company->id : null; // 80% szans, że będzie company
 
         // custom address jeśli brak company
         $custom_address = $company_id ? null : fake()->address();
-
-        // total_distance > 0 i < 1000
-        $total_distance = fake()->numberBetween(1, 999);
-
-        // random departure i return w ostatnich 10 latach
-        $departure = fake()->dateTimeBetween('-10 years', 'now');
-        $return = fake()->dateTimeBetween($departure, '+10 days');
 
         // unique number+year – używamy closure
         do {
@@ -56,13 +45,9 @@ class DelegationFactory extends Factory
             'number' => $number,
             'year' => $year,
             'user_id' => $user_id,
-            'car_id' => $car_id,
             'company_id' => $company_id,
             'custom_address' => $custom_address,
             'description' => fake()->sentence(),
-            'total_distance' => $total_distance,
-            'departure' => $departure,
-            'return' => $return,
             'settled' => fake()->boolean(20), // 20% szans, że settled
             'created_at' => now(),
             'updated_at' => now(),

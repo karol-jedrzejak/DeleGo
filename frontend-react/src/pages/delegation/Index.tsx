@@ -72,7 +72,7 @@ const Index = () => {
         
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
-
+            console.log(res.data);
             setItems(data);
             setPagination(pagination);
         });
@@ -111,7 +111,6 @@ const Index = () => {
                             <tr className="font-normal">
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["return","departure"]} text="Daty" />                                
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["company.name_short","custom_address"]} text="Firma / Adres" />
-                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["car.brand","car.model","car.registration_number"]} text="Auto" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["description"]} text="Opis" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["settled"]} text="Rozliczone" />
                                 {authData.hasPermission('admin','admin') && (
@@ -122,7 +121,6 @@ const Index = () => {
                             <tr>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["return","departure"]}/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["company.name_short","custom_address"]}/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["car.brand","car.model","car.registration_number"]}/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["description"]}/>
                                 <HeaderSearchSelect
                                     search={search} setSearch={setSearch} setPage={setPage} options={
@@ -184,7 +182,6 @@ const Index = () => {
                                         <>{item.custom_address}</>
                                         )}
                                     </td>
-                                    <td className="p-2">{item.car?.brand} {item.car?.model} {item.car?.registration_number}</td>
                                     <td className="p-2">{item.description}</td>
                                     <td className="p-2">
                                         <div className="flex w-full flex-row items-center justify-center pr-4">

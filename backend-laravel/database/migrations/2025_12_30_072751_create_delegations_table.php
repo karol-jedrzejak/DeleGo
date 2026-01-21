@@ -18,16 +18,11 @@ return new class extends Migration
             $table->unsignedSmallInteger('year');
 
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('car_id')->nullable()->constrained('cars');
 
             $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->string('custom_address')->nullable();
 
             $table->text('description');
-            $table->integer('total_distance')->nullable();
-
-            $table->dateTime('departure');
-            $table->dateTime('return');
 
             $table->boolean('settled');
 

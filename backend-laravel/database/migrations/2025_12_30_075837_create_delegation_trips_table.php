@@ -15,12 +15,18 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('delegation_id')->constrained('delegations');
+            $table->foreignId('delegation_trip_type_id')->constrained('delegation_trip_types');
+
+            $table->foreignId('car_id')->nullable()->constrained('cars');
+            $table->integer('distance')->nullable();
+            
+            $table->text('custom_transport')->nullable();
 
             $table->text('starting_point');
             $table->text('destination');
 
             $table->text('description');
-            $table->integer('distance');
+
 
             $table->dateTime('departure');
             $table->dateTime('arrival');

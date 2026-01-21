@@ -13,6 +13,9 @@ class DelegationTrip extends Model
 
     protected $fillable = [
         'delegation_id',
+        'car_id',
+        'delegation_trip_type_id',
+        'custom_transport',
         'starting_point',
         'destination',
         'description',
@@ -25,8 +28,18 @@ class DelegationTrip extends Model
     // Relacje
     // --------------------------------------------------------- //
 
+    public function car(): BelongsTo
+    {
+        return $this->belongsTo(Car::class)->withDefault();
+    }
+
     public function delegation(): BelongsTo
     {
         return $this->belongsTo(Delegation::class);
+    }
+
+    public function delegationTripType(): BelongsTo
+    {
+        return $this->belongsTo(DelegationTripType::class);
     }
 }

@@ -17,13 +17,10 @@ class DelegationTripFactory extends Factory
     public function definition(): array
     {
         return [
-            //'delegation_id' => null,
             'starting_point' => fake()->address(),
             'destination' => fake()->address(),
             'description' => fake()->sentence(),
             'distance' => fake()->numberBetween(1, 999),
-            //'departure' => null,
-            //'arrival' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];

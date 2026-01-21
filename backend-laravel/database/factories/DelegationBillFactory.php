@@ -22,8 +22,6 @@ class DelegationBillFactory extends Factory
     public function definition(): array
     {
         return [
-            //'delegation_id' => null,
-            //'delegation_bill_type_id' => null,
             'description' => fake()->sentence(),
             'amount' => fake()->numberBetween(1, 499),
             'created_at' => now(),

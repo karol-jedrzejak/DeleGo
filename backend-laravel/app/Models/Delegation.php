@@ -18,13 +18,9 @@ class Delegation extends Model
         'number',
         'year',
         'user_id',
-        'car_id',
         'company_id',
         'custom_address',
         'description',
-        'total_distance',
-        'departure',
-        'return',
         'settled'
     ];
 
@@ -42,10 +38,6 @@ class Delegation extends Model
         return $this->belongsTo(Company::class)->withDefault();
     }
 
-    public function car(): BelongsTo
-    {
-        return $this->belongsTo(Car::class)->withDefault();
-    }
 
     public function delegationBills(): HasMany
     {
@@ -67,15 +59,10 @@ class Delegation extends Model
         'number',
         'year',
         'company.name_short',
-        'car.model',
-        'car.brand',
-        'car.registration_number',
         'user.name',
         'user.surname',
         'custom_address',
         'description',
-        'departure',
-        'return',
         'settled'
     ];
 

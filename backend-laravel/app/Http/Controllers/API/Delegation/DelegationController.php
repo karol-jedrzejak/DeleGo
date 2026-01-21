@@ -27,7 +27,10 @@ class DelegationController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $query = Delegation::filter($request);
+        // Wczytanie maxymalnej i minimalnej daty z podmodelu delegationTrips
+        $query = Delegation::filter($request)
+        ->withMin('delegationTrips as departure', 'departure')
+        ->withMax('delegationTrips as return', 'arrival');
 
         // razem z modelem user jeśli admin
         if ($user->isAdmin()) {
@@ -38,7 +41,6 @@ class DelegationController extends Controller
 
         // Z submodelami
         $query->with([
-            'car:id,registration_number,brand,model',
             'company:id,name_short',
         ]);
 
@@ -71,18 +73,51 @@ class DelegationController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // razem z modelem user jeśli admin
+        // razem z modelem user jeśli admin + dopisanie dat
         if ($user->isAdmin()) {
-            $delegation->load('user');
+            $delegation->load('user')
+            ->loadMin('delegationTrips as departure', 'departure')
+            ->loadMax('delegationTrips as return', 'arrival');
         }
 
         $delegation->loadMissing([
-            'car:id,registration_number,brand,model',
             'company:id,name_short,name_complete,street,house_number,city,postal_code,postal_city,region,country',
-            'delegationTrips:id,delegation_id,arrival,departure,description,destination,distance,starting_point',
         ]);
 
-        //$delegation->loadMissing('delegationBills.delegationBillType');
+        $delegation->loadMissing([
+            'delegationTrips' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'arrival',
+                    'description',
+                    'delegation_trip_type_id',
+                    'departure',
+                    'destination',
+                    'distance',
+                    'starting_point',
+                    'car_id',
+                    'custom_transport',
+                ]);
+            },
+            'delegationTrips.delegationTripType' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                    'requires_car',
+                    'requires_description',
+                ]);
+            },
+            'delegationTrips.car' => function ($q) {
+                $q->select([
+                    'id',
+                    'registration_number',
+                    'brand',
+                    'model',
+                ]);
+            },
+        ]);
+
         $delegation->loadMissing([
             'delegationBills' => function ($q) {
                 $q->select([

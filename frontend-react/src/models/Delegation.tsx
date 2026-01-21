@@ -1,4 +1,3 @@
-import type { ItemBasicType as CarBasicType } from '@/models/Car';
 import type { ItemBasicType as UserBasicType } from '@/models/User';
 import type { ItemWithAddressType as CompanyType, ItemNamesOnlyType as CompanyNamesOnlyType } from '@/models/Company';
 
@@ -37,9 +36,7 @@ export type ItemFullType = {
   custom_address: string | null;
   description: string;
   user: UserBasicType | null;
-  car: CarBasicType | null;  
   company: CompanyType | null;
-  total_distance: number | null;
   delegation_bills: DelegationBillType[];
   delegation_trips: DelegationTripType[];
 };
@@ -51,9 +48,8 @@ export type ItemBasicType = {
   dates: Dates;
   custom_address: string | null;
   description: string;
-  user: UserBasicType | null;
-  car: CarBasicType | null;  
-  company: CompanyNamesOnlyType | null;
+  user: UserBasicType | null; 
+  company: CompanyType | null;
 };
 
 // -------------------------------------------------------------------------- //
@@ -65,14 +61,10 @@ export function apiToForm(
 ): FormDataType {
   return {
     settled: api.settled,
-    return: api.dates.return,
-    departure: api.dates.departure,
     custom_address: api.custom_address,
     description: api.description,
     user_id: api.user?.id ?? null,
-    car_id: api.car?.id ?? null,
     company_id: api.company?.id ?? null,
-    total_distance: api.total_distance,
     delegation_bills: api.delegation_bills.map(apiToFormDelegationBill),
     delegation_trips: api.delegation_trips.map(apiToFormDelegationTrip),
   };
@@ -84,14 +76,10 @@ export function apiToForm(
 
 export type FormDataType = {
   settled: boolean;
-  return: string;
-  departure: string;
   custom_address: string | null;
   description: string;
   user_id: number | null;
-  car_id: number | null;
   company_id: number | null;
-  total_distance: number | null;
   delegation_bills: FormDelegationBillType[];
   delegation_trips: FormDelegationTripType[];
 }
@@ -102,14 +90,10 @@ export type FormDataType = {
 
 export const DEFAULT_FORM_DATA = {
   settled: false,
-  return: "",
-  departure: "",
   custom_address: null,
   description: "",
   user_id: null,
-  car_id:  null,
   company_id: null,
-  total_distance: null,
   delegation_bills: [],
   delegation_trips: [],
 };

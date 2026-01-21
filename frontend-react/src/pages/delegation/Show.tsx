@@ -91,12 +91,6 @@ const Show = () => {
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
-                                        <td className="p-2">Auto:</td>
-                                        <td className="p-2 flex items-center">
-                                            {item.car ? <>{item.car.brand} {item.car.model} ({item.car.registration_number})</> : "-"}
-                                        </td>
-                                    </tr>
-                                    <tr className="custom-table-row">
                                         <td className="p-2">Opis:</td>
                                         <td className="p-2 flex items-center">
                                             {item.description}
@@ -112,12 +106,6 @@ const Show = () => {
                                         <td className="p-2">Powrót:</td>
                                         <td className="p-2 flex items-center">
                                             {item.dates.return}
-                                        </td>
-                                    </tr>
-                                    <tr className="custom-table-row">
-                                        <td className="p-2">Dystans:</td>
-                                        <td className="p-2 flex items-center">
-                                            {item.total_distance} km
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
@@ -154,6 +142,7 @@ const Show = () => {
                                         <th className="p-2">Z</th>
                                         <th className="p-2">Do</th>
                                         <th className="p-2">Dystans</th>
+                                        <th className="p-2">Transport</th>
                                         <th className="p-2">Opis</th>
                                     </tr>
                                 </thead>
@@ -165,6 +154,11 @@ const Show = () => {
                                             <td className="p-2">{trip.starting_point}</td> 
                                             <td className="p-2">{trip.destination}</td>  
                                             <td className="p-2">{trip.distance} km</td>  
+                                            <td className="p-2">
+                                                {trip.delegation_trip_type.requires_car ? 
+                                                <>{trip.delegation_trip_type.name+" - "+trip.car?.brand+" "+trip.car?.model+" ["+trip.car?.registration_number+"]"}</> :
+                                                <>{trip.delegation_trip_type.name+" - "+trip.custom_transport}</>}
+                                            </td>  
                                             <td className="p-2">{trip.description}</td>   
                                         </tr>
                                     ))}

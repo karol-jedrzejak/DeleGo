@@ -28,14 +28,13 @@ class DelegationIndexResource extends JsonResource
                 'number' => $this->number,
                 'year' => $this->year,
             ],
-            'settled' => $this->settled,
             'dates' => [
-                'return' => $this->return,
                 'departure' => $this->departure,
+                'return' => $this->return,
             ],
+            'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,
-            'total_distance' => $this->total_distance,
 
             // belongsTo
             'user' => $user?->isAdmin()
@@ -50,13 +49,6 @@ class DelegationIndexResource extends JsonResource
                 return null;
             }),
 
-            // belongsTo
-            'car' => $this->whenLoaded('car', function () {
-                if ($this->car && $this->car->id) {
-                    return new CarBasicResource($this->car);
-                }
-                return null;
-            }),
         ];
     }
 }
