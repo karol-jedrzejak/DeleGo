@@ -135,7 +135,7 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
     // -------------------------------------------------------------------------- //
 
     const handleTransportChange = (transport_id: string) => {
-        setTripFormData((p) => ({ ...p, delegation_trip_type_id: Number(transport_id)}));
+        setTripFormData((p) => ({ ...p, car_id: null, car_label: "", custom_transport: null, delegation_trip_type_id: Number(transport_id)}));
     };
 
     const handleCarChange = (car_id: number | null, car_label: string | null) => {

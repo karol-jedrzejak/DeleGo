@@ -47,10 +47,6 @@ export default function CarSelect({
     // -------------------------------------------------------------------------- //
 
     useEffect(() => {
-        setQuery("");
-    }, [user_id]);
-
-    useEffect(() => {
         if (!isTyping.current) return;
 
         if (query.length < 2) {

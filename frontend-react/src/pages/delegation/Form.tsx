@@ -3,13 +3,14 @@ import { AuthContext } from "@/providers/AuthProvider.js";
 
 import { Input,Select,Line,Button,PopUp, Card, Spinner } from '@/components';
 import { Error as ErrorComponent } from '@/components';
-import { SquarePlus } from "lucide-react";
+import { SquarePlus,SquarePen,Trash2 } from "lucide-react";
 
 
 import UserSelect from '@/features/user/components/UserSelect.tsx';
 import CompanySelect from '@/features/company/components/CompanySelect.tsx';
 
 import CreateTrip from '@/pages/delegation/delegation_trip/Create.tsx';
+import EditTrip from '@/pages/delegation/delegation_trip/Edit.tsx';
 
 // Model //
 
@@ -62,6 +63,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const authData = useContext(AuthContext);
     const [isCompany, setIsCompany] = useState<boolean>(true);
     const [createDelegationTripPopUp, setCreateDelegationTripPopUp] = useState<boolean>(false);
+    const [editDelegationTripPopUp, setEditDelegationTripPopUp] = useState<number | undefined>(undefined);
     //const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
 
     const [tripOptions, setTripOptions] = useState<DelegationTripBasicType[]>([]);
@@ -121,6 +123,20 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         setFormData((p) => ({ ...p, company_id: company_id ?? null}));
     };
 
+    const handleDeleteDelegationTrip = (index: number) => {
+        setFormData(prev => ({
+        ...prev,
+        delegation_trips: prev.delegation_trips.filter((_, i) => i !== index),
+    }));
+    };
+
+
+
+
+
+
+
+
     if(loadingBillGet || loadingTripGet){
         return <Spinner/>;
     }
@@ -144,6 +160,18 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         </Card.Header>
                         <Card.Body>
                             <CreateTrip setPopUp={setCreateDelegationTripPopUp}></CreateTrip>
+                        </Card.Body>
+                    </Card>
+                </PopUp>
+            )}
+            {editDelegationTripPopUp!== undefined &&(
+                <PopUp>
+                    <Card>
+                        <Card.Header>
+                            <span>Edycja przejazdu w delegacji</span>
+                        </Card.Header>
+                        <Card.Body>
+                            <EditTrip id={editDelegationTripPopUp} setPopUp={setEditDelegationTripPopUp}></EditTrip>
                         </Card.Body>
                     </Card>
                 </PopUp>
@@ -220,7 +248,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         onClick={() => {setCreateDelegationTripPopUp(true)}}
                         disabled={!formData.user_id}
                     >
-                    <SquarePlus size={22}/>
+                    <SquarePlus size={22} className="pe-1"/><span>Dodaj Przejazd</span>
                 </Button>
              
 {/*                 <Create
@@ -255,11 +283,23 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <td className="p-2">{trip.description}</td>
                             <td className="p-2">{trip.distance} km</td>
                             <td className="p-2">{trip.car_label ? trip.car_label : trip.custom_transport}</td>
-                            <td className="p-2">
-                                <Button>Edit</Button>
-                            </td>
-                            <td className="p-2">
-                                <Button>del</Button>
+                            <td className="p-2 flex flex-row justify-center gap-1">
+                                <Button
+                                        className='flex items-center'
+                                        type="button"
+                                        color="yellow"
+                                        onClick={() => {setEditDelegationTripPopUp(index)}}
+                                    >
+                                    <SquarePen size={20}/>
+                                </Button>
+                                <Button
+                                        className='flex items-center'
+                                        type="button"
+                                        color="red"
+                                        onClick={() => {handleDeleteDelegationTrip(index)}}
+                                    >
+                                    <Trash2 size={20}/>
+                                </Button>
                             </td>
                             </tr>
                         ))}
