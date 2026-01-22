@@ -6,7 +6,7 @@ import { Input,Spinner } from '@/components';
 
 // Model //
 
-import type { ItemBasicType,ItemLookupType  } from "@/models/User";
+import type { ItemLookupType  } from "@/models/User";
 
 // API //
 
@@ -15,7 +15,7 @@ import { userService } from "@/api/services/backend/user/user.service";
 
 type Props = {
     onSelect: (item: number | null ) => void;
-    initialValue?: ItemBasicType | null;
+    initialValue?: string | null;
     disabled?: boolean;
 };
 
@@ -29,7 +29,7 @@ export default function UserSelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialValue ? initialValue.names.name+" "+initialValue.names.surname : "");
+    const [query, setQuery] = useState<string>(initialValue ? initialValue : "");
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
@@ -39,6 +39,12 @@ export default function UserSelect({
     // -------------------------------------------------------------------------- //
     // Use Effects
     // -------------------------------------------------------------------------- //
+
+    useEffect(() => {
+    if (!isTyping.current) {
+        setQuery(initialValue ?? "");
+    }
+    }, [initialValue]);
 
     useEffect(() => {
         if (!isTyping.current) return;

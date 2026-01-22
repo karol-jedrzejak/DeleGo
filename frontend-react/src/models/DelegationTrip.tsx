@@ -42,6 +42,7 @@ export function apiToForm(
   return {
     id: api.id,
     car_id: api.car?.id ?? null,
+    car_label: api.car ? `${api.car.brand} ${api.car.model} (${api.car.registration_number})` : "",
     starting_point: api.starting_point,
     destination: api.destination,
     description: api.description,
@@ -61,6 +62,7 @@ export type FormDataType = {
   id: number | null,
   delegation_trip_type_id: number,
   car_id: number | null,
+  car_label: string,
   starting_point: string,
   destination: string,
   description: string,
@@ -78,6 +80,7 @@ export const DEFAULT_FORM_DATA = {
   id: null,
   delegation_trip_type_id: 1,
   car_id: null,
+  car_label: "",  
   starting_point: "",
   destination: "",
   description: "",
@@ -135,14 +138,3 @@ export const hasTripOverlap = (
         return newStart < end && newEnd > start;
     });
 };
-
-/* export  const hasDateBetween = (toCheckDate: string, delStart: string, delEnd: string) => {
-    const date = new Date(toCheckDate).getTime();
-    const start = new Date(delStart).getTime();
-    const end = new Date(delEnd).getTime();
-    return date <= end && date >= start;
-};
-
- */
-
-

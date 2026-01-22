@@ -6,7 +6,7 @@ import { Input,Spinner } from '@/components';
 
 // Model //
 
-import type { ItemBasicType,ItemLookupType  } from "@/models/Car";
+import type { ItemLookupType  } from "@/models/Car";
 
 // API //
 
@@ -14,9 +14,10 @@ import { useBackend, mapErrorToInputErrors } from '@/hooks/useLaravelBackend';
 import { carService } from "@/api/services/backend/user/car.service";
 
 type Props = {
-    onSelect: (item: number | null ) => void;
-    initialValue?: ItemBasicType | null;
+    onSelect: (item: number | null, label: string | null) => void;
+    initialValue?: string | null;
     user_id: number | null;
+    errors?: string[] | null,
     disabled?: boolean;
     className?: string;
 };
@@ -24,6 +25,7 @@ type Props = {
 export default function CarSelect({
     disabled=false,
     initialValue = null,
+    errors = null,
     user_id,
     onSelect,
     className,
@@ -33,7 +35,7 @@ export default function CarSelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialValue ? initialValue.brand+" "+initialValue.model+" ("+initialValue.registration_number+")" : "");
+    const [query, setQuery] = useState<string>(initialValue ? initialValue : "");
     const [results, setResults] = useState<ItemLookupType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
@@ -81,7 +83,7 @@ export default function CarSelect({
         setQuery(e.target.value);
         if(e.target.value == "")
         {
-            onSelect(null);
+            onSelect(null,null);
         }
     };
 
@@ -90,7 +92,7 @@ export default function CarSelect({
         setResults([]);
         setShowDropdown(false);
         isTyping.current = false;
-        onSelect(item.id);
+        onSelect(item.id, item.name);
     };
 
     // -------------------------------------------------------------------------- //
@@ -125,6 +127,11 @@ export default function CarSelect({
                 ))}
                 </ul>
             )}
+            {errors && <div className="text-red-600 my-2 text-center text-sm">
+                {errors.map( (error,key) => (
+                                <span key={key}>{error} </span>
+                            ))}
+                </div>}
         </div>
     );
 

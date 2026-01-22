@@ -1,8 +1,8 @@
-import React, { useContext,useState } from 'react';
+import React, { createContext, useContext, useState,useEffect } from 'react';
 import { AuthContext } from "@/providers/AuthProvider.js";
 
-
-import { Input,Select,Line,Button,PopUp, Card } from '@/components';
+import { Input,Select,Line,Button,PopUp, Card, Spinner } from '@/components';
+import { Error as ErrorComponent } from '@/components';
 import { SquarePlus } from "lucide-react";
 
 
@@ -14,6 +14,37 @@ import CreateTrip from '@/pages/delegation/delegation_trip/Create.tsx';
 // Model //
 
 import type { ItemFullType,FormDataType } from '@/models/Delegation';
+
+import type { ItemBasicType as DelegationBillBasicType } from '@/models/DelegationBillType';
+import type { ItemBasicType as DelegationTripBasicType } from '@/models/DelegationTripType';
+
+
+import { useBackend } from '@/hooks/useLaravelBackend.ts';
+import { delegationService } from '@/api/services/backend/user/delegation.service.ts';
+
+// -------------------------------------------------------------------------- //
+// Contekst formularza delegacji
+// -------------------------------------------------------------------------- //
+
+type DelegationFormContextType = {
+    itemData: ItemFullType | null;
+    formData: FormDataType;
+    setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
+    billTypes: DelegationBillBasicType[];
+    tripTypes: DelegationTripBasicType[];
+};
+
+const DelegationFormContext = createContext<DelegationFormContextType | null>(null);
+
+export const useDelegationForm = () => {
+  const ctx = useContext(DelegationFormContext);
+  if (!ctx) throw new Error('useDelegationForm must be used inside DelegationFormContext');
+  return ctx;
+};
+
+// -------------------------------------------------------------------------- //
+// Propsy
+// -------------------------------------------------------------------------- //
 
 type FormProps = {
     itemData?: ItemFullType
@@ -32,6 +63,33 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const [isCompany, setIsCompany] = useState<boolean>(true);
     const [createDelegationTripPopUp, setCreateDelegationTripPopUp] = useState<boolean>(false);
     //const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
+
+    const [tripOptions, setTripOptions] = useState<DelegationTripBasicType[]>([]);
+    const [billOptions, setBillOptions] = useState<DelegationBillBasicType[]>([]);
+
+    // -------------------------------------------------------------------------- //
+    // Get options
+    // -------------------------------------------------------------------------- //
+
+    const { loading:loadingTripGet, error:errorTripGet, mutate:mutateTripGet } = useBackend<DelegationTripBasicType[]>("get", delegationService.paths.getTripOptions,{ initialLoading: true });
+
+    useEffect(() => {
+        mutateTripGet()
+        .then((res) => {
+            setTripOptions(res.data);
+        })
+        .catch(() => {});
+    }, []);
+
+    const { loading:loadingBillGet, error:errorBillGet, mutate:mutateBillGet } = useBackend<DelegationBillBasicType[]>("get", delegationService.paths.getBillOptions,{ initialLoading: true });
+
+    useEffect(() => {
+        mutateBillGet()
+        .then((res) => {
+            setBillOptions(res.data);
+        })
+        .catch(() => {});
+    }, []);
 
     // -------------------------------------------------------------------------- //
     // Basic Change Handlers
@@ -63,12 +121,21 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         setFormData((p) => ({ ...p, company_id: company_id ?? null}));
     };
 
+    if(loadingBillGet || loadingTripGet){
+        return <Spinner/>;
+    }
+
+    if(errorBillGet || errorTripGet){
+        return <ErrorComponent><ErrorComponent.Text type={"standard"}>Błąd serwera</ErrorComponent.Text></ErrorComponent>;
+    }
+
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
 
     return (
         <>
+        <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, billTypes: billOptions, tripTypes: tripOptions }}>
             {createDelegationTripPopUp &&(
                 <PopUp>
                     <Card>
@@ -76,7 +143,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <span>Dodanie przejazdu do delegacji</span>
                         </Card.Header>
                         <Card.Body>
-                            <CreateTrip delegationData={formData} setDelegationData={setFormData} setPopUp={setCreateDelegationTripPopUp}></CreateTrip>
+                            <CreateTrip setPopUp={setCreateDelegationTripPopUp}></CreateTrip>
                         </Card.Body>
                     </Card>
                 </PopUp>
@@ -86,7 +153,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             <Line text="Dane Delegacji"/>
             <div className='w-full'>
             {authData.hasPermission('admin','admin') && (
-                <UserSelect onSelect={handleUserChange} initialValue={itemData?.user} />
+                <UserSelect onSelect={handleUserChange} initialValue={itemData ? itemData.user?.names.name + " " + itemData.user?.names.surname : ""} />
             )}
             </div>
             <div className='w-full xl:flex xl:flex-row xl:items-end'>
@@ -100,7 +167,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     <CompanySelect
                         className='flex-1'
                         onSelect={handleCompanyChange}
-                        initialValue={itemData?.company}
+                        initialValue={itemData?.company?.names.name_short ?? ""}
                         disabled={formData.custom_address ? true : false}
                 />):(
                     <Input
@@ -170,6 +237,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <th className="p-2">Przyjazd</th>
                             <th className="p-2">Opis</th>
                             <th className="p-2">Dystans</th>
+                            <th className="p-2">Transport</th>
                             <th className="p-2"></th>
                         </tr>
                     </thead>
@@ -186,6 +254,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <td className="p-2">{trip.arrival.split("T")[0]} - {trip.arrival.split("T")[1]}</td>
                             <td className="p-2">{trip.description}</td>
                             <td className="p-2">{trip.distance} km</td>
+                            <td className="p-2">{trip.car_label ? trip.car_label : trip.custom_transport}</td>
                             <td className="p-2">
                                 <Button>Edit</Button>
                             </td>
@@ -221,6 +290,18 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 >
                 TEST - CONSOLE LOG
             </Button>
+            <Button
+                    className='mx-2 my-2 flex items-center'
+                    type="button"
+                    color="blue"
+                    onClick={() => {
+                        console.log(billOptions);
+                        console.log(tripOptions);
+                    }}
+                >
+                TEST - trip bill
+            </Button>
+        </DelegationFormContext.Provider>
         </>
     );
 }

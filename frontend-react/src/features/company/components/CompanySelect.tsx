@@ -6,7 +6,7 @@ import { Input,Spinner } from '@/components';
 
 // Model //
 
-import type { ItemWithAddressType,ItemNamesOnlyType   } from "@/models/Company";
+import type { ItemNamesOnlyType   } from "@/models/Company";
 
 // API //
 
@@ -15,7 +15,7 @@ import { companyService } from "@/api/services/backend/company/company.service";
 
 type Props = {
     onSelect: (item: number | null ) => void;
-    initialValue?: ItemWithAddressType | null;
+    initialValue?: string | null;
     disabled?: boolean;
     className?: string;
 };
@@ -31,7 +31,7 @@ export default function CompanySelect({
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const [query, setQuery] = useState<string>(initialValue ? initialValue.names.name_short+" - "+initialValue.names.name_complete : "");
+    const [query, setQuery] = useState<string>(initialValue ? initialValue : "");
     const [results, setResults] = useState<ItemNamesOnlyType[]>([]);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);

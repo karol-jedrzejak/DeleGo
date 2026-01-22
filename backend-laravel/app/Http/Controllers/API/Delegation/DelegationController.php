@@ -82,10 +82,12 @@ class DelegationController extends Controller
 
         // razem z modelem user jeśli admin + dopisanie dat
         if ($user->isAdmin()) {
-            $delegation->load('user')
-            ->loadMin('delegationTrips as departure', 'departure')
-            ->loadMax('delegationTrips as return', 'arrival');
+            $delegation->load('user');
         }
+
+        $delegation
+        ->loadMin('delegationTrips as departure', 'departure')
+        ->loadMax('delegationTrips as return', 'arrival');
 
         $delegation->loadMissing([
             'company:id,name_short,name_complete,street,house_number,city,postal_code,postal_city,region,country',
