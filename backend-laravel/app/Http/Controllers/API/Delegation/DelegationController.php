@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\Delegation;
 
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Delegation;
 use App\Models\DelegationBillType;
 use App\Models\DelegationTripType;
@@ -17,6 +19,9 @@ use App\Http\Resources\Delegation\DelegationShowResource;
 
 use App\Http\Resources\Delegation\DelegationBillTypeShowResource;
 use App\Http\Resources\Delegation\DelegationTripTypeShowResource;
+
+use App\Http\Requests\User\DelegationRequest;
+
 
 class DelegationController extends Controller
 {
@@ -57,19 +62,37 @@ class DelegationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DelegationRequest $request)
     {
-        //
+    $data = $request->validated();
+
+        return DB::transaction(function () use ($data) {
+
+            $year = now()->year;
+            $number = Delegation::where('year', $year)->max('number') + 1;
+
+            $delegation = Delegation::create([
+                'number' => $number,
+                'year' => $year,
+                'user_id' => $data['user_id'],
+                'company_id' => $data['company_id'] ?? null,
+                'custom_address' => $data['custom_address'] ?? null,
+                'description' => $data['description'],
+                'settled' => $data['settled'],
+            ]);
+
+            $delegation->trips()->createMany($data['delegation_trips']);
+            $delegation->bills()->createMany($data['delegation_bills']);
+
+            return response()->json([
+                'text' => 'Poprawnie dodano Delegacje',
+                'type' => 'message',
+                'status' => 'success',
+                'id' => $delegation->id,
+            ],201);
+        });
     }
 
     /**
@@ -176,14 +199,6 @@ class DelegationController extends Controller
      * Display the specified resource.
      */
     public function pdf(Delegation $delegation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Delegation $delegation)
     {
         //
     }

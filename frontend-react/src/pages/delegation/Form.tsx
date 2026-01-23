@@ -342,6 +342,13 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     </tbody>
                 </table>
             </div>
+            {formError?.delegation_trips ??
+                <div className="text-red-600 my-2 text-center text-sm">
+                    {formError?.delegation_trips?.map( (error,key) => (
+                        <span key={key}>{error} </span>
+                    ))}
+                </div>
+            }
 
             <Line text="Rachunki"/>{/* delegation_bills */}
             <div>
@@ -397,6 +404,15 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     </tbody>
                 </table>
             </div>
+
+            {formError?.delegation_bills ??
+                <div className="text-red-600 my-2 text-center text-sm">
+                    {formError?.delegation_bills?.map( (error,key) => (
+                        <span key={key}>{error} </span>
+                    ))}
+                </div>
+            }
+
         </DelegationFormContext.Provider>
         </>
     );
