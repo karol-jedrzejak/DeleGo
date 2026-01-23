@@ -373,7 +373,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <tr key={index} className="custom-table-row">
                             <td className="p-2">{billOptions.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
                             <td className="p-2">{bill.description}</td>
-                            <td className="p-2">{formatter.format(bill.amount)}</td>
+                            <td className="p-2 text-right tabular-nums font-sans">{formatter.format(bill.amount)}</td>
                             <td className="p-2 flex flex-row justify-center gap-1">
                                 <Button
                                         className='flex items-center'
@@ -397,33 +397,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     </tbody>
                 </table>
             </div>
-
-
-        {/* DEV ONLY */}
-        <Line text="DEV"/>{/* delegation_bills */}
-        <Button
-                className='mx-2 my-2 flex items-center'
-                type="button"
-                color="blue"
-                onClick={() => console.log(formData)}
-            >
-            TEST - CONSOLE LOG
-            </Button>
-            <Button
-                    className='mx-2 my-2 flex items-center'
-                    type="button"
-                    color="blue"
-                    onClick={() => {
-                        console.log(billOptions);
-                        console.log(tripOptions);
-                    }}
-                >
-                TEST - trip bill
-            </Button>
-        {/* DEV ONLY */}
-
-
-
         </DelegationFormContext.Provider>
         </>
     );
