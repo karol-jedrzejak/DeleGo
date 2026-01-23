@@ -308,21 +308,25 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             </div>
 
             <Line text="Rachunki"/>{/* delegation_bills */}
+            <div className='py-4'>
+                <table className="table-auto w-full">
+                    <thead>
+                        <tr className="font-normal">
+                            <th className="p-2">Typ</th>
+                            <th className="p-2">Opis</th>
+                            <th className="p-2">Kwota</th>
+                            <th className="p-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody className="relative">
+{/*                         <tr>
+                            <td></td>
+                        </tr> */}
+                    </tbody>
+                </table>
+            </div>
 
-            {/* export type FormDataType = {
-            id: number | null,
-            delegation_bill_type_id: number,
-            description: string,
-            amount: number,
-            }
-
-            export type ItemBasicType = {
-                id: number,
-                name: string,
-            };
-            */}
-
-            <Button
+{/*             <Button
                     className='mx-2 my-2 flex items-center'
                     type="button"
                     color="blue"
@@ -340,7 +344,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     }}
                 >
                 TEST - trip bill
-            </Button>
+            </Button> */}
         </DelegationFormContext.Provider>
         </>
     );
