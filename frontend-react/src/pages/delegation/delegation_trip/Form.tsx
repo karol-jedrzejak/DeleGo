@@ -26,15 +26,16 @@ type ValidationProps = {
     tripFormData: FormDataType
     setFormErrors: React.Dispatch<React.SetStateAction<FormErrors>>
     tripTypes: DelegationTripBasicType[]
+    id?:number
 }
 
-export const validate = ({formData,tripFormData,setFormErrors,tripTypes}:ValidationProps) => {
+export const validate = ({formData,tripFormData,setFormErrors,tripTypes,id}:ValidationProps) => {
 
     setFormErrors(null);
     let error = false;
 
     // Validate overlap with other trip dates
-    if (hasTripOverlap(tripFormData, formData.delegation_trips)) {
+    if (hasTripOverlap(tripFormData, formData.delegation_trips,id)) {
         error=true;
         setFormErrors((p) => ({ ...p, arrival: ["Daty pokrywają się z inna datą."], departure: ["Daty pokrywają się z inna datą."] }));
     }
@@ -87,6 +88,12 @@ export const validate = ({formData,tripFormData,setFormErrors,tripTypes}:Validat
             error=true;
             setFormErrors((p) => ({ ...p, car_id: ['Wybierz auto.'] }));
         }
+
+        if(!tripFormData.distance || tripFormData.distance < 1)
+        {
+            error=true;
+            setFormErrors((p) => ({ ...p, distance: ['Uzupełnij dystans w km.'] }));
+        }
     }
 
     if (selectedTripType?.requires_description) {
@@ -135,7 +142,7 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
     // -------------------------------------------------------------------------- //
 
     const handleTransportChange = (transport_id: string) => {
-        setTripFormData((p) => ({ ...p, car_id: null, car_label: "", custom_transport: null, delegation_trip_type_id: Number(transport_id)}));
+        setTripFormData((p) => ({ ...p, car_id: null, car_label: "", custom_transport: null, distance: null, delegation_trip_type_id: Number(transport_id)}));
     };
 
     const handleCarChange = (car_id: number | null, car_label: string | null) => {
@@ -177,13 +184,28 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
                 ) :(<></>)
                 }
                 {tripTypes.find(t => t.id === tripFormData.delegation_trip_type_id)?.requires_car ? (
+                    <>
                 <CarSelect
-                    className='col-span-4 xl:col-span-3'
+                    className='col-span-4 xl:col-span-2'
                     onSelect={handleCarChange}
                     initialValue={tripFormData.car_label}
                     user_id={itemData?.user?.id ?? null}
                     errors={formError?.car_id ?? null}
                     />
+                <Input
+                    label="Dystans:"   
+                    type ="number"
+                    name="distance"
+                    value={tripFormData.distance ?? 0}
+                    onChange={handleChange}
+                    classNameContainer='col-span-4 xl:col-span-1'
+                    classNameInput="w-full" 
+                    unit={"km"}
+                    min={0}
+                    errors={formError?.distance ?? null}
+                    required
+                ></Input>
+                </>
                 ):(<></>)}
             </div>
             <div className='w-full grid grid-cols-4 xl:gap-x-4'>
@@ -241,22 +263,10 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
                     name="description"
                     value={tripFormData.description}
                     onChange={handleChange}
-                    classNameContainer='col-span-4 xl:col-span-3'
+                    classNameContainer='col-span-4 xl:col-span-4'
                     classNameInput="w-full"
                     placeholder='opis'
                     errors={formError?.description ?? null}
-                    required
-                ></Input>
-                <Input
-                    label="Dystans:"   
-                    type ="number"
-                    name="distance"
-                    value={tripFormData.distance}
-                    onChange={handleChange}
-                    classNameContainer='col-span-4 xl:col-span-1'
-                    classNameInput="w-full" 
-                    unit={"km"}
-                    errors={formError?.distance ?? null}
                     required
                 ></Input>
             </div>

@@ -2,28 +2,28 @@ import React, { useState } from 'react';
 
 // Komponenty UI //
 
-import { SquarePen,Undo2 } from "lucide-react";
+import { SquarePlus,Undo2 } from "lucide-react";
 import { Button} from '@/components';
 
 // Model //
-import type { FormDataType } from '@/models/DelegationTrip.tsx';
+import { DEFAULT_FORM_DATA } from '@/models/DelegationBill';
+import type { FormDataType } from '@/models/DelegationBill.tsx';
 import Form from './Form.tsx';
 import { validate } from './Form.tsx';
 import { useDelegationForm } from '../Form.tsx';
 
 type FormProps = {
-    id: number
-    setPopUp: React.Dispatch<React.SetStateAction<number | undefined>>
+    setPopUp: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Edit({id,setPopUp}:FormProps) {
+export default function Create({setPopUp}:FormProps) {
 
-    const { formData, setFormData,tripTypes } = useDelegationForm();
+    const { setFormData } = useDelegationForm();
     // -------------------------------------------------------------------------- //
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
  
-    const [tripFormData, setTripFormData] = useState<FormDataType>(formData.delegation_trips[id]);
+    const [billFormData, setBillFormData] = useState<FormDataType>(DEFAULT_FORM_DATA);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormDataType, string[]>> | null>(null);
     
     // -------------------------------------------------------------------------- //
@@ -31,24 +31,13 @@ export default function Edit({id,setPopUp}:FormProps) {
     // -------------------------------------------------------------------------- //
 
     const handleSubmit = async () => {
-        if(validate({formData,tripFormData,setFormErrors,tripTypes,id}))
+        if(validate({billFormData,setFormErrors}))
         {
-            // Update trip
-            setFormData(prev => {
-                const trips = [...prev.delegation_trips]; // kopia
-                trips[id] = tripFormData;                 // ZASTĄPIENIE
+            // Add trip to delegation
+            setFormData((p) => ({ ...p, delegation_bills: [...p.delegation_bills, billFormData] }));
 
-                return {
-                ...prev,
-                delegation_trips: trips,
-                };
-            });
-
-            console.log(tripFormData);
-
-            
             // Close pop-up
-            setPopUp(undefined);
+            setPopUp(false);
         }
     };
     
@@ -58,20 +47,20 @@ export default function Edit({id,setPopUp}:FormProps) {
 
     return (
         <div className='w-full'>
-            <Form tripFormData={tripFormData} setTripFormData={setTripFormData} formError={formErrors}/>
+            <Form billFormData={billFormData} setBillFormData={setBillFormData} formError={formErrors}/>
             <div className='w-full flex justify-end items-center pt-4 gap-2'>
                 <Button
                     className='flex items-center'
-                    color="yellow"
+                    color="green"
                     onClick={() => {handleSubmit()}}
                 >
-                    <SquarePen size={24} className="pe-1"/>
-                    Zaktualizuj
+                    <SquarePlus size={24} className="pe-1"/>
+                    Dodaj
                 </Button>
                 <Button
                     className='flex items-center'
                     color="sky"
-                    onClick={() => {setPopUp(undefined)}}
+                    onClick={() => {setPopUp(false)}}
                 >
                     <Undo2 size={24} className="pe-1"/>
                     Anuluj

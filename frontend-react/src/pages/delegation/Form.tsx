@@ -12,6 +12,9 @@ import CompanySelect from '@/features/company/components/CompanySelect.tsx';
 import CreateTrip from '@/pages/delegation/delegation_trip/Create.tsx';
 import EditTrip from '@/pages/delegation/delegation_trip/Edit.tsx';
 
+import CreateBill from '@/pages/delegation/delegation_bill/Create.tsx';
+import EditBill from '@/pages/delegation/delegation_bill/Edit.tsx';
+
 // Model //
 
 import type { ItemFullType,FormDataType } from '@/models/Delegation';
@@ -22,6 +25,16 @@ import type { ItemBasicType as DelegationTripBasicType } from '@/models/Delegati
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { delegationService } from '@/api/services/backend/user/delegation.service.ts';
+
+// -------------------------------------------------------------------------- //
+// Formatter kwot walutowych
+// -------------------------------------------------------------------------- //
+
+const formatter = new Intl.NumberFormat("pl-PL", {
+    style: 'currency', // Określenie stylu jako waluta
+    currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
+});
+
 
 // -------------------------------------------------------------------------- //
 // Contekst formularza delegacji
@@ -64,7 +77,9 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const [isCompany, setIsCompany] = useState<boolean>(true);
     const [createDelegationTripPopUp, setCreateDelegationTripPopUp] = useState<boolean>(false);
     const [editDelegationTripPopUp, setEditDelegationTripPopUp] = useState<number | undefined>(undefined);
-    //const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
+    
+    const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
+    const [editDelegationBillPopUp, setEditDelegationBillPopUp] = useState<number | undefined>(undefined);
 
     const [tripOptions, setTripOptions] = useState<DelegationTripBasicType[]>([]);
     const [billOptions, setBillOptions] = useState<DelegationBillBasicType[]>([]);
@@ -130,12 +145,12 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     }));
     };
 
-
-
-
-
-
-
+    const handleDeleteDelegationBill = (index: number) => {
+        setFormData(prev => ({
+        ...prev,
+        delegation_bills: prev.delegation_bills.filter((_, i) => i !== index),
+    }));
+    };
 
     if(loadingBillGet || loadingTripGet){
         return <Spinner/>;
@@ -176,6 +191,31 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     </Card>
                 </PopUp>
             )}
+            {createDelegationBillPopUp &&(
+                <PopUp>
+                    <Card>
+                        <Card.Header>
+                            <span>Dodanie rachunku do delegacji</span>
+                        </Card.Header>
+                        <Card.Body>
+                            <CreateBill setPopUp={setCreateDelegationBillPopUp}></CreateBill>
+                        </Card.Body>
+                    </Card>
+                </PopUp>
+            )}
+            {editDelegationBillPopUp!== undefined &&(
+                <PopUp>
+                    <Card>
+                        <Card.Header>
+                            <span>Edycja rachunku w delegacji</span>
+                        </Card.Header>
+                        <Card.Body>
+                            <EditBill id={editDelegationBillPopUp} setPopUp={setEditDelegationBillPopUp}></EditBill>
+                        </Card.Body>
+                    </Card>
+                </PopUp>
+            )}
+
 
 
             <Line text="Dane Delegacji"/>
@@ -250,10 +290,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     >
                     <SquarePlus size={22} className="pe-1"/><span>Dodaj Przejazd</span>
                 </Button>
-             
-{/*                 <Create
-                    delegationData={formData}
-                    setDelegationData={setFormData}/> */}
             </div>
             <div className='py-4'>
                 <table className="table-auto w-full">
@@ -281,7 +317,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <td className="p-2">{trip.departure.split("T")[0]} - {trip.departure.split("T")[1]}</td>
                             <td className="p-2">{trip.arrival.split("T")[0]} - {trip.arrival.split("T")[1]}</td>
                             <td className="p-2">{trip.description}</td>
-                            <td className="p-2">{trip.distance} km</td>
+                            <td className="p-2">{trip.distance ? trip.distance+" km" : "-"}</td>
                             <td className="p-2">{trip.car_label ? trip.car_label : trip.custom_transport}</td>
                             <td className="p-2 flex flex-row justify-center gap-1">
                                 <Button
@@ -308,6 +344,16 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             </div>
 
             <Line text="Rachunki"/>{/* delegation_bills */}
+            <div>
+                <Button
+                        className='mx-2 my-2 flex items-center'
+                        type="button"
+                        color="green"
+                        onClick={() => {setCreateDelegationBillPopUp(true)}}
+                    >
+                    <SquarePlus size={22} className="pe-1"/><span>Dodaj Rachunek</span>
+                </Button>
+            </div>
             <div className='py-4'>
                 <table className="table-auto w-full">
                     <thead>
@@ -319,20 +365,49 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         </tr>
                     </thead>
                     <tbody className="relative">
-{/*                         <tr>
-                            <td></td>
-                        </tr> */}
+                        {[...formData.delegation_bills]
+                        .sort((a, b) =>
+                            a.amount - b.amount
+                        )
+                        .map((bill, index) => (
+                            <tr key={index} className="custom-table-row">
+                            <td className="p-2">{billOptions.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
+                            <td className="p-2">{bill.description}</td>
+                            <td className="p-2">{formatter.format(bill.amount)}</td>
+                            <td className="p-2 flex flex-row justify-center gap-1">
+                                <Button
+                                        className='flex items-center'
+                                        type="button"
+                                        color="yellow"
+                                        onClick={() => {setEditDelegationBillPopUp(index)}}
+                                    >
+                                    <SquarePen size={20}/>
+                                </Button>
+                                <Button
+                                        className='flex items-center'
+                                        type="button"
+                                        color="red"
+                                        onClick={() => {handleDeleteDelegationBill(index)}}
+                                    >
+                                    <Trash2 size={20}/>
+                                </Button>
+                            </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
 
-{/*             <Button
-                    className='mx-2 my-2 flex items-center'
-                    type="button"
-                    color="blue"
-                    onClick={() => console.log(formData)}
-                >
-                TEST - CONSOLE LOG
+
+        {/* DEV ONLY */}
+        <Line text="DEV"/>{/* delegation_bills */}
+        <Button
+                className='mx-2 my-2 flex items-center'
+                type="button"
+                color="blue"
+                onClick={() => console.log(formData)}
+            >
+            TEST - CONSOLE LOG
             </Button>
             <Button
                     className='mx-2 my-2 flex items-center'
@@ -344,7 +419,11 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     }}
                 >
                 TEST - trip bill
-            </Button> */}
+            </Button>
+        {/* DEV ONLY */}
+
+
+
         </DelegationFormContext.Provider>
         </>
     );

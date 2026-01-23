@@ -11,7 +11,7 @@ export type ItemFullType = {
   starting_point: string,
   destination: string,
   description: string,
-  distance: number,
+  distance: number | null,
   departure: string,
   arrival: string,
   car: CarBasicType | null;
@@ -24,7 +24,7 @@ export type ItemBasicType = {
   starting_point: string,
   destination: string,
   description: string,
-  distance: number,
+  distance: number | null,
   departure: string,
   arrival: string,
   car: CarBasicType | null; 
@@ -66,7 +66,7 @@ export type FormDataType = {
   starting_point: string,
   destination: string,
   description: string,
-  distance: number,
+  distance: number | null,
   departure: string,
   arrival: string,
   custom_transport: string | null,
@@ -84,7 +84,7 @@ export const DEFAULT_FORM_DATA = {
   starting_point: "",
   destination: "",
   description: "",
-  distance: 1,
+  distance: null,
   departure: "",
   arrival: "",
   custom_transport: null,
@@ -125,16 +125,22 @@ export const DEFAULT_ERROR_DATA = {
 
 
 export const hasTripOverlap = (
-    toCheckTrip:FormDataType,
-    trips: FormDataType[]
-    ) => {
-    const newStart = new Date(toCheckTrip.departure).getTime();
-    const newEnd = new Date(toCheckTrip.arrival).getTime();
+  toCheckTrip: FormDataType,
+  trips: FormDataType[],
+  id?: number
+) => {
+  const newStart = new Date(toCheckTrip.departure).getTime();
+  const newEnd = new Date(toCheckTrip.arrival).getTime();
 
-    return trips.some(trip => {
-        const start = new Date(trip.departure).getTime();
-        const end = new Date(trip.arrival).getTime();
+  const tripsToCheck =
+    id !== undefined
+      ? trips.filter((_, index) => index !== id)
+      : trips;
 
-        return newStart < end && newEnd > start;
-    });
+  return tripsToCheck.some(trip => {
+    const start = new Date(trip.departure).getTime();
+    const end = new Date(trip.arrival).getTime();
+
+    return newStart < end && newEnd > start;
+  });
 };

@@ -6,7 +6,7 @@ import { SquarePen,Undo2 } from "lucide-react";
 import { Button} from '@/components';
 
 // Model //
-import type { FormDataType } from '@/models/DelegationTrip.tsx';
+import type { FormDataType } from '@/models/DelegationBill.tsx';
 import Form from './Form.tsx';
 import { validate } from './Form.tsx';
 import { useDelegationForm } from '../Form.tsx';
@@ -18,12 +18,12 @@ type FormProps = {
 
 export default function Edit({id,setPopUp}:FormProps) {
 
-    const { formData, setFormData,tripTypes } = useDelegationForm();
+    const { formData,setFormData } = useDelegationForm();
     // -------------------------------------------------------------------------- //
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
  
-    const [tripFormData, setTripFormData] = useState<FormDataType>(formData.delegation_trips[id]);
+    const [billFormData, setBillFormData] = useState<FormDataType>(formData.delegation_bills[id]);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormDataType, string[]>> | null>(null);
     
     // -------------------------------------------------------------------------- //
@@ -31,21 +31,18 @@ export default function Edit({id,setPopUp}:FormProps) {
     // -------------------------------------------------------------------------- //
 
     const handleSubmit = async () => {
-        if(validate({formData,tripFormData,setFormErrors,tripTypes,id}))
+        if(validate({billFormData,setFormErrors,id}))
         {
-            // Update trip
+            // Update bill
             setFormData(prev => {
-                const trips = [...prev.delegation_trips]; // kopia
-                trips[id] = tripFormData;                 // ZASTĄPIENIE
+                const bill = [...prev.delegation_bills]; // kopia
+                bill[id] = billFormData;                 // ZASTĄPIENIE
 
                 return {
                 ...prev,
-                delegation_trips: trips,
+                delegation_bills: bill,
                 };
             });
-
-            console.log(tripFormData);
-
             
             // Close pop-up
             setPopUp(undefined);
@@ -58,7 +55,7 @@ export default function Edit({id,setPopUp}:FormProps) {
 
     return (
         <div className='w-full'>
-            <Form tripFormData={tripFormData} setTripFormData={setTripFormData} formError={formErrors}/>
+            <Form billFormData={billFormData} setBillFormData={setBillFormData} formError={formErrors}/>
             <div className='w-full flex justify-end items-center pt-4 gap-2'>
                 <Button
                     className='flex items-center'
