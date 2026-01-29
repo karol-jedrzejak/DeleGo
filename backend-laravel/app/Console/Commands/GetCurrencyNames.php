@@ -33,7 +33,7 @@ class GetCurrencyNames extends Command
         $this->info('Pobieranie danych z NBP...');
 
         // 1. Pobranie danych JSON z API
-        $response = Http::get('https://api.nbp.pl/api/exchangerates/tabless/a/?format=json');
+        $response = Http::get('https://api.nbp.pl/api/exchangerates/tables/a/?format=json');
 
         if (!$response->ok()) {
             $this->error('Błąd pobierania danych z NBP!');
@@ -44,39 +44,76 @@ class GetCurrencyNames extends Command
 
         $length = count($data);
         $this->info("Dane z ostatnich $length dni:");
-        $first = true;
 
+        $currency_symbols = [
+            "PLN" => 'zł',
+            "THB" => '฿',
+            "USD" => '$',
+            "AUD" => '$',
+            "HKD" => '$',
+            "CAD" => '$',
+            "NZD" => '$',
+            "SGD" => '$',
+            "EUR" => '€',
+            "HUF" => 'Ft',
+            'CHF' => 'CHF',
+            'GBP' => '£',
+            "UAH" => "₴",
+            'JPY' => '¥',
+            "CZK" => "Kč",
+            "DKK" => "kr.",
+            "ISK" => "Íkr",
+            "NOK" => "nkr",
+            "SEK" => "kr",
+            "RON" => "L",
+            "TRY" => "₺",
+            "ILS" => "₪",
+            "CLP" => "$",
+            "PHP" => "₱",
+            "MXN" => "$",
+            "ZAR" => "R",
+            "BRL" => "R$",
+            "MYR" => "RM",
+            "IDR" => "Rp",
+            "INR" => "₹",
+            "KRW" => "₩",
+            'CNY' => '¥',
+        ];
 
+        foreach($data as $one_day_data)
+        {
+            $date = $one_day_data['effectiveDate'];
+            $rates = $one_day_data['rates'];
 
+            $this->info("Dane z dnia: $date");
 
+            // 2. Zapis kursów i walut do bazy
+            foreach ($rates as $rate) {
+                
+                if($rate['code'] != "XDR")
+                {
+                  // Zapis waluty do tabeli currencies (jeżeli nie istnieje)
+                  $currency = Currency::updateOrCreate(
+                      ['code' => $rate['code']],
+                      [
+                          'name' => $rate['currency'],
+                          'symbol' => $currency_symbols[$rate['code']]
+                      ]
+                  );
+                }
 
-        $date = $data['effectiveDate'];
-        $rates = $data['rates'];
-
-        $this->info("Dane z dnia: $date");
-
-        // 2. Zapis kursów i walut do bazy
-        foreach ($rates as $rate) {
-            // Zapis waluty do tabeli currencies (jeżeli nie istnieje)
-            $currency = Currency::updateOrCreate(
-                ['code' => $rate['code']],
-                [
-                    'name' => $rate['currency'],
-                    'symbol' => null // NBP nie podaje symbolu
-                ]
-            );
-
-            // Zapis kursu
-            CurrencyExchangeRate::updateOrCreate(
-                [
-                    'currency_code' => $rate['code'],
-                    'rate_date'     => $date,
-                    'source'        => 'NBP',
-                ],
-                [
-                    'rate' => $rate['mid'],
-                ]
-            );
+                // Zapis kursu
+                CurrencyExchangeRate::updateOrCreate(
+                    [
+                        'currency_code' => $rate['code'],
+                        'rate_date'     => $date,
+                        'source'        => 'NBP',
+                    ],
+                    [
+                        'rate' => $rate['mid'],
+                    ]
+                );
+            }
         }
 
         $this->info('Dane zapisane pomyślnie.');
