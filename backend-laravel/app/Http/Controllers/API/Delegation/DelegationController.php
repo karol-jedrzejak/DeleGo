@@ -166,6 +166,13 @@ class DelegationController extends Controller
                     'name',
                 ]);
             },
+            'delegationBills.currency' => function ($q) {
+                $q->select([
+                    'code',
+                    'name',
+                    'symbol',
+                ]);
+            },
         ]);
 
         return new DelegationShowResource($delegation);

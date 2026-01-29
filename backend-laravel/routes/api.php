@@ -10,8 +10,7 @@ use App\Http\Controllers\API\Company\CompanyController;
 use App\Http\Controllers\API\Company\EmployeeController;
 use App\Http\Controllers\API\User\CarController;
 use App\Http\Controllers\API\Delegation\DelegationController;
-
-
+use App\Http\Controllers\API\Misc\CurrencyController;
 
 // Authentication
 Route::prefix('v1')->group(function () {
@@ -24,6 +23,9 @@ Route::prefix('v1')->group(function () {
         // Auth
         Route::post('logout', [AuthenticationController::class, 'logout']);
         Route::get('user', [AuthenticationController::class, 'current_user_info']);
+
+        // Currency
+        Route::get('currency_options', [CurrencyController::class, 'options']);
 
         // Car  
         Route::get('car/options', [CarController::class, 'options'])->middleware('permission:misc,cars,1');
