@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('currency_exchange_rates', function (Blueprint $table) {
             $table->id();
+            $table->char('currency_code', 3);
             $table->foreign('currency_code')
                 ->references('code')
                 ->on('currencies');

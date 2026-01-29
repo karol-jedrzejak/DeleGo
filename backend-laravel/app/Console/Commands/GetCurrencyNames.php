@@ -33,7 +33,7 @@ class GetCurrencyNames extends Command
         $this->info('Pobieranie danych z NBP...');
 
         // 1. Pobranie danych JSON z API
-        $response = Http::get('https://api.nbp.pl/api/exchangerates/tables/a/?format=json');
+        $response = Http::get('https://api.nbp.pl/api/exchangerates/tables/a/last/50/?format=json');
 
         if (!$response->ok()) {
             $this->error('Błąd pobierania danych z NBP!');
@@ -46,7 +46,7 @@ class GetCurrencyNames extends Command
         $this->info("Dane z ostatnich $length dni:");
 
         $currency_symbols = [
-            "PLN" => 'zł',
+            "BGN" => "лв",
             "THB" => '฿',
             "USD" => '$',
             "AUD" => '$',
@@ -80,12 +80,23 @@ class GetCurrencyNames extends Command
             'CNY' => '¥',
         ];
 
+        Currency::updateOrCreate(
+            ['code' => "PLN"],
+            [
+                'name' => "Złoty",
+                'symbol' => 'zł'
+            ]
+        );
+
+        $bar = $this->output->createProgressBar($length);
+        $bar->start();
+
         foreach($data as $one_day_data)
         {
             $date = $one_day_data['effectiveDate'];
             $rates = $one_day_data['rates'];
 
-            $this->info("Dane z dnia: $date");
+            $bar->advance();
 
             // 2. Zapis kursów i walut do bazy
             foreach ($rates as $rate) {
@@ -97,26 +108,29 @@ class GetCurrencyNames extends Command
                       ['code' => $rate['code']],
                       [
                           'name' => $rate['currency'],
-                          'symbol' => $currency_symbols[$rate['code']]
+                          'symbol' => $currency_symbols[$rate['code']] ?? ''
+                      ]
+                  );
+                
+                  // Zapis kursu
+                  CurrencyExchangeRate::updateOrCreate(
+                      [
+                          'currency_code' => $rate['code'],
+                          'rate_date'     => $date,
+                          'source'        => 'NBP',
+                      ],
+                      [
+                          'rate' => $rate['mid'],
                       ]
                   );
                 }
-
-                // Zapis kursu
-                CurrencyExchangeRate::updateOrCreate(
-                    [
-                        'currency_code' => $rate['code'],
-                        'rate_date'     => $date,
-                        'source'        => 'NBP',
-                    ],
-                    [
-                        'rate' => $rate['mid'],
-                    ]
-                );
             }
         }
 
+        $bar->finish();
+        $this->newLine();
         $this->info('Dane zapisane pomyślnie.');
+
         return 0;
 
     }
