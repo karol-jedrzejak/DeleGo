@@ -185,13 +185,14 @@ const Show = () => {
                                             <td className="p-2">{bill.delegation_bill_type.name}</td>
                                             <td className="p-2">{bill.description}</td>
                                             <td className="p-2 text-right tabular-nums font-sans">
-                                                {formatter.format(bill.amount)}
+                                                {bill.amount} {bill.currency.symbol}
+                                                {/* {formatter.format(bill.amount)} */}
                                             </td>          
                                         </tr>
                                     ))}
                                     <tr className="custom-table-sum">
                                         <td colSpan={2} className="p-2 font-normal text-right"><b>SUMA</b></td>
-                                        <td className="p-2 text-right tabular-nums font-sans">{formatter.format(item.delegation_bills.reduce((sum, bill) => sum + bill.amount, 0))}</td>       
+                                        <td className="p-2 text-right tabular-nums font-sans">{/* {formatter.format(item.delegation_bills.reduce((sum, bill) => sum + bill.amount, 0))} */}</td>       
                                     </tr>
                                 </tbody>
                             </table>
