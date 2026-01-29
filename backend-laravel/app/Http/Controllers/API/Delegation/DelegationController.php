@@ -156,6 +156,7 @@ class DelegationController extends Controller
                     'id',
                     'delegation_id',
                     'amount',
+                    'currency_code',
                     'description',
                     'delegation_bill_type_id',
                 ]);

@@ -10,6 +10,15 @@ use App\Models\Traits\Filterable;
 
 class Currency extends Model
 {
+    // klucz główny to 'code', a nie 'id'
+    protected $primaryKey = 'code';
+
+    // klucz nie jest autoinkrementowany
+    public $incrementing = false;
+
+    // typ klucza głównego
+    protected $keyType = 'string';
+
     /** @use HasFactory<\Database\Factories\DelegationFactory> */
     use HasFactory;
 
