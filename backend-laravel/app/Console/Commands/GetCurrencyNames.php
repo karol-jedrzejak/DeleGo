@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Http;
 use App\Models\Currency;
@@ -89,6 +90,9 @@ class GetCurrencyNames extends Command
         );
 
         $bar = $this->output->createProgressBar($length);
+        $bar->setBarCharacter("\033[32m█\033[0m");   // zielony
+        $bar->setEmptyBarCharacter('░');
+        $bar->setProgressCharacter('');
         $bar->start();
 
         foreach($data as $one_day_data)
@@ -107,7 +111,7 @@ class GetCurrencyNames extends Command
                   $currency = Currency::updateOrCreate(
                       ['code' => $rate['code']],
                       [
-                          'name' => $rate['currency'],
+                          'name' => Str::title($rate['currency']),
                           'symbol' => $currency_symbols[$rate['code']] ?? ''
                       ]
                   );
