@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Car;
+use App\Models\Currency;
 use App\Models\Delegation;
 use App\Models\DelegationBill;
 use App\Models\DelegationBillType;
@@ -18,15 +19,19 @@ class DelegationSeeder extends Seeder
      */
     public function run(): void
     {
+
         Delegation::factory()
             ->count(100)
             ->create()
             ->each(function ($delegation) {
 
+                $currency = fake()->boolean(80) ? "PLN" : Currency::inRandomOrder()->first()->code;
+
                 // Liczba rachunków 0-4
                 $billsCount = rand(0,4);
                 for ($i=0; $i<$billsCount; $i++) {
                     DelegationBill::factory()->create([
+                        'currency_code' => $currency,
                         'delegation_id' => $delegation->id,
                         'delegation_bill_type_id' => DelegationBillType::inRandomOrder()->first()->id,
                     ]);

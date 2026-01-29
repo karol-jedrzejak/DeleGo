@@ -10,7 +10,7 @@ use App\Models\CurrencyExchangeRate;
 
 class CurrencySeeder extends Seeder
 {
-    protected array $currency_symbols = [
+    public array $currency_symbols = [
             "BGN" => "лв",
             "THB" => '฿',
             "USD" => '$',

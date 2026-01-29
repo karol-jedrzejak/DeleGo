@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('delegation_bills', function (Blueprint $table) {
             $table->id();
 
+            $table->string('currency_code'); // typ zgodny z kolumną currencies.code
+            $table->foreign('currency_code') // nazwa kolumny w tej tabeli
+                ->references('code')       // kolumna w tabeli currencies
+                ->on('currencies');         // tabela docelowa
+
             $table->foreignId('delegation_id')->constrained('delegations');
             $table->foreignId('delegation_bill_type_id')->constrained('delegation_bill_types');
 

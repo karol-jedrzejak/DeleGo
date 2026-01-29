@@ -14,6 +14,7 @@ class DelegationBill extends Model
     
     protected $fillable = [
         'delegation_id',
+        'currency_code',
         'delegation_bill_type_id',
         'description',
         'amount',
