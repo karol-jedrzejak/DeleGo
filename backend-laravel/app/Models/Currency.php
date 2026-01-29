@@ -28,6 +28,11 @@ class Currency extends Model
         return $this->hasMany(CurrencyExchangeRate::class);
     }
 
+    public function delegationBills(): HasMany
+    {
+        return $this->hasMany(DelegationBill::class);
+    }
+
     // --------------------------------------------------------- //
     // Sortowanie i wyszukiwanie
     // --------------------------------------------------------- //
