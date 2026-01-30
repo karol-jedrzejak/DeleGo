@@ -22,6 +22,8 @@ const Show = () => {
     // Formatter kwot walutowych
     // -------------------------------------------------------------------------- //
 
+    // uzyc ?
+    
     const formatter = new Intl.NumberFormat("pl-PL", {
         style: 'currency', // Określenie stylu jako waluta
         currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
