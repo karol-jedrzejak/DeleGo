@@ -48,7 +48,7 @@ type FormProps = {
 
 export default function Form({ billFormData,setBillFormData,formError}:FormProps) {
 
-    const { billTypes } = useDelegationForm();
+    const { billTypes, currencyTypes } = useDelegationForm();
 
     // -------------------------------------------------------------------------- //
     // Handlery zmian
@@ -69,6 +69,10 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
         setBillFormData((p) => ({ ...p, delegation_bill_type_id: Number(bill_type_id)}));
     };
 
+    const handleCurrencyTypeChange = (currency_code: string) => {
+        setBillFormData((p) => ({ ...p, currency_code: currency_code}));
+    };
+
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
@@ -79,7 +83,7 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
                 <Select
                 name="delegation_bill_type_id"
                 label="Rodzaj Rachunku:"
-                classNameContainer='col-span-4 xl:col-span-1'
+                classNameContainer='col-span-4 xl:col-span-4'
                 classNameInput='w-full'
                 defaultValue={billFormData.delegation_bill_type_id}
                 onChange={(e) => handleBillTypeChange(e.target.value)}
@@ -88,10 +92,9 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
                         <option key={key} value={bill_type.id}>{bill_type.name}</option>
                     ))}
                 </Select>
-            </div>
-            <div className='w-full grid grid-cols-4 xl:gap-x-4'>
+
                 <Input
-                    label="Kwota (zł):"   
+                    label="Kwota:"   
                     type ="number"
                     name="amount"
                     value={billFormData.amount}
@@ -102,6 +105,18 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
                     errors={formError?.amount ?? null}
                     required
                 ></Input>
+                <Select
+                name="currency_code"
+                label="Waluta:"
+                classNameContainer='col-span-4 xl:col-span-2'
+                classNameInput='w-full'
+                defaultValue={billFormData.currency_code}
+                onChange={(e) => handleCurrencyTypeChange(e.target.value)}
+                >
+                    {currencyTypes.map( (currency_type,key) => (
+                        <option key={key} value={currency_type.code}>{currency_type.name} {currency_type.code} {currency_type.symbol}</option>
+                    ))}
+                </Select>
                 <Input
                     label="Opis:"   
                     type ="text"

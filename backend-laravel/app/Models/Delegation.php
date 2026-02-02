@@ -38,7 +38,6 @@ class Delegation extends Model
         return $this->belongsTo(Company::class)->withDefault();
     }
 
-
     public function delegationBills(): HasMany
     {
         return $this->hasMany(DelegationBill::class);

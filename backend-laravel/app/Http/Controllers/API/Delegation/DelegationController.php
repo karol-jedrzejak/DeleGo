@@ -83,8 +83,8 @@ class DelegationController extends Controller
                 'settled' => $data['settled'],
             ]);
 
-            $delegation->trips()->createMany($data['delegation_trips']);
-            $delegation->bills()->createMany($data['delegation_bills']);
+            $delegation->delegationTrips()->createMany($data['delegation_trips']);
+            $delegation->delegationBills()->createMany($data['delegation_bills']);
 
             return response()->json([
                 'text' => 'Poprawnie dodano Delegacje',

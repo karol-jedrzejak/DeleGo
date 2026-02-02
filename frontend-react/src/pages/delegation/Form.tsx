@@ -21,10 +21,12 @@ import type { ItemFullType,FormDataType } from '@/models/Delegation';
 
 import type { ItemBasicType as DelegationBillBasicType } from '@/models/DelegationBillType';
 import type { ItemBasicType as DelegationTripBasicType } from '@/models/DelegationTripType';
+import type { ItemFullType as CurrencyType } from '@/models/Currency';
 
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { delegationService } from '@/api/services/backend/user/delegation.service.ts';
+import { currencyService } from '@/api/services/backend/misc/currency.service.ts';
 
 // -------------------------------------------------------------------------- //
 // Formatter kwot walutowych
@@ -46,6 +48,7 @@ type DelegationFormContextType = {
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
     billTypes: DelegationBillBasicType[];
     tripTypes: DelegationTripBasicType[];
+    currencyTypes: CurrencyType[];
 };
 
 const DelegationFormContext = createContext<DelegationFormContextType | null>(null);
@@ -83,6 +86,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
 
     const [tripOptions, setTripOptions] = useState<DelegationTripBasicType[]>([]);
     const [billOptions, setBillOptions] = useState<DelegationBillBasicType[]>([]);
+    const [currencyOptions, setCurrencyOptions] = useState<CurrencyType[]>([]);
 
     // -------------------------------------------------------------------------- //
     // Get options
@@ -104,6 +108,16 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         mutateBillGet()
         .then((res) => {
             setBillOptions(res.data);
+        })
+        .catch(() => {});
+    }, []);
+
+    const { loading:loadingCurrencyGet, error:errorCurrencyGet, mutate:mutateCurrencyGet } = useBackend<CurrencyType[]>("get", currencyService.paths.getOptions,{ initialLoading: true });
+
+    useEffect(() => {
+        mutateCurrencyGet()
+        .then((res) => {
+            setCurrencyOptions(res.data);
         })
         .catch(() => {});
     }, []);
@@ -152,11 +166,11 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     }));
     };
 
-    if(loadingBillGet || loadingTripGet){
+    if(loadingBillGet || loadingTripGet || loadingCurrencyGet){
         return <Spinner/>;
     }
 
-    if(errorBillGet || errorTripGet){
+    if(errorBillGet || errorTripGet || errorCurrencyGet){
         return <ErrorComponent><ErrorComponent.Text type={"standard"}>Błąd serwera</ErrorComponent.Text></ErrorComponent>;
     }
 
@@ -166,7 +180,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
 
     return (
         <>
-        <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, billTypes: billOptions, tripTypes: tripOptions }}>
+        <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, billTypes: billOptions, tripTypes: tripOptions, currencyTypes: currencyOptions}}>
             {createDelegationTripPopUp &&(
                 <PopUp>
                     <Card>
@@ -381,7 +395,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <tr key={index} className="custom-table-row">
                             <td className="p-2">{billOptions.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
                             <td className="p-2">{bill.description}</td>
-                            <td className="p-2 text-right tabular-nums font-sans">{formatter.format(bill.amount)}</td>
+                            <td className="p-2 text-right tabular-nums font-sans">{bill.amount} {currencyOptions.find((item) => item.code === bill.currency_code)?.symbol}</td>
                             <td className="p-2 flex flex-row justify-center gap-1">
                                 <Button
                                         className='flex items-center'
@@ -413,6 +427,16 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 ))}
             </div>
             )}
+
+            
+            <Button
+                    className='flex items-center'
+                    type="button"
+                    color="red"
+                    onClick={() => console.log(formData)}
+                >
+                TEST
+            </Button>
 
         </DelegationFormContext.Provider>
         </>
