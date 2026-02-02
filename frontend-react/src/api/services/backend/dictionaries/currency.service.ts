@@ -1,5 +1,5 @@
 export const currencyService = {
   paths: {
-    getOptions: `/currency_options`,
+    getOptions: `/dictionaries/currencies`,
   },
 };

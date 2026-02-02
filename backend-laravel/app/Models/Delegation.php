@@ -62,7 +62,9 @@ class Delegation extends Model
         'user.surname',
         'custom_address',
         'description',
-        'settled'
+        'settled',
+        'return',
+        'departure',
     ];
 
     public static array $searchable = [

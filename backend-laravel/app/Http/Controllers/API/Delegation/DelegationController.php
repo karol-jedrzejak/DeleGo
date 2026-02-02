@@ -180,28 +180,50 @@ class DelegationController extends Controller
     }
 
     /**
+     * Get form options.
+     */
+    public function options()
+    {
+        return response()->json([
+            'tripTypes' => DelegationTripTypeShowResource::collection(
+                DelegationTripType::query()
+                    ->select(['id', 'name', 'requires_car', 'requires_description'])
+                    ->orderBy('name')
+                    ->get()
+            ),
+            'billTypes' => DelegationBillTypeShowResource::collection(
+                DelegationBillType::query()
+                    ->select(['id', 'name'])
+                    ->orderBy('name')
+                    ->get()
+            ),
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function trip_options()
+/*     public function trip_options()
     {
         $query = DelegationTripType::query()
             ->select(['id', 'name','requires_car','requires_description'])
             ->orderBy('name')
             ->get();
         return DelegationTripTypeShowResource::collection($query);
-    }
+    } */
+/*  */
 
     /**
      * Display the specified resource.
      */
-    public function bill_options()
+/*     public function bill_options()
     {
         $query = DelegationBillType::query()
             ->select(['id', 'name'])
             ->orderBy('name')
             ->get();
         return DelegationBillTypeShowResource::collection($query);
-    }
+    } */
 
     /**
      * Display the specified resource.

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API\Misc;
+namespace App\Http\Controllers\API\Dictionaries;
 
 use App\Http\Controllers\Controller;
 
 use App\Models\Currency;
-use App\Http\Resources\Misc\CurrencyOptionsResource;
+use App\Http\Resources\Dictionaries\CurrencyOptionsResource;
 
 class CurrencyController extends Controller
 {

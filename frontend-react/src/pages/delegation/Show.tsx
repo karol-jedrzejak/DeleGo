@@ -24,10 +24,10 @@ const Show = () => {
 
     // uzyc ?
     
-    const formatter = new Intl.NumberFormat("pl-PL", {
+/*     const formatter = new Intl.NumberFormat("pl-PL", {
         style: 'currency', // Określenie stylu jako waluta
         currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
-    });
+    }); */
 
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
@@ -151,11 +151,11 @@ const Show = () => {
                                 <tbody>
                                     {item.delegation_trips.map((trip) => (
                                         <tr key={trip.id} className="custom-table-row">
-                                            <td className="p-2">{trip.departure}</td>  
-                                            <td className="p-2">{trip.arrival}</td>  
+                                            <td className="p-2 tabular-nums font-sans">{trip.departure}</td>  
+                                            <td className="p-2 tabular-nums font-sans">{trip.arrival}</td>  
                                             <td className="p-2">{trip.starting_point}</td> 
                                             <td className="p-2">{trip.destination}</td>  
-                                            <td className="p-2">{trip.distance} km</td>  
+                                            <td className="p-2">{trip.distance ? trip.distance+"km" : "-"}</td>  
                                             <td className="p-2">
                                                 {trip.delegation_trip_type.requires_car ? 
                                                 <>{trip.delegation_trip_type.name+" - "+trip.car?.brand+" "+trip.car?.model+" ["+trip.car?.registration_number+"]"}</> :
@@ -168,6 +168,7 @@ const Show = () => {
                             </table>
                         </Card.Body>
                     </Card>
+                    {item.delegation_bills ? 
                     <Card>
                         <Card.Header>
                             <div>Rachunki</div>
@@ -200,6 +201,7 @@ const Show = () => {
                             </table>
                         </Card.Body>
                     </Card>
+                    : ""}
                 </div>
             </div>
         )}</>

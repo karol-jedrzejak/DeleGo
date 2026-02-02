@@ -124,7 +124,7 @@ type FormProps = {
 
 export default function Form({ tripFormData,setTripFormData,formError}:FormProps) {
 
-    const { itemData,tripTypes } = useDelegationForm();
+    const { itemData,delegationOptions } = useDelegationForm();
 
     // -------------------------------------------------------------------------- //
     // Handlery zmian
@@ -164,11 +164,11 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
                 defaultValue={tripFormData.delegation_trip_type_id}
                 onChange={(e) => handleTransportChange(e.target.value)}
                 >
-                    {tripTypes.map( (trip_type,key) => (
+                    {delegationOptions.tripTypes.map( (trip_type,key) => (
                         <option key={key} value={trip_type.id}>{trip_type.name}</option>
                     ))}
                 </Select>
-                {tripTypes.find(t => t.id === tripFormData.delegation_trip_type_id)?.requires_description ? (
+                {delegationOptions.tripTypes.find(t => t.id === tripFormData.delegation_trip_type_id)?.requires_description ? (
                     <Input
                         label="Tranport opis:"   
                         type ="text"
@@ -183,7 +183,7 @@ export default function Form({ tripFormData,setTripFormData,formError}:FormProps
                     ></Input>
                 ) :(<></>)
                 }
-                {tripTypes.find(t => t.id === tripFormData.delegation_trip_type_id)?.requires_car ? (
+                {delegationOptions.tripTypes.find(t => t.id === tripFormData.delegation_trip_type_id)?.requires_car ? (
                     <>
                 <CarSelect
                     className='col-span-4 xl:col-span-2'

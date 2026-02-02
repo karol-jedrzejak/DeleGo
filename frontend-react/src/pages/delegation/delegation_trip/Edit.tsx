@@ -18,7 +18,7 @@ type FormProps = {
 
 export default function Edit({id,setPopUp}:FormProps) {
 
-    const { formData, setFormData,tripTypes } = useDelegationForm();
+    const { formData, setFormData,delegationOptions } = useDelegationForm();
     // -------------------------------------------------------------------------- //
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
@@ -31,6 +31,7 @@ export default function Edit({id,setPopUp}:FormProps) {
     // -------------------------------------------------------------------------- //
 
     const handleSubmit = async () => {
+        let tripTypes = delegationOptions.tripTypes;
         if(validate({formData,tripFormData,setFormErrors,tripTypes,id}))
         {
             // Update trip
@@ -43,9 +44,6 @@ export default function Edit({id,setPopUp}:FormProps) {
                 delegation_trips: trips,
                 };
             });
-
-            console.log(tripFormData);
-
             
             // Close pop-up
             setPopUp(undefined);

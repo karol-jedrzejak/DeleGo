@@ -48,7 +48,7 @@ type FormProps = {
 
 export default function Form({ billFormData,setBillFormData,formError}:FormProps) {
 
-    const { billTypes, currencyTypes } = useDelegationForm();
+    const { delegationOptions, currencyTypes } = useDelegationForm();
 
     // -------------------------------------------------------------------------- //
     // Handlery zmian
@@ -88,7 +88,7 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
                 defaultValue={billFormData.delegation_bill_type_id}
                 onChange={(e) => handleBillTypeChange(e.target.value)}
                 >
-                    {billTypes.map( (bill_type,key) => (
+                    {delegationOptions.billTypes.map( (bill_type,key) => (
                         <option key={key} value={bill_type.id}>{bill_type.name}</option>
                     ))}
                 </Select>

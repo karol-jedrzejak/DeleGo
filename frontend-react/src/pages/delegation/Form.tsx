@@ -17,26 +17,23 @@ import EditBill from '@/pages/delegation/delegation_bill/Edit.tsx';
 
 // Model //
 
-import type { ItemFullType,FormDataType } from '@/models/Delegation';
-
-import type { ItemBasicType as DelegationBillBasicType } from '@/models/DelegationBillType';
-import type { ItemBasicType as DelegationTripBasicType } from '@/models/DelegationTripType';
+import type { ItemFullType,FormDataType,DelegationOptions } from '@/models/Delegation';
 import type { ItemFullType as CurrencyType } from '@/models/Currency';
 
 
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { delegationService } from '@/api/services/backend/user/delegation.service.ts';
-import { currencyService } from '@/api/services/backend/misc/currency.service.ts';
+import { currencyService } from '@/api/services/backend/dictionaries/currency.service';
 
 // -------------------------------------------------------------------------- //
 // Formatter kwot walutowych
 // -------------------------------------------------------------------------- //
 
-const formatter = new Intl.NumberFormat("pl-PL", {
+/* const formatter = new Intl.NumberFormat("pl-PL", {
     style: 'currency', // Określenie stylu jako waluta
     currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
 });
-
+ */
 
 // -------------------------------------------------------------------------- //
 // Contekst formularza delegacji
@@ -46,8 +43,7 @@ type DelegationFormContextType = {
     itemData: ItemFullType | null;
     formData: FormDataType;
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
-    billTypes: DelegationBillBasicType[];
-    tripTypes: DelegationTripBasicType[];
+    delegationOptions: DelegationOptions;
     currencyTypes: CurrencyType[];
 };
 
@@ -84,30 +80,22 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const [createDelegationBillPopUp, setCreateDelegationBillPopUp] = useState<boolean>(false);
     const [editDelegationBillPopUp, setEditDelegationBillPopUp] = useState<number | undefined>(undefined);
 
-    const [tripOptions, setTripOptions] = useState<DelegationTripBasicType[]>([]);
-    const [billOptions, setBillOptions] = useState<DelegationBillBasicType[]>([]);
+    const [delegationOptions, setDelegationOptions] = useState<DelegationOptions>({
+        billTypes: [],
+        tripTypes: [],
+    });
     const [currencyOptions, setCurrencyOptions] = useState<CurrencyType[]>([]);
 
     // -------------------------------------------------------------------------- //
     // Get options
     // -------------------------------------------------------------------------- //
 
-    const { loading:loadingTripGet, error:errorTripGet, mutate:mutateTripGet } = useBackend<DelegationTripBasicType[]>("get", delegationService.paths.getTripOptions,{ initialLoading: true });
+    const { loading:loadingOptionsGet, error:errorOptionsGet, mutate:mutateOptionsGet } = useBackend<DelegationOptions>("get", delegationService.paths.getOptions,{ initialLoading: true });
 
     useEffect(() => {
-        mutateTripGet()
+        mutateOptionsGet()
         .then((res) => {
-            setTripOptions(res.data);
-        })
-        .catch(() => {});
-    }, []);
-
-    const { loading:loadingBillGet, error:errorBillGet, mutate:mutateBillGet } = useBackend<DelegationBillBasicType[]>("get", delegationService.paths.getBillOptions,{ initialLoading: true });
-
-    useEffect(() => {
-        mutateBillGet()
-        .then((res) => {
-            setBillOptions(res.data);
+            setDelegationOptions(res.data);
         })
         .catch(() => {});
     }, []);
@@ -166,11 +154,11 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     }));
     };
 
-    if(loadingBillGet || loadingTripGet || loadingCurrencyGet){
+    if(loadingOptionsGet || loadingCurrencyGet){
         return <Spinner/>;
     }
 
-    if(errorBillGet || errorTripGet || errorCurrencyGet){
+    if(errorOptionsGet || errorCurrencyGet){
         return <ErrorComponent><ErrorComponent.Text type={"standard"}>Błąd serwera</ErrorComponent.Text></ErrorComponent>;
     }
 
@@ -180,7 +168,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
 
     return (
         <>
-        <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, billTypes: billOptions, tripTypes: tripOptions, currencyTypes: currencyOptions}}>
+        <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, delegationOptions: delegationOptions, currencyTypes: currencyOptions}}>
             {createDelegationTripPopUp &&(
                 <PopUp>
                     <Card>
@@ -393,7 +381,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         )
                         .map((bill, index) => (
                             <tr key={index} className="custom-table-row">
-                            <td className="p-2">{billOptions.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
+                            <td className="p-2">{delegationOptions.billTypes.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
                             <td className="p-2">{bill.description}</td>
                             <td className="p-2 text-right tabular-nums font-sans">{bill.amount} {currencyOptions.find((item) => item.code === bill.currency_code)?.symbol}</td>
                             <td className="p-2 flex flex-row justify-center gap-1">
@@ -434,6 +422,14 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                     type="button"
                     color="red"
                     onClick={() => console.log(formData)}
+                >
+                TEST
+            </Button>
+            <Button
+                    className='flex items-center'
+                    type="button"
+                    color="red"
+                    onClick={() => console.log(delegationOptions)}
                 >
                 TEST
             </Button>

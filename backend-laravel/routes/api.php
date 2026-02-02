@@ -10,7 +10,7 @@ use App\Http\Controllers\API\Company\CompanyController;
 use App\Http\Controllers\API\Company\EmployeeController;
 use App\Http\Controllers\API\User\CarController;
 use App\Http\Controllers\API\Delegation\DelegationController;
-use App\Http\Controllers\API\Misc\CurrencyController;
+use App\Http\Controllers\API\Dictionaries\CurrencyController;
 
 // Authentication
 Route::prefix('v1')->group(function () {
@@ -25,7 +25,7 @@ Route::prefix('v1')->group(function () {
         Route::get('user', [AuthenticationController::class, 'current_user_info']);
 
         // Currency
-        Route::get('currency_options', [CurrencyController::class, 'options']);
+        Route::get('dictionaries/currencies', [CurrencyController::class, 'options']);
 
         // Car  
         Route::get('car/options', [CarController::class, 'options'])->middleware('permission:misc,cars,1');
@@ -34,9 +34,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('car/{id}/destroy', [CarController::class, 'forceDelete'])->middleware('permission:admin,admin,1');
 
         // Delegations
-        Route::get('delegation/trip_options', [DelegationController::class, 'trip_options'])->middleware('permission:misc,delegations,1');
-        Route::get('delegation/bill_options', [DelegationController::class, 'bill_options'])->middleware('permission:misc,delegations,1');
-
+        Route::get('delegation/options', [DelegationController::class, 'options'])->middleware('permission:misc,delegations,1');
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
         Route::get('delegation/{id}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
         

@@ -7,8 +7,18 @@ import type { ItemBasicType as DelegationTripType } from '@/models/DelegationTri
 import type { FormDataType as FormDelegationBillType } from '@/models/DelegationBill';
 import type { FormDataType as FormDelegationTripType } from '@/models/DelegationTrip';
 
+
+import type { ItemBasicType as DelegationBillBasicType } from '@/models/DelegationBillType';
+import type { ItemBasicType as DelegationTripBasicType } from '@/models/DelegationTripType';
+
 import { apiToForm as apiToFormDelegationBill } from '@/models/DelegationBill';
 import { apiToForm as apiToFormDelegationTrip } from '@/models/DelegationTrip';
+
+export type DelegationOptions = {
+    billTypes: DelegationBillBasicType[];
+    tripTypes: DelegationTripBasicType[];
+};
+
 
 // -------------------------------------------------------------------------- //
 // Subtypy danych

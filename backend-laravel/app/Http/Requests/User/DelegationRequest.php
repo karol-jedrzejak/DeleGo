@@ -47,6 +47,7 @@ class DelegationRequest extends FormRequest
 
             // === BILLS ===
             'delegation_bills' => ['required', 'array'],
+            'delegation_bills.*.currency_code' => ['required'],
             'delegation_bills.*.delegation_bill_type_id' => ['required', 'exists:delegation_bill_types,id'],
             'delegation_bills.*.description' => ['required', 'string'],
             'delegation_bills.*.amount' => ['required', 'numeric', 'min:0'],
