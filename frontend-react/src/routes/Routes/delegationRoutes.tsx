@@ -2,6 +2,7 @@
 import DelegationIndex from "@/pages/delegation/Index";
 import DelegationShow from "@/pages/delegation/Show";
 import DelegationCreate from "@/pages/delegation/Create";
+import DelegationEdit from "@/pages/delegation/Edit";
 
 export const DELEGATION = {
     INDEX: {
@@ -31,7 +32,7 @@ export const DELEGATION = {
     EDIT: {
         PATH:  '/delegation/:id/edit',
         LINK:  (id: number) => `/delegation/${id}/edit`,
-        COMPONENT: DelegationIndex,
+        COMPONENT: DelegationEdit,
         PERMISSIONS: {misc:{delegations: 1}}
     },
 } as const;

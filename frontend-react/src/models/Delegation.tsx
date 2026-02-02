@@ -75,8 +75,8 @@ export function apiToForm(
     description: api.description,
     user_id: api.user?.id ?? null,
     company_id: api.company?.id ?? null,
-    delegation_bills: api.delegation_bills.map(apiToFormDelegationBill),
-    delegation_trips: api.delegation_trips.map(apiToFormDelegationTrip),
+    delegation_bills: (api.delegation_bills ?? []).map(apiToFormDelegationBill),
+    delegation_trips: (api.delegation_trips ?? []).map(apiToFormDelegationTrip),
   };
 }
 

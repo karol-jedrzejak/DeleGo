@@ -73,7 +73,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     // -------------------------------------------------------------------------- //
 
     const authData = useContext(AuthContext);
-    const [isCompany, setIsCompany] = useState<boolean>(true);
+    const [isCompany, setIsCompany] = useState<boolean>(itemData?.company ? true : false);
     const [createDelegationTripPopUp, setCreateDelegationTripPopUp] = useState<boolean>(false);
     const [editDelegationTripPopUp, setEditDelegationTripPopUp] = useState<number | undefined>(undefined);
     
@@ -171,7 +171,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         <DelegationFormContext.Provider value={{ itemData: itemData ?? null, formData, setFormData, delegationOptions: delegationOptions, currencyTypes: currencyOptions}}>
             {createDelegationTripPopUp &&(
                 <PopUp>
-                    <Card>
+                    <Card className="max-h-[95vh] overflow-y-auto">
                         <Card.Header>
                             <span>Dodanie przejazdu do delegacji</span>
                         </Card.Header>
@@ -223,22 +223,36 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             <Line text="Dane Delegacji"/>
             <div className='w-full'>
             {authData.hasPermission('admin','admin') && (
-                <UserSelect onSelect={handleUserChange} initialValue={itemData ? itemData.user?.names.name + " " + itemData.user?.names.surname : ""} />
+                <UserSelect
+                    onSelect={handleUserChange}
+                    initialValue={itemData ? itemData?.user?.names.name + " " + itemData?.user?.names.surname : ""}
+                    errors={formError?.user_id ?? null}
+                />
             )}
             </div>
             <div className='w-full xl:flex xl:flex-row xl:items-end'>
-                <label className="inline-flex items-center cursor-pointer p-4">
-                    <span className="select-none text-sm font-medium text-heading">Firma</span>
-                    <input type="checkbox" value="" className="sr-only peer" onChange={() => {setIsCompany(!isCompany)}}/>
-                    <div className="relative mx-3 w-9 h-5 bg-neutral-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
-                    <span className="select-none text-sm font-medium text-heading">Address</span>
-                </label>
+                <div>
+                    <label className="inline-flex items-center cursor-pointer p-4">
+                        <span className="select-none text-sm font-medium text-heading">Firma</span>
+                        <input
+                            type="checkbox"
+                            value=""
+                            className="sr-only peer"
+                            onChange={() => {setIsCompany(!isCompany)}}
+                            checked={!isCompany} 
+                        />
+                        <div className="relative mx-3 w-9 h-5 bg-neutral-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
+                        <span className="select-none text-sm font-medium text-heading">Address</span>
+                    </label>
+                    {formError?.company_id || formError?.custom_address ? <div className='text-red-600 my-2 text-center text-sm hidden xl:block'>&nbsp;</div> : ""}
+                </div>
                 {isCompany ? (
                     <CompanySelect
                         className='flex-1'
                         onSelect={handleCompanyChange}
-                        initialValue={itemData?.company?.names.name_short ?? ""}
+                        initialValue={itemData ? itemData?.company?.names.name_short : ""}
                         disabled={formData.custom_address ? true : false}
+                        errors={formError?.company_id ?? null}
                 />):(
                     <Input
                         label="Address:"   
@@ -341,6 +355,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             </td>
                             </tr>
                         ))}
+                        {formData.delegation_trips.length<1 ? <tr className="custom-table-row"><td className="p-2 text-center" colSpan={8}>Brak</td></tr> : ""}
                     </tbody>
                 </table>
             </div>
@@ -404,6 +419,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             </td>
                             </tr>
                         ))}
+                        {formData.delegation_bills.length<1 ? <tr className="custom-table-row"><td className="p-2 text-center" colSpan={4}>Brak</td></tr> : ""}
                     </tbody>
                 </table>
             </div>
@@ -415,25 +431,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 ))}
             </div>
             )}
-
-            
-            <Button
-                    className='flex items-center'
-                    type="button"
-                    color="red"
-                    onClick={() => console.log(formData)}
-                >
-                TEST
-            </Button>
-            <Button
-                    className='flex items-center'
-                    type="button"
-                    color="red"
-                    onClick={() => console.log(delegationOptions)}
-                >
-                TEST
-            </Button>
-
         </DelegationFormContext.Provider>
         </>
     );

@@ -109,7 +109,7 @@ export default function CarSelect({
                 errors={mapErrorToInputErrors(errorGetSearch)}
                 onChange={handleChange}
             ></Input>
-            {loadingGetSearch && <div className="absolute z-10 bottom-0 right-0 p-3"><Spinner/></div>}
+            {loadingGetSearch && <div className="absolute z-10 top-10 right-0 p-3"><Spinner/></div>}
             {showDropdown && results.length > 0 && (
                 <ul className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1 left-0 text-black">
                 {results.map((item) => (

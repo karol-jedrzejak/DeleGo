@@ -56,7 +56,10 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         <>
             <div className='w-full'>
             {authData.hasPermission('admin','admin') && (
-                <UserSelect onSelect={handleUserChange} initialValue={itemData?.user?.names.name+" "+itemData?.user?.names.surname} />
+                <UserSelect
+                    onSelect={handleUserChange}
+                    initialValue={itemData ? itemData?.user?.names.name+" "+itemData?.user?.names.surname : ""}
+                />
             )}
             </div>
             <div className='w-full flex-wrap grid grid-cols-2 xl:gap-x-4'>

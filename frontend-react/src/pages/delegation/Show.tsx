@@ -164,6 +164,7 @@ const Show = () => {
                                             <td className="p-2">{trip.description}</td>   
                                         </tr>
                                     ))}
+                                    {item.delegation_trips.length<1 ? <tr className="custom-table-row"><td className="p-2 text-center" colSpan={7}>Brak</td></tr> : ""}
                                 </tbody>
                             </table>
                         </Card.Body>
@@ -193,10 +194,14 @@ const Show = () => {
                                             </td>          
                                         </tr>
                                     ))}
-                                    <tr className="custom-table-sum">
-                                        <td colSpan={2} className="p-2 font-normal text-right"><b>SUMA</b></td>
-                                        <td className="p-2 text-right tabular-nums font-sans">{/* {formatter.format(item.delegation_bills.reduce((sum, bill) => sum + bill.amount, 0))} */}</td>       
-                                    </tr>
+                                    {item.delegation_trips.length<1 ?
+                                        <tr className="custom-table-row"><td className="p-2 text-center" colSpan={3}>Brak</td></tr>
+                                        :
+                                        <tr className="custom-table-sum">
+                                            <td colSpan={2} className="p-2 font-normal text-right"><b>SUMA</b></td>
+                                            <td className="p-2 text-right tabular-nums font-sans">{/* {formatter.format(item.delegation_bills.reduce((sum, bill) => sum + bill.amount, 0))} */}</td>       
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </Card.Body>

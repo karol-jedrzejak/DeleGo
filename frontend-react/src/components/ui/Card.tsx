@@ -12,12 +12,12 @@ const Card = ({ children,className="" }: Props) => {
     );
 };
 
-Card.Header = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-slate-300 dark:bg-sky-950 text-black dark:text-white py-2 px-4">{children}</div>
+Card.Header = ({ children,className }: { children: React.ReactNode,className?: string }) => (
+  <div className={className+` bg-slate-300 dark:bg-sky-950 text-black dark:text-white py-2 px-4`}>{children}</div>
 )
 
-Card.Body = ({ children }: { children: React.ReactNode }) => (
-  <div  className="py-4 px-4">{children}</div>
+Card.Body = ({ children,className }: { children: React.ReactNode,className?: string }) => (
+  <div  className={className+` py-4 px-4`}>{children}</div>
 )
 
 export default Card;

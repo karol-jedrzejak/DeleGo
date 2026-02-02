@@ -5,7 +5,7 @@ namespace App\Http\Resources\Delegation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\Misc\CurrencyShowResource;
+use App\Http\Resources\Dictionaries\CurrencyShowResource;
 use App\Http\Resources\Delegation\DelegationBillTypeShowResource;
 
 
