@@ -8,11 +8,11 @@ A web application designed to simplify and automate the calculation of business 
 
 ## Architecture
 Backend (API):
-Laravel 12 – RESTful API for business logic
-MySQL – Relational database for storing users, trips, and expense data
-Docker – Containerized environment for easy deployment and development
+- Laravel 12 – RESTful API for business logic
+- MySQL – Relational database for storing users, trips, and expense data
+- Docker – Containerized environment for easy deployment and development
 
 Frontend (Client):
-React – Interactive, responsive user interface
-TypeScript – Type safety and maintainable code
-Tailwind CSS – Modern, customizable styling framework
+- React – Interactive, responsive user interface
+- TypeScript – Type safety and maintainable code
+- Tailwind CSS – Modern, customizable styling framework
