@@ -15,9 +15,17 @@ To be updated..
 To Setup backend:
 ```
 cd backend-laravel
-composer update
+cp .env.example .env
+php artisan key:generate
+composer install
 npm install
-docker compose up
+docker compose up -d --build  
+```
+To enter tinker and seed database:
+```
+docker exec -it laravel_app php artisan tinker
+php artisan migrate
+php artisan db:seed
 ```
 
 To start Server:

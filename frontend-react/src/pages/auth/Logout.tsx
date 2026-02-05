@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import { useContext } from "react";
-
 import { AuthContext } from "@/providers/AuthProvider.js";
-
 import { Loading } from '@/components';
+
+
+// -------------------------------------------------------------------------- //
+// Logika
+// -------------------------------------------------------------------------- //
+
 
 export default function Logout() {
     const authData = useContext(AuthContext);

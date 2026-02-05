@@ -1,10 +1,12 @@
 import { useState,useEffect,useContext } from "react";
 import { Link,useParams } from "react-router-dom"
-import { MessageContext } from "@/providers/MessageProvider.js";
 
+// Różne //
+
+import { MessageContext } from "@/providers/MessageProvider.js";
 import { ROUTES } from "@/routes/Routes.tsx";
 
-// Komponenty UI / Pages //
+// Komponenty UI //
 
 import { SquarePen,Map,Copy,Users } from "lucide-react";
 import { Card, Loading, Button , Error } from '@/components';
@@ -27,7 +29,7 @@ import { formatAddress } from "@/features/company/utilities/formatAddress";
 const Show = () => {
 
     // -------------------------------------------------------------------------- //
-    // Deklaracja stanów
+    // Zmienne
     // -------------------------------------------------------------------------- //
 
     const { setMessage } = useContext(MessageContext);
@@ -63,14 +65,14 @@ const Show = () => {
     }
 
     // -------------------------------------------------------------------------- //
-    // Wyświetlanie błędu i Loading
+    // Błędy / ładowanie
     // -------------------------------------------------------------------------- //
 
     if(loading) { return <Loading/>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
-    // Renderowanie danych
+    // Renderowanie
     // -------------------------------------------------------------------------- //
 
     return (
