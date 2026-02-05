@@ -1,6 +1,9 @@
 import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom"
 
+
+import { formatCurrency } from "@/utils/formatters";
+
 // Komponenty UI //
 
 import { Card, Loading , Error } from '@/components';
@@ -18,16 +21,6 @@ import { useBackend } from "@/hooks/useLaravelBackend";
 
 const Show = () => {
 
-    // -------------------------------------------------------------------------- //
-    // Formatter kwot walutowych
-    // -------------------------------------------------------------------------- //
-
-    // uzyc ?
-    
-/*     const formatter = new Intl.NumberFormat("pl-PL", {
-        style: 'currency', // Określenie stylu jako waluta
-        currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
-    }); */
 
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
@@ -86,12 +79,13 @@ const Show = () => {
                                             {item.number.year}/{item.number.number}
                                         </td>
                                     </tr>
+                                    {item.user ?
                                     <tr className="custom-table-row">
                                         <td className="p-2">Osoba:</td>
                                         <td className="p-2 flex items-center">
                                             {item.user?.names.name} {item.user?.names.surname}
                                         </td>
-                                    </tr>
+                                    </tr> : <></>}
                                     <tr className="custom-table-row">
                                         <td className="p-2">Opis:</td>
                                         <td className="p-2 flex items-center">
@@ -189,8 +183,7 @@ const Show = () => {
                                             <td className="p-2">{bill.delegation_bill_type.name}</td>
                                             <td className="p-2">{bill.description}</td>
                                             <td className="p-2 text-right tabular-nums font-sans">
-                                                {bill.amount} {bill.currency.symbol}
-                                                {/* {formatter.format(bill.amount)} */}
+                                                {formatCurrency(bill.amount, bill.currency.code)}
                                             </td>          
                                         </tr>
                                     ))}

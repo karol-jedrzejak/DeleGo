@@ -5,6 +5,7 @@ import { Input,Select,Line,Button,PopUp, Card, Spinner } from '@/components';
 import { Error as ErrorComponent } from '@/components';
 import { SquarePlus,SquarePen,Trash2 } from "lucide-react";
 
+import { formatCurrency } from "@/utils/formatters";
 
 import UserSelect from '@/features/user/components/UserSelect.tsx';
 import CompanySelect from '@/features/company/components/CompanySelect.tsx';
@@ -24,16 +25,6 @@ import type { ItemFullType as CurrencyType } from '@/models/Currency';
 import { useBackend } from '@/hooks/useLaravelBackend.ts';
 import { delegationService } from '@/api/services/backend/user/delegation.service.ts';
 import { currencyService } from '@/api/services/backend/dictionaries/currency.service';
-
-// -------------------------------------------------------------------------- //
-// Formatter kwot walutowych
-// -------------------------------------------------------------------------- //
-
-/* const formatter = new Intl.NumberFormat("pl-PL", {
-    style: 'currency', // Określenie stylu jako waluta
-    currency: "PLN", // Określenie kodu waluty (np. 'PLN', 'USD', 'EUR')
-});
- */
 
 // -------------------------------------------------------------------------- //
 // Contekst formularza delegacji
@@ -302,7 +293,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         type="button"
                         color="green"
                         onClick={() => {setCreateDelegationTripPopUp(true)}}
-                        disabled={!formData.user_id}
+                        disabled={authData.hasPermission('admin','admin') && !formData.user_id}
                     >
                     <SquarePlus size={22} className="pe-1"/><span>Dodaj Przejazd</span>
                 </Button>
@@ -398,7 +389,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <tr key={index} className="custom-table-row">
                             <td className="p-2">{delegationOptions.billTypes.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
                             <td className="p-2">{bill.description}</td>
-                            <td className="p-2 text-right tabular-nums font-sans">{bill.amount} {currencyOptions.find((item) => item.code === bill.currency_code)?.symbol}</td>
+                            <td className="p-2 text-right tabular-nums font-sans">{formatCurrency(bill.amount, bill.currency_code)}</td>
                             <td className="p-2 flex flex-row justify-center gap-1">
                                 <Button
                                         className='flex items-center'
