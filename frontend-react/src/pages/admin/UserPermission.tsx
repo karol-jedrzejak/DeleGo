@@ -3,12 +3,15 @@ import { MessageContext } from "@/providers/MessageProvider.js";
 
 // Komponenty UI //
 
-import { Copy,Phone,Mail ,SquarePen} from "lucide-react";
-import { Card, Button , Input, Error, Spinner} from '@/components';
+import { Copy,Phone,Mail ,SquarePen } from "lucide-react";
+import { Card, Button , Input, Error, Spinner } from '@/components';
+
+// Komponenty Funkcjonalne //
+
+import UserSelect from "@/features/user/components/UserSelect";
 
 // Model //
 
-import UserSelect from "@/features/user/components/UserSelect";
 import type { ItemFullType  } from "@/models/User";
 
 // API //
@@ -19,7 +22,7 @@ import { userService } from "@/api/services/backend/user/user.service";
 const UserPermission = () => {
 
   // -------------------------------------------------------------------------- //
-  // Inicjalizacja zmiennych
+  // Zmienne
   // -------------------------------------------------------------------------- //
   
   const { setMessage } = useContext(MessageContext);
@@ -44,7 +47,7 @@ const UserPermission = () => {
   };
 
   // -------------------------------------------------------------------------- //
-  // Handle Change
+  // Handlery
   // -------------------------------------------------------------------------- //
 
   const handleChange = (
@@ -108,13 +111,13 @@ const UserPermission = () => {
     }
 
   // -------------------------------------------------------------------------- //
-  // Wyświetlanie błędu i Loading
+  // Błędy
   // -------------------------------------------------------------------------- //
 
   if(errorGet || errorPut) { return <Error><Error.Text>Błąd</Error.Text></Error> }
 
   // -------------------------------------------------------------------------- //
-  // Renderowanie danych
+  // Renderowanie
   // -------------------------------------------------------------------------- //
 
   return (

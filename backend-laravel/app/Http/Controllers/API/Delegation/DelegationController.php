@@ -22,6 +22,8 @@ use App\Http\Resources\Delegation\DelegationTripTypeShowResource;
 
 use App\Http\Requests\User\DelegationRequest;
 
+use App\Services\Delegation\DelegationCostCalculator;
+
 
 class DelegationController extends Controller
 {
@@ -151,6 +153,15 @@ class DelegationController extends Controller
     public function pdf(Delegation $delegation)
     {
         //
+/* 
+        $currencyCode = $request->get('currency', 'PLN');
+
+        $calculator = app(DelegationCostCalculator::class);
+
+        $summary = $calculator->calculate($delegation, $currencyCode);
+
+        return new DelegationResource($delegation, $summary); */
+
     }
 
     /**

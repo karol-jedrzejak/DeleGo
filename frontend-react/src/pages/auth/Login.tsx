@@ -8,6 +8,10 @@ import { Input, Button ,Spinner } from '@/components';
 
 import { AuthContext } from "@/providers/AuthProvider.js";
 
+// -------------------------------------------------------------------------- //
+// Typy Danych
+// -------------------------------------------------------------------------- //
+
 interface LoginFormData {
     email: string;
     password: string;
@@ -18,6 +22,11 @@ type FormErrors = {
 };
 
 export default function Login() {
+
+    // -------------------------------------------------------------------------- //
+    // Zmienne
+    // -------------------------------------------------------------------------- //
+
     const authData = useContext(AuthContext);
 
     const [formData, setFormData] = useState<LoginFormData>({
@@ -26,6 +35,11 @@ export default function Login() {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<FormErrors>({login: null });
+
+    // -------------------------------------------------------------------------- //
+    // Handlery
+    // -------------------------------------------------------------------------- //
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -52,6 +66,10 @@ export default function Login() {
             }
         }
     };
+
+    // -------------------------------------------------------------------------- //
+    // Renderowanie
+    // -------------------------------------------------------------------------- //
 
     return (
         <div className="text-black dark:text-white flex justify-center flex-col items-center">
