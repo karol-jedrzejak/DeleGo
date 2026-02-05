@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Services\NbpCurrencyApi;
+use App\Services\Currency\NbpCurrencyApi;
 use App\Models\Currency;
 use App\Models\CurrencyExchangeRate;
 
