@@ -2,7 +2,7 @@ import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom"
 
 
-import { formatCurrency } from "@/utils/formatters";
+import { formatCurrency, formatDateTime } from "@/utils/formatters";
 
 // Komponenty UI //
 
@@ -121,6 +121,35 @@ const Show = () => {
                                             {!item.company?.id ? item.custom_address : ""}
                                         </td>
                                     </tr>
+                                </tbody> 
+                            </table>
+                        </Card.Body>
+                    </Card>
+                    <Card>
+                        <Card.Header>
+                            <div>Statusy</div>
+                        </Card.Header>
+                        <Card.Body>
+                            <table className="table-auto w-full">
+                                <thead>
+                                    <tr className="font-normal">
+                                        <th className="p-2">Data</th>
+                                        <th className="p-2">Status</th>
+                                        {/* <th className="p-2">Poprzedni</th> */}
+                                        <th className="p-2">Komentarz</th>
+                                        <th className="p-2">Użytkownik</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {item.delegation_status_histories.map((status_history,key) => (
+                                        <tr className="custom-table-row" key={key}>
+                                            <td className="p-2">{formatDateTime(status_history.created_at)}</td>
+                                            <td className="p-2">{status_history.to_status_label}</td>
+                                            {/* <td className="p-2">{status_history.from_status_label ? status_history.from_status_label : "-"}</td> */}
+                                            <td className="p-2">{status_history.comment ? status_history.comment : "-"}</td>
+                                            <td className="p-2">{status_history.user.names.name} {status_history.user.names.surname}</td>
+                                        </tr>
+                                    ))}
                                 </tbody> 
                             </table>
                         </Card.Body>

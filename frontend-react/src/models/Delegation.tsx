@@ -7,9 +7,9 @@ import type { ItemBasicType as DelegationTripType } from '@/models/DelegationTri
 import type { FormDataType as FormDelegationBillType } from '@/models/DelegationBill';
 import type { FormDataType as FormDelegationTripType } from '@/models/DelegationTrip';
 
-
 import type { ItemBasicType as DelegationBillBasicType } from '@/models/DelegationBillType';
 import type { ItemBasicType as DelegationTripBasicType } from '@/models/DelegationTripType';
+import type { ItemFullType as DelegationStatusHistoriesFullType } from '@/models/DelegationStatusHistories';
 
 import { apiToForm as apiToFormDelegationBill } from '@/models/DelegationBill';
 import { apiToForm as apiToFormDelegationTrip } from '@/models/DelegationTrip';
@@ -49,12 +49,14 @@ export type ItemFullType = {
   company: CompanyType | null;
   delegation_bills: DelegationBillType[];
   delegation_trips: DelegationTripType[];
+  delegation_status_histories: DelegationStatusHistoriesFullType[];
 };
 
 export type ItemBasicType = {
   id: number;
   number: NumberWithYear;
   settled: boolean;
+  user_can_edit: boolean;
   dates: Dates;
   custom_address: string | null;
   description: string;

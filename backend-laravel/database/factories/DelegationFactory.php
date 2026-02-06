@@ -32,6 +32,18 @@ class DelegationFactory extends Factory
             'rejected',
             /* 'pdf_ready' */
             ];
+        $status = fake()->randomElement($status_types);
+
+        $status_types_settled_enable = [
+            'approved',
+            'pdf_ready'
+        ];
+
+        $settled = false;
+        if(in_array($status,$status_types_settled_enable))
+        {
+            fake()->boolean(20);
+        }
 
         // Losowy company_id lub null
         $company = Company::inRandomOrder()->first();
@@ -56,8 +68,8 @@ class DelegationFactory extends Factory
             'company_id' => $company_id,
             'custom_address' => $custom_address,
             'description' => fake()->sentence(),
-            'status' => fake()->randomElement($status_types),
-            'settled' => fake()->boolean(20), // 20% szans, że settled
+            'status' => $status,
+            'settled' => $settled, // 20% szans, że settled
             'created_at' => now(),
             'updated_at' => now(),
         ];

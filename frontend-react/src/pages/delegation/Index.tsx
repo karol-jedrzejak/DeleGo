@@ -207,11 +207,16 @@ const Index = () => {
                                                     <Search size={20}/>
                                                 </Button>
                                             </Link>
+                                            {item.user_can_edit ? 
                                             <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)}>
                                                 <Button color="yellow">
                                                     <SquarePen size={20}/>
                                                 </Button>
-                                            </Link>
+                                            </Link> : 
+                                                <Button color="yellow" disabled>
+                                                    <SquarePen size={20}/>
+                                                </Button>
+                                            }
                                         </div>
                                     </td>
                                 </tr>

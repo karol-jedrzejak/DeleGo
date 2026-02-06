@@ -33,6 +33,7 @@ class DelegationIndexResource extends JsonResource
                 'return' => $this->return,
             ],
             'status' => $this->status,
+            'user_can_edit' => in_array($this->status, ['draft', 'rejected']),           
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,

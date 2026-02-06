@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Http\Resources\User\UserBasicResource;
 
+use App\Enums\DelegationStatus;
+
 class DelegationStatusHistoryShowResource extends JsonResource
 {
     /**
@@ -19,8 +21,11 @@ class DelegationStatusHistoryShowResource extends JsonResource
         return [
             'id' => $this->id,
             'from_status' => $this->from_status,
+            'from_status_label' => $this->from_status ? DelegationStatus::from($this->from_status)->label() : "-",
             'to_status' => $this->to_status,
+            'to_status_label' => DelegationStatus::from($this->to_status)->label(),
             'comment' => $this->comment,
+            'created_at' => $this->created_at,
 
             // belongsTo
             'user' => $this->whenLoaded('changer', function () {

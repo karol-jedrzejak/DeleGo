@@ -154,7 +154,8 @@ class DelegationController extends Controller
                     'from_status',
                     'to_status',
                     'comment',
-                ]);
+                    'created_at'
+                ])->orderBy('id','desc');
             },
             'delegationStatusHistories.changer' => function ($q) {
                 $q->select([

@@ -70,7 +70,7 @@ class DelegationShowResource extends JsonResource
                 : null;
             }),
 
-            'delegation_status_history' => $this->whenLoaded('delegationStatusHistories', function () {
+            'delegation_status_histories' => $this->whenLoaded('delegationStatusHistories', function () {
                 return DelegationStatusHistoryShowResource::collection($this->delegationStatusHistories);
             }),
         ];
