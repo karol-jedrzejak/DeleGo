@@ -10,6 +10,7 @@ use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\Delegation\DelegationBillShowResource;
 use App\Http\Resources\Delegation\DelegationTripShowResource;
+use App\Http\Resources\Delegation\DelegationStatusHistoryShowResource;
 
 class DelegationShowResource extends JsonResource
 {

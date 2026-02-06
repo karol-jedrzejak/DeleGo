@@ -23,8 +23,8 @@ class DelegationStatusHistoryShowResource extends JsonResource
             'comment' => $this->comment,
 
             // belongsTo
-            'user' => $this->whenLoaded('user', function () {
-                return new UserBasicResource($this->user);
+            'user' => $this->whenLoaded('changer', function () {
+                return new UserBasicResource($this->changer);
             }),
         ];
     }

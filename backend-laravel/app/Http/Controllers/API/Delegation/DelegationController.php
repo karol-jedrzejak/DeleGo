@@ -161,7 +161,6 @@ class DelegationController extends Controller
                     'id',
                     'name',
                     'surname',
-                    'deleted_at',
                 ]);
             },
         ]);
