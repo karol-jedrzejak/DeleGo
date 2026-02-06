@@ -123,6 +123,7 @@ class DelegationController extends Controller
                 $q->select([
                     'id',
                     'delegation_id',
+                    'date',
                     'amount',
                     'currency_code',
                     'description',
@@ -140,6 +141,27 @@ class DelegationController extends Controller
                     'code',
                     'name',
                     'symbol',
+                ]);
+            },
+        ]);
+
+        $delegation->loadMissing([
+            'delegationStatusHistories' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'changed_by',
+                    'from_status',
+                    'to_status',
+                    'comment',
+                ]);
+            },
+            'delegationStatusHistories.changer' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                    'surname',
+                    'deleted_at',
                 ]);
             },
         ]);

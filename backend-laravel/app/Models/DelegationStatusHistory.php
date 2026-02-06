@@ -23,9 +23,9 @@ class DelegationStatusHistory extends Model
     // Relacje
     // --------------------------------------------------------- //
 
-    public function user(): BelongsTo
+    public function changer(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'changed_by');
     }
 
     public function delegation(): BelongsTo
