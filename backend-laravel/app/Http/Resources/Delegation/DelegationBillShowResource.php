@@ -21,6 +21,7 @@ class DelegationBillShowResource extends JsonResource
         return [
             'id' => $this->id,
             'amount' => $this->amount,
+            'date' => $this->date,
             'description' => $this->description,
             'currency' => new CurrencyShowResource($this->whenLoaded('currency')),
             'delegation_bill_type' => new DelegationBillTypeShowResource($this->whenLoaded('delegationBillType')),

@@ -29,6 +29,7 @@ class DelegationShowResource extends JsonResource
                 'number' => $this->number,
                 'year' => $this->year,
             ],
+            'status' => $this->status,
             'settled' => $this->settled,
             'dates' => [
                 'departure' => $this->departure,
@@ -66,6 +67,10 @@ class DelegationShowResource extends JsonResource
                 return $this->delegationBills->isNotEmpty()
                 ? DelegationBillShowResource::collection($this->delegationBills)
                 : null;
+            }),
+
+            'delegation_status_history' => $this->whenLoaded('delegationStatusHistories', function () {
+                return DelegationStatusHistoryShowResource::collection($this->delegationStatusHistories);
             }),
         ];
     }

@@ -4,6 +4,9 @@ namespace App\Http\Requests\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+use App\Rules\BillsWithinTripsDates;
+
+
 class DelegationRequest extends FormRequest
 {
     /**
@@ -22,6 +25,8 @@ class DelegationRequest extends FormRequest
 
     protected function baseRules(): array
     {
+        $trips = $this->delegation_trips ?? [];
+        
         return [
             // === DELEGATION ===
             'settled' => ['required', 'boolean'],
@@ -57,6 +62,7 @@ class DelegationRequest extends FormRequest
             'delegation_bills.*.currency_code' => ['required'],
             'delegation_bills.*.delegation_bill_type_id' => ['required', 'exists:delegation_bill_types,id'],
             'delegation_bills.*.description' => ['required', 'string'],
+            'delegation_bills.*.date' => ['required', 'date', new BillsWithinTripsDates($trips)],
             'delegation_bills.*.amount' => ['required', 'numeric', 'min:0'],
         ];
     }

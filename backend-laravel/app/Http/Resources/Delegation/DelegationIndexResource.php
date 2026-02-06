@@ -32,6 +32,7 @@ class DelegationIndexResource extends JsonResource
                 'departure' => $this->departure,
                 'return' => $this->return,
             ],
+            'status' => $this->status,
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,
