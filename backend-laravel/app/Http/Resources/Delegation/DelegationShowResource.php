@@ -12,6 +12,8 @@ use App\Http\Resources\Delegation\DelegationBillShowResource;
 use App\Http\Resources\Delegation\DelegationTripShowResource;
 use App\Http\Resources\Delegation\DelegationStatusHistoryShowResource;
 
+use App\Enums\DelegationStatus;
+
 class DelegationShowResource extends JsonResource
 {
     /**
@@ -31,6 +33,7 @@ class DelegationShowResource extends JsonResource
                 'year' => $this->year,
             ],
             'status' => $this->status,
+            'status_label' => DelegationStatus::from($this->status)->label(),
             'settled' => $this->settled,
             'dates' => [
                 'departure' => $this->departure,

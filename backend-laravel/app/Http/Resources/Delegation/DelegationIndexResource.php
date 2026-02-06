@@ -10,6 +10,8 @@ use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\User\CarBasicResource;
 
+use App\Enums\DelegationStatus;
+
 class DelegationIndexResource extends JsonResource
 {
     /**
@@ -33,6 +35,7 @@ class DelegationIndexResource extends JsonResource
                 'return' => $this->return,
             ],
             'status' => $this->status,
+            'status_label' => DelegationStatus::from($this->status)->label(),
             'user_can_edit' => in_array($this->status, ['draft', 'rejected']),           
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,

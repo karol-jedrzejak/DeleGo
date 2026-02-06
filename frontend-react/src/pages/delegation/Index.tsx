@@ -113,6 +113,7 @@ const Index = () => {
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["company.name_short","custom_address"]} text="Firma / Adres" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["description"]} text="Opis" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["settled"]} text="Rozliczone" />
+                                <HeaderSorting sort={sort} setSort={setSort} variable_names={["status"]} text="Status" />
                                 {authData.hasPermission('admin','admin') && (
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
                                 )}
@@ -148,6 +149,7 @@ const Index = () => {
                                             },
                                         ]
                                     }/>
+                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["status"]}/>
                                 {authData.hasPermission('admin','admin') && (
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["user.name","user.surname"]}/>
                                 )}
@@ -192,6 +194,7 @@ const Index = () => {
                                         )}
                                         </div>
                                     </td>
+                                    <td className="p-2">{item.status_label}</td>
                                     {authData.hasPermission('admin','admin') && (
                                         <td className="p-2">{item.user?.names.name} {item.user?.names.surname}</td>
                                     )}

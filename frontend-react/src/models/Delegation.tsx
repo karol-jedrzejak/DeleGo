@@ -56,6 +56,8 @@ export type ItemBasicType = {
   id: number;
   number: NumberWithYear;
   settled: boolean;
+  status: string;
+  status_label: string;
   user_can_edit: boolean;
   dates: Dates;
   custom_address: string | null;

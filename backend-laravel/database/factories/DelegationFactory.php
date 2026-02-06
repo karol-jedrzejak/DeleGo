@@ -42,7 +42,7 @@ class DelegationFactory extends Factory
         $settled = false;
         if(in_array($status,$status_types_settled_enable))
         {
-            fake()->boolean(20);
+            $settled = fake()->boolean(50);
         }
 
         // Losowy company_id lub null
