@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('custom_address')->nullable();
 
             $table->text('description');
-
+            
+            $table->string('status')->default('draft');
             $table->boolean('settled');
 
             $table->timestamps();

@@ -11,6 +11,7 @@ use App\Models\DelegationBill;
 use App\Models\DelegationBillType;
 use App\Models\DelegationTrip;
 use App\Models\DelegationTripType;
+use App\Models\DelegationStatusHistory;
 
 class DelegationSeeder extends Seeder
 {
@@ -19,6 +20,13 @@ class DelegationSeeder extends Seeder
      */
     public function run(): void
     {
+        $status_types = [
+            'draft',
+            'submitted',
+            'approved',
+            'rejected',
+            'pdf_ready'
+            ];
 
         Delegation::factory()
             ->count(100)
@@ -27,22 +35,12 @@ class DelegationSeeder extends Seeder
 
                 $currency = fake()->boolean(80) ? "PLN" : Currency::inRandomOrder()->first()->code;
 
-                // Liczba rachunków 0-4
-                $billsCount = rand(0,4);
-                for ($i=0; $i<$billsCount; $i++) {
-                    DelegationBill::factory()->create([
-                        'currency_code' => $currency,
-                        'delegation_id' => $delegation->id,
-                        'delegation_bill_type_id' => DelegationBillType::inRandomOrder()->first()->id,
-                    ]);
-                }
-
                 // Liczba tripów 0-4
                 $tripsCount = rand(2,4);
 
                 // Zakres dat dla tripów
                 $dates_array = [];
-                $min_date = fake()->dateTimeBetween('-10 years', 'now');
+                $min_date = fake()->dateTimeBetween('-2 years', 'now');
                 $max_date = fake()->dateTimeBetween($min_date, '+14 days');
 
                 // Wybór typu transportu
@@ -82,6 +80,68 @@ class DelegationSeeder extends Seeder
                         'arrival' => $arrival,
                     ]);
                 }
+
+                $start = $dates_array[0]['departure']->format('Y-m-d');
+                $end = $dates_array[$tripsCount-1]['arrival']->format('Y-m-d');
+
+                // Liczba rachunków 0-4
+                $billsCount = rand(0,4);
+                for ($i=0; $i<$billsCount; $i++) {
+                    DelegationBill::factory()->create([
+                        'currency_code' => $currency,
+                        'delegation_id' => $delegation->id,
+                        'date' => fake()->dateTimeBetween($start,$end),
+                        'delegation_bill_type_id' => DelegationBillType::inRandomOrder()->first()->id,
+                    ]);
+                }
+
+                // Draft //
+
+                DelegationStatusHistory::factory()->create([
+                    'delegation_id' => $delegation->id,
+                    'changed_by' => $delegation->user_id,
+                    'from_status' => null,
+                    'to_status' => 'draft',
+                    'comment' => null,
+                ]);
+
+                // Submitted //
+                if (!in_array($delegation->status, ['draft'])) {
+                    DelegationStatusHistory::factory()->create([
+                        'delegation_id' => $delegation->id,
+                        'changed_by' => $delegation->user_id,
+                        'from_status' => 'draft',
+                        'to_status' => 'submitted',
+                        'comment' => null,
+                    ]);
+                }
+                
+                // Approved //
+                if (!in_array($delegation->status, ['draft','submitted','rejected'])) {
+                    DelegationStatusHistory::factory()->create([
+                        'delegation_id' => $delegation->id,
+                        'changed_by' => 1,
+                        'from_status' => 'submitted',
+                        'to_status' => 'approved',
+                        'comment' => null,
+                    ]);
+                }
+
+                // Rejected //
+                if (!in_array($delegation->status, ['draft','submitted','approved'])) {
+                    DelegationStatusHistory::factory()->create([
+                        'delegation_id' => $delegation->id,
+                        'changed_by' => 1,
+                        'from_status' => 'submitted',
+                        'to_status' => 'rejected',
+                        'comment' => fake()->sentence(6),
+                    ]);
+                }
+
+                // Pdf Ready //
+                // To be created
+
+
             });
     }
 }

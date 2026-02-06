@@ -21,6 +21,7 @@ class Delegation extends Model
         'company_id',
         'custom_address',
         'description',
+        'status',
         'settled'
     ];
 
@@ -48,6 +49,11 @@ class Delegation extends Model
         return $this->hasMany(DelegationTrip::class);
     }
 
+    public function delegationStatusHistories(): HasMany
+    {
+        return $this->hasMany(DelegationStatusHistory::class);
+    }
+
     // --------------------------------------------------------- //
     // Sortowanie i wyszukiwanie
     // --------------------------------------------------------- //
@@ -65,6 +71,7 @@ class Delegation extends Model
         'settled',
         'return',
         'departure',
+        'status',
     ];
 
     public static array $searchable = [
@@ -72,6 +79,6 @@ class Delegation extends Model
         'description',
         'company.name_short',
         'user.name',
-        'user.surname'
+        'user.surname',
     ];
 }

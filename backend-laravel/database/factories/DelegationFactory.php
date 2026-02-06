@@ -25,6 +25,14 @@ class DelegationFactory extends Factory
         // Wybór losowego usera
         $user_id = User::inRandomOrder()->first()->id ?? 1;
 
+        $status_types = [
+            'draft',
+            'submitted',
+            'approved',
+            'rejected',
+            /* 'pdf_ready' */
+            ];
+
         // Losowy company_id lub null
         $company = Company::inRandomOrder()->first();
         $company_id = fake()->boolean(70) && $company ? $company->id : null; // 80% szans, że będzie company
@@ -48,6 +56,7 @@ class DelegationFactory extends Factory
             'company_id' => $company_id,
             'custom_address' => $custom_address,
             'description' => fake()->sentence(),
+            'status' => fake()->randomElement($status_types),
             'settled' => fake()->boolean(20), // 20% szans, że settled
             'created_at' => now(),
             'updated_at' => now(),

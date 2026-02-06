@@ -62,6 +62,10 @@ class User extends Authenticatable
         ];
     }
 
+    // --------------------------------------------------------- //
+    // Relacje
+    // --------------------------------------------------------- //
+
     public function news(): HasMany
     {
         return $this->hasMany(News::class);
@@ -76,6 +80,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Car::class);
     }
+
+    public function delegations(): HasMany
+    {
+        return $this->hasMany(Delegation::class);
+    }
+    
+    public function delegationStatusHistories(): HasMany
+    {
+        return $this->hasMany(DelegationStatusHistory::class);
+    }
+
+    // --------------------------------------------------------- //
+    // Poziomy dostępu
+    // --------------------------------------------------------- //
 
     public function isAdmin(): bool
     {

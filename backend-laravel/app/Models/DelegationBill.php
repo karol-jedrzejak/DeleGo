@@ -11,12 +11,12 @@ class DelegationBill extends Model
     /** @use HasFactory<\Database\Factories\DelegationBillFactory> */
     use HasFactory;
 
-    
-    protected $fillable = [
+        protected $fillable = [
         'delegation_id',
         'currency_code',
         'delegation_bill_type_id',
         'description',
+        'date',
         'amount',
     ];
 

@@ -21,9 +21,11 @@ return new class extends Migration
 
             $table->foreignId('delegation_id')->constrained('delegations');
             $table->foreignId('delegation_bill_type_id')->constrained('delegation_bill_types');
-
+ 
             $table->text('description');
             $table->float('amount', 7, 2);
+
+            $table->date('date');
 
             $table->timestamps();
         });
