@@ -21,6 +21,7 @@ return new class extends Migration
 
             $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->string('custom_address')->nullable();
+            $table->decimal('total_amount', 10, 2)->nullable();
 
             $table->text('description');
             

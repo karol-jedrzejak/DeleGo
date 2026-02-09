@@ -41,6 +41,7 @@ class DelegationIndexResource extends JsonResource
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,
+            'total_amount' => $this->total_amount,
 
             // belongsTo
             'user' => $user?->isAdmin()

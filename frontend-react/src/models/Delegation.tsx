@@ -50,6 +50,7 @@ export type ItemFullType = {
   description: string;
   user: UserBasicType | null;
   company: CompanyType | null;
+  total_amount: number;
   delegation_bills: DelegationBillType[];
   delegation_trips: DelegationTripType[];
   delegation_status_histories: DelegationStatusHistoriesFullType[];
@@ -68,6 +69,7 @@ export type ItemBasicType = {
   description: string;
   user: UserBasicType | null; 
   company: CompanyType | null;
+  total_amount: number;
 };
 
 // -------------------------------------------------------------------------- //

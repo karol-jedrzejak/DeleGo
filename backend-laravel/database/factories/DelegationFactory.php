@@ -70,6 +70,7 @@ class DelegationFactory extends Factory
             'description' => fake()->sentence(),
             'status' => $status,
             'settled' => $settled, // 20% szans, że settled
+            'total_amount' => fake()->boolean(80) ? null : fake()->randomFloat(2, 100, 5000), // 80% szans na null, inaczej kwota
             'created_at' => now(),
             'updated_at' => now(),
         ];

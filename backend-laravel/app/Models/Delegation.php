@@ -22,7 +22,8 @@ class Delegation extends Model
         'custom_address',
         'description',
         'status',
-        'settled'
+        'settled',
+        'total_amount',
     ];
 
     // --------------------------------------------------------- //

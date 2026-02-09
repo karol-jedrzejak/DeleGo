@@ -244,6 +244,7 @@ class DelegationController extends Controller
                 'custom_address' => $data['custom_address'] ?? null,
                 'description' => $data['description'],
                 'settled' => $data['settled'],
+                'total_amount' => null,
             ]);
 
             $delegation->delegationTrips()->createMany($data['delegation_trips']);

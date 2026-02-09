@@ -42,7 +42,8 @@ class DelegationShowResource extends JsonResource
             ],
             'custom_address' => $this->custom_address,
             'description' => $this->description,
-            
+            'total_amount' => $this->total_amount,
+
             // belongsTo
             'user' => $user?->isAdmin()
                 ? new UserBasicResource($this->user)
