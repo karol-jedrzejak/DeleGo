@@ -42,6 +42,17 @@ enum DelegationStatus: string
         };
     }
 
+    public function allowedTransitions(): array
+    {
+        return match ($this) {
+            self::DRAFT => [self::SUBMITTED],
+            self::SUBMITTED => [self::APPROVED, self::REJECTED],
+            self::REJECTED => [self::SUBMITTED],
+            self::APPROVED => [],
+            self::PDF_READY => [],
+        };
+    }
+
     public function color(): string
     {
         return match ($this) {

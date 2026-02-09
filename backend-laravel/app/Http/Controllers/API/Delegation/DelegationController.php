@@ -221,7 +221,13 @@ class DelegationController extends Controller
      */
     public function statusList()
     {
-        return response()->json(DelegationStatus::options());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $level = $user->getPermissionLevel('misc','delegations');
+        if($user->isAdmin()) {
+            $level = 9;
+        }
+        return response()->json(DelegationStatus::options($level));
     }
 
     /**
