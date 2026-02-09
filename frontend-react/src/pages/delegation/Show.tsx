@@ -203,6 +203,7 @@ const Show = () => {
                             <table className="table-auto w-full">
                                 <thead>
                                     <tr className="font-normal">
+                                        <th className="p-2">Data</th>
                                         <th className="p-2">Typ</th>
                                         <th className="p-2">Opis</th>
                                         <th className="p-2">Wartość</th>
@@ -211,6 +212,7 @@ const Show = () => {
                                 <tbody>
                                     {item.delegation_bills.map((bill) => (
                                         <tr key={bill.id} className="custom-table-row">
+                                            <td className="p-2">{bill.date}</td>
                                             <td className="p-2">{bill.delegation_bill_type.name}</td>
                                             <td className="p-2">{bill.description}</td>
                                             <td className="p-2 text-right tabular-nums font-sans">
@@ -222,7 +224,7 @@ const Show = () => {
                                         <tr className="custom-table-row"><td className="p-2 text-center" colSpan={3}>Brak</td></tr>
                                         :
                                         <tr className="custom-table-sum">
-                                            <td colSpan={2} className="p-2 font-normal text-right"><b>SUMA</b></td>
+                                            <td colSpan={3} className="p-2 font-normal text-right"><b>SUMA</b></td>
                                             <td className="p-2 text-right tabular-nums font-sans">{/* {formatter.format(item.delegation_bills.reduce((sum, bill) => sum + bill.amount, 0))} */}</td>       
                                         </tr>
                                     }

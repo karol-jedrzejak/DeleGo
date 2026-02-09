@@ -7,5 +7,6 @@ export const delegationService = {
     update: (id: string) => `/delegation/${id}`,
     destroy: (id: string) => `/delegation/${id}`,
     getOptions: "/delegation/options",
+    getStatusList: "/delegation/status-list",
   },
 };

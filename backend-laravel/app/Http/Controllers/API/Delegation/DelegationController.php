@@ -23,7 +23,7 @@ use App\Http\Resources\Delegation\DelegationTripTypeShowResource;
 use App\Http\Requests\User\DelegationRequest;
 
 use App\Services\Delegation\DelegationCostCalculator;
-
+use App\Enums\DelegationStatus;
 
 class DelegationController extends Controller
 {
@@ -98,7 +98,7 @@ class DelegationController extends Controller
                     'starting_point',
                     'car_id',
                     'custom_transport',
-                ]);
+                ])->orderBy('departure','asc');
             },
             'delegationTrips.delegationTripType' => function ($q) {
                 $q->select([
@@ -128,7 +128,7 @@ class DelegationController extends Controller
                     'currency_code',
                     'description',
                     'delegation_bill_type_id',
-                ]);
+                ])->orderBy('date','asc');
             },
             'delegationBills.delegationBillType' => function ($q) {
                 $q->select([
@@ -155,7 +155,7 @@ class DelegationController extends Controller
                     'to_status',
                     'comment',
                     'created_at'
-                ])->orderBy('id','desc');
+                ])->orderBy('created_at','asc');
             },
             'delegationStatusHistories.changer' => function ($q) {
                 $q->select([
@@ -205,6 +205,14 @@ class DelegationController extends Controller
                     ->get()
             ),
         ]);
+    }
+
+    /**
+     * Get status list.
+     */
+    public function statusList()
+    {
+        return response()->json(DelegationStatus::options());
     }
 
     /**

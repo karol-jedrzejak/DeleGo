@@ -72,11 +72,11 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
                         onChange={handleChange}
                         name="perPage"
                         id="perPage"
-                        className="custom-select w-[60px] m-2 px-2 py-1 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-neutral-100 rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-800">
-                        <option value="10">10   </option>
-                        <option value="25">25   </option>
-                        <option value="50">50   </option>
-                        <option value="100">100   </option>
+                        className="custom-select w-[60px] m-2 ps-2 pe-6 py-1 border text-gray-900 dark:text-gray-900 border-gray-400 dark:border-gray-200 bg-neutral-100 rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-800">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
                     </select>
                     <div>Rekordów na stronę <span className="text-neutral-600 dark:text-neutral-400">(Znaleziono {paginationData?.total} {getRecordLabel(paginationData?.total)})</span></div>
                 </div>

@@ -4,8 +4,6 @@ import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/Routes.tsx";
 import { AuthContext } from "@/providers/AuthProvider.js";
 
-import { formatDateTime } from "@/utils/formatters";
-
 // Komponenty UI //
 
 import pdf_icon from "@/assets/icons/pdf_icon.svg"
@@ -60,6 +58,9 @@ const Index = () => {
 
     const [pagination, setPagination] = useState<PaginationData | null>(null);
 
+    const [statusOptions, setStatusOptions] = useState<{ text: string; search: { variable: string[], value: string | null }[] }[]>([]);
+
+
     // -------------------------------------------------------------------------- //
     // Pobranie danych
     // -------------------------------------------------------------------------- //
@@ -69,9 +70,18 @@ const Index = () => {
         delegationService.paths.getAll
     );
 
+    type StatusListType = {
+        value: string,
+        label: string,
+    };
+
+    const { loading: loadingStatus, error: errorStatus, mutate: mutateStatus } = useBackend<StatusListType[]>(
+        "get",
+        delegationService.paths.getStatusList
+    );
+
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
-        
         mutate({params: params}).then((res) => {
             const { data, ...pagination } = res.data;
             console.log(res.data);
@@ -80,11 +90,29 @@ const Index = () => {
         });
     }, [page, perPage,search,sort]);
 
+    useEffect(() => {
+        mutateStatus().then((res) => {
+            const options = [
+                {
+                    text: "-",
+                    search: [{ variable: ["status"], value: null }],
+                },
+                ...res.data.map(s => ({
+                    text: s.label,
+                    search: [{ variable: ["status"], value: s.value }],
+                })),
+            ];
+            setStatusOptions(options);
+            console.log(res.data);
+        });
+    }, []);
+
     // -------------------------------------------------------------------------- //
     // Wyświetlanie błędu
     // -------------------------------------------------------------------------- //
 
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
+    if(errorStatus) { return <Error><Error.Text type={errorStatus.type}>{errorStatus.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
@@ -151,7 +179,7 @@ const Index = () => {
                                             },
                                         ]
                                     }/>
-                                <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["status"]}/>
+                                <HeaderSearchSelect disabled={loadingStatus} search={search} setSearch={setSearch} setPage={setPage} options={statusOptions}/>
                                 {authData.hasPermission('admin','admin') && (
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["user.name","user.surname"]}/>
                                 )}

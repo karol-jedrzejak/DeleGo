@@ -36,7 +36,7 @@ class BillsWithinTripsDates implements ValidationRule
 
         // walidacja bill.date
         if ($value < $minDate || $value > $maxDate) {
-            $fail("The {$attribute} must be between {$minDate} and {$maxDate}.");
+            $fail("Data rachunku musi mieścić się w okresie trwania delegacji ({$minDate} do {$maxDate}).");
         }
     }
 }

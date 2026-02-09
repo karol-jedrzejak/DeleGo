@@ -10,6 +10,14 @@ enum DelegationStatus: string
     case REJECTED = 'rejected';
     case PDF_READY = 'pdf_ready';
 
+    public static function options(): array
+    {
+        return array_map(fn($s) => [
+            'value' => $s->value,   // np. "draft" → wysyłane w ?status=
+            'label' => $s->label(), // np. "Szkic" → do selecta w React
+        ], self::cases());
+    }
+
     public function label(): string
     {
         return match ($this) {

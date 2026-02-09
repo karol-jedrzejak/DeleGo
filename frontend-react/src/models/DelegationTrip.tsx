@@ -85,8 +85,8 @@ export const DEFAULT_FORM_DATA = {
   destination: "",
   description: "",
   distance: null,
-  departure: "",
-  arrival: "",
+  departure: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
+  arrival: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
   custom_transport: null,
 };
 

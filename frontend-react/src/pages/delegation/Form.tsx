@@ -145,6 +145,14 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     }));
     };
 
+    const getBillError = (index: number) => {
+    return Object.entries(formError ?? {})
+        .find(([key]) => key.startsWith(`delegation_bills.${index}.`))
+        ?.[1]?.[0];
+    };
+
+
+
     if(loadingOptionsGet || loadingCurrencyGet){
         return <Spinner/>;
     }
@@ -312,7 +320,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                             <th className="p-2"></th>
                         </tr>
                     </thead>
-                    <tbody className="relative">
+                    <tbody className="relative">                       
                         {[...formData.delegation_trips]
                         .sort((a, b) =>
                             new Date(a.departure).getTime() - new Date(b.departure).getTime()
@@ -374,6 +382,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 <table className="table-auto w-full">
                     <thead>
                         <tr className="font-normal">
+                            <th className="p-2">Data</th>
                             <th className="p-2">Typ</th>
                             <th className="p-2">Opis</th>
                             <th className="p-2">Kwota</th>
@@ -381,47 +390,46 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         </tr>
                     </thead>
                     <tbody className="relative">
-                        {[...formData.delegation_bills]
-                        .sort((a, b) =>
-                            a.amount - b.amount
-                        )
-                        .map((bill, index) => (
-                            <tr key={index} className="custom-table-row">
-                            <td className="p-2">{delegationOptions.billTypes.find(bt => bt.id === bill.delegation_bill_type_id)?.name}</td>
-                            <td className="p-2">{bill.description}</td>
-                            <td className="p-2 text-right tabular-nums font-sans">{formatCurrency(bill.amount, bill.currency_code)}</td>
-                            <td className="p-2 flex flex-row justify-center gap-1">
-                                <Button
-                                        className='flex items-center'
-                                        type="button"
-                                        color="yellow"
-                                        onClick={() => {setEditDelegationBillPopUp(index)}}
-                                    >
-                                    <SquarePen size={20}/>
-                                </Button>
-                                <Button
-                                        className='flex items-center'
-                                        type="button"
-                                        color="red"
-                                        onClick={() => {handleDeleteDelegationBill(index)}}
-                                    >
-                                    <Trash2 size={20}/>
-                                </Button>
-                            </td>
-                            </tr>
-                        ))}
+                        {formData.delegation_bills
+                            .map((bill, index) => {
+                                const error = getBillError(index);
+                                return (
+                                    <React.Fragment key={index}>
+                                        <tr className="custom-table-row">
+                                            <td className="p-2">{bill.date}</td>
+                                            <td className="p-2">
+                                                {delegationOptions.billTypes.find(bt => bt.id === bill.delegation_bill_type_id)?.name}
+                                            </td>
+                                            <td className="p-2">{bill.description}</td>
+                                            <td className="p-2 text-right tabular-nums font-sans">
+                                                {formatCurrency(bill.amount, bill.currency_code)}
+                                            </td>
+                                            <td className="p-2 flex flex-row justify-center gap-1">
+                                                <Button color="yellow" onClick={() => setEditDelegationBillPopUp(index)}>
+                                                    <SquarePen size={20} />
+                                                </Button>
+                                                <Button color="red" onClick={() => handleDeleteDelegationBill(index)}>
+                                                    <Trash2 size={20} />
+                                                </Button>
+                                            </td>
+                                        </tr>
+
+                                        {error && (
+                                        <tr>
+                                            <td colSpan={4} className="text-red-600 text-sm text-center pb-2">
+                                                {error}
+                                            </td>
+                                        </tr>
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })
+                        }
                         {formData.delegation_bills.length<1 ? <tr className="custom-table-row"><td className="p-2 text-center" colSpan={4}>Brak</td></tr> : ""}
                     </tbody>
                 </table>
             </div>
     
-            {formError?.delegation_bills?.length && (
-            <div className="text-red-600 my-2 text-center text-sm">
-                {formError.delegation_bills.map((error, key) => (
-                <span key={key}>{error}</span>
-                ))}
-            </div>
-            )}
         </DelegationFormContext.Provider>
         </>
     );

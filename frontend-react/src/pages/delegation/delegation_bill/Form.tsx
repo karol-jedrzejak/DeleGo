@@ -118,6 +118,17 @@ export default function Form({ billFormData,setBillFormData,formError}:FormProps
                     ))}
                 </Select>
                 <Input
+                    label="Data:"   
+                    type ="date"
+                    name="date"
+                    value={billFormData.date}
+                    onChange={handleChange}
+                    classNameContainer='col-span-4 xl:col-span-4'
+                    classNameInput="w-full"
+                    errors={formError?.date ?? null}
+                    required
+                ></Input>
+                <Input
                     label="Opis:"   
                     type ="text"
                     name="description"

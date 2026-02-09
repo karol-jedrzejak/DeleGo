@@ -8,6 +8,7 @@ import type { ItemFullType as CurrencyType } from '@/models/Currency';
 
 export type ItemFullType = {
     id: number,
+    date: string,
     delegation_id: number,
     delegation_bill_type: DelegationBillTypeType,    
     description: string,
@@ -17,6 +18,7 @@ export type ItemFullType = {
 
 export type ItemBasicType = {
     id: number,
+    date: string,
     delegation_bill_type: DelegationBillTypeType,    
     description: string,
     currency: CurrencyType,
@@ -32,6 +34,7 @@ export function apiToForm(
 ): FormDataType {
   return {
     id: api.id,
+    date: api.date,
     delegation_bill_type_id: api.delegation_bill_type.id,
     description: api.description,
     amount: api.amount,
@@ -46,6 +49,7 @@ export function apiToForm(
 
 export type FormDataType = {
   id: number | null,
+  date: string,
   delegation_bill_type_id: number,
   description: string,
   amount: number,
@@ -58,6 +62,7 @@ export type FormDataType = {
 
 export const DEFAULT_FORM_DATA = {
   id: null,
+  date: new Date().toISOString().split('T')[0],
   delegation_bill_type_id: 1,
   description: "",
   amount: 0.01,
@@ -69,6 +74,7 @@ export const DEFAULT_FORM_DATA = {
 // -------------------------------------------------------------------------- //
 
 export type ErrorDataType = {
+  date: string[] | null,
   delegation_bill_type_id: string[] | null,
   currency_code: string[] | null,
   description: string[] | null,
@@ -76,6 +82,7 @@ export type ErrorDataType = {
 }
 
 export const DEFAULT_ERROR_DATA = {
+  date: null,
   delegation_bill_type_id: null,
   currency_code: null,
   description: null,

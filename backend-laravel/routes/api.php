@@ -35,6 +35,7 @@ Route::prefix('v1')->group(function () {
 
         // Delegations
         Route::get('delegation/options', [DelegationController::class, 'options'])->middleware('permission:misc,delegations,1');
+        Route::get('delegation/status-list', [DelegationController::class, 'statusList'])->middleware('permission:misc,delegations,1');
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
         Route::get('delegation/{id}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
         

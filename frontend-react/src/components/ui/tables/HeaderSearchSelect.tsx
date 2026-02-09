@@ -17,6 +17,7 @@ type Props = {
   search: SearchType;
   options: Options[]; // 🔥 TABLICA
   nosort?: boolean;
+  disabled?: boolean;
 };
 
 function HeaderSearchSelect({
@@ -25,6 +26,7 @@ function HeaderSearchSelect({
   setPage,
   options,
   nosort = false,
+  disabled=false,
 }: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -75,16 +77,15 @@ function HeaderSearchSelect({
 
   return (
     <th>
-      <div className="flex flex-row p-2 mb-2">
+      <div className={`flex flex-row p-2 mb-2`}>
         <div className={nosort ? "flex-1" : "flex-1 me-2"}>
 
             <Select
                 name="user_id"
                 onChange={handleChange}
-                disabled={search.search !== null}
-                className={
-                `custom-select font-normal w-full px-3 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ` +
-                (search.search
+                disabled={search.search !== null || disabled}
+                className={`custom-select font-normal ps-3 pe-6 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ` +
+                (search.search || disabled
                     ? "text-gray-500 border-gray-400 bg-neutral-300"
                     : "text-gray-900 border-gray-400 bg-white")
                 }
