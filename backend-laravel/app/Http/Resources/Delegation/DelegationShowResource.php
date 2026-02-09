@@ -34,6 +34,7 @@ class DelegationShowResource extends JsonResource
             ],
             'status' => $this->status,
             'status_label' => DelegationStatus::from($this->status)->label(),
+            'status_color' => DelegationStatus::from($this->status)->color(),
             'settled' => $this->settled,
             'dates' => [
                 'departure' => $this->departure,

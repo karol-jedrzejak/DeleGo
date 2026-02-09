@@ -42,6 +42,9 @@ export type ItemFullType = {
   id: number;
   number: NumberWithYear;
   settled: boolean;
+  status: string;
+  status_label: string;
+  status_color: string;
   dates: Dates;
   custom_address: string | null;
   description: string;
@@ -58,6 +61,7 @@ export type ItemBasicType = {
   settled: boolean;
   status: string;
   status_label: string;
+  status_color: string;
   user_can_edit: boolean;
   dates: Dates;
   custom_address: string | null;

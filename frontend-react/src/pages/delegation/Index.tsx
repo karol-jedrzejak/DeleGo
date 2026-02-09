@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/Routes.tsx";
 import { AuthContext } from "@/providers/AuthProvider.js";
 
+import { formatDateTime } from "@/utils/formatters";
+
 // Komponenty UI //
 
 import pdf_icon from "@/assets/icons/pdf_icon.svg"
@@ -194,7 +196,11 @@ const Index = () => {
                                         )}
                                         </div>
                                     </td>
-                                    <td className="p-2">{item.status_label}</td>
+                                    <td className="p-2">
+                                        <span className={`py-1 px-2 text-white rounded-md ${item.status_color === 'red' ? 'bg-red-800' : item.status_color === 'green' ? 'bg-green-800' : item.status_color === 'yellow' ? 'bg-yellow-800' : 'bg-blue-800'}`}>
+                                            {item.status_label}
+                                        </span>
+                                    </td>
                                     {authData.hasPermission('admin','admin') && (
                                         <td className="p-2">{item.user?.names.name} {item.user?.names.surname}</td>
                                     )}

@@ -115,6 +115,10 @@ const Show = () => {
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
+                                        <td className="p-2">Status:</td>
+                                        <td className="p-2 flex items-center">{item.status_label}</td>
+                                    </tr>
+                                    <tr className="custom-table-row">
                                         <td className="p-2">Address/Firma:</td>
                                         <td className="p-2 flex items-center">
                                             {item.company?.id ? <><CompanyButtons size={1}company={item.company}/></> : ""}
@@ -135,7 +139,6 @@ const Show = () => {
                                     <tr className="font-normal">
                                         <th className="p-2">Data</th>
                                         <th className="p-2">Status</th>
-                                        {/* <th className="p-2">Poprzedni</th> */}
                                         <th className="p-2">Komentarz</th>
                                         <th className="p-2">Użytkownik</th>
                                     </tr>
@@ -145,7 +148,6 @@ const Show = () => {
                                         <tr className="custom-table-row" key={key}>
                                             <td className="p-2">{formatDateTime(status_history.created_at)}</td>
                                             <td className="p-2">{status_history.to_status_label}</td>
-                                            {/* <td className="p-2">{status_history.from_status_label ? status_history.from_status_label : "-"}</td> */}
                                             <td className="p-2">{status_history.comment ? status_history.comment : "-"}</td>
                                             <td className="p-2">{status_history.user.names.name} {status_history.user.names.surname}</td>
                                         </tr>

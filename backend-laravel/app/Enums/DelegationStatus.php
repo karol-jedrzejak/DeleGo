@@ -15,10 +15,22 @@ enum DelegationStatus: string
         return match ($this) {
             null => '-',
             self::DRAFT => 'Szkic',
-            self::SUBMITTED => 'Czeka na akceptację',
+            self::SUBMITTED => 'Weryfikowana',
             self::APPROVED => 'Zatwierdzona',
             self::REJECTED => 'Odrzucona',
             self::PDF_READY => 'Gotowa',
+        };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            null => '-',
+            self::DRAFT => 'red',
+            self::SUBMITTED => 'yellow',
+            self::APPROVED => 'green',
+            self::REJECTED => 'red',
+            self::PDF_READY => 'blue',
         };
     }
 }

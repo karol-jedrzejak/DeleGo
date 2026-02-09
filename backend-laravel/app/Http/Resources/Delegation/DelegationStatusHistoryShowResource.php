@@ -24,6 +24,7 @@ class DelegationStatusHistoryShowResource extends JsonResource
             'from_status_label' => $this->from_status ? DelegationStatus::from($this->from_status)->label() : "-",
             'to_status' => $this->to_status,
             'to_status_label' => DelegationStatus::from($this->to_status)->label(),
+            'to_status_color' => DelegationStatus::from($this->to_status)->color(),
             'comment' => $this->comment,
             'created_at' => $this->created_at,
 

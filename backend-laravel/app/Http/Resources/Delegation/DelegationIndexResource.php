@@ -36,6 +36,7 @@ class DelegationIndexResource extends JsonResource
             ],
             'status' => $this->status,
             'status_label' => DelegationStatus::from($this->status)->label(),
+            'status_color' => DelegationStatus::from($this->status)->color(),
             'user_can_edit' => in_array($this->status, ['draft', 'rejected']),           
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,

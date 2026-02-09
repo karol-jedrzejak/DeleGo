@@ -11,6 +11,7 @@ export type ItemFullType = {
     to_status: string,
     from_status_label: string,
     to_status_label: string,
+    to_status_color: string,
     comment: string | null,
     created_at: string,
 };
