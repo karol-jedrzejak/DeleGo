@@ -5,8 +5,9 @@ export const delegationService = {
     getPdf: (id: string) => `/delegation/${id}/pdf`,
     create: "/delegation",
     update: (id: string) => `/delegation/${id}`,
+    changeStatus: (id: string) => `/delegation/${id}/change_status`,
     destroy: (id: string) => `/delegation/${id}`,
     getOptions: "/delegation/options",
-    getStatusList: "/delegation/status-list",
+    getStatusList: "/delegation/status_list",
   },
 };

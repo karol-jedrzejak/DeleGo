@@ -118,3 +118,11 @@ export const DEFAULT_FORM_DATA = {
   delegation_trips: [],
 };
 
+// -------------------------------------------------------------------------- //
+// Formularz zmiany statusu
+// -------------------------------------------------------------------------- //
+
+export type FormStatusChangeDataType = {
+  new_status: string;
+  comment: string;
+}

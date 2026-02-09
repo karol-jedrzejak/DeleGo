@@ -84,7 +84,7 @@ function HeaderSearchSelect({
                 name="user_id"
                 onChange={handleChange}
                 disabled={search.search !== null || disabled}
-                className={`custom-select font-normal ps-3 pe-6 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ` +
+                className={`custom-select custom-select-width font-normal ps-3 pe-6 py-2 border rounded-md focus:outline-none shadow-md focus:ring-3 focus:ring-sky-600 ` +
                 (search.search || disabled
                     ? "text-gray-500 border-gray-400 bg-neutral-300"
                     : "text-gray-900 border-gray-400 bg-white")

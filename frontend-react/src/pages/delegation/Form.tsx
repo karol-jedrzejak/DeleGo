@@ -97,7 +97,10 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         mutateCurrencyGet()
         .then((res) => {
             setCurrencyOptions(res.data);
+            console.log(authData);
         })
+
+
         .catch(() => {});
     }, []);
 
@@ -229,6 +232,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 />
             )}
             </div>
+        {authData.hasPermission('sales','companies',11) ? (
             <div className='w-full xl:flex xl:flex-row xl:items-end'>
                 <div>
                     <label className="inline-flex items-center cursor-pointer p-4">
@@ -268,6 +272,22 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 )}
 
             </div>
+        ):(
+            <div className='w-full xl:flex xl:flex-row xl:items-end'>
+                <Input
+                    label="Address:"   
+                    type = "text"
+                    name="custom_address"
+                    value={formData.custom_address ?? ""}
+                    onChange={handleAddressChange}
+                    classNameContainer='flex-1'
+                    classNameInput="w-full"
+                    placeholder = "address"   
+                    disabled={formData.company_id ? true : false}
+                    errors={formError?.custom_address ?? null}
+                ></Input>
+            </div>
+        )}
             <div className='w-full xl:flex xl:flex-row xl:gap-x-4'>
                 <Input
                     label="Opis:"   

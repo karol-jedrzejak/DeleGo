@@ -22,7 +22,7 @@ class DelegationPolicy
     public function view(User $user, Delegation $delegation): bool
     {
         // ADMIN – pełny dostęp
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2) {
             return true;
         }
 

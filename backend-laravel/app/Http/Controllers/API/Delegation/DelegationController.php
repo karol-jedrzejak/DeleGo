@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Delegation;
 use App\Models\DelegationBillType;
 use App\Models\DelegationTripType;
+use App\Models\DelegationStatusHistory;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -47,8 +48,16 @@ class DelegationController extends Controller
         ->withMax('delegationTrips as return', 'arrival');
 
         // razem z modelem user jeśli admin
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2) {
             $query->with('user');
+
+            // Dodatkowy warunek: poziom 2 nie widzi cudzych draft/rejected
+            if (!$user->isAdmin() && $user->getPermissionLevel('misc','delegations') == 2) {
+                $query->where(function($q) use ($user) {
+                    $q->where('user_id', $user->id) // własne delegacje
+                    ->orWhereNotIn('status', [DelegationStatus::DRAFT->value, DelegationStatus::REJECTED->value]); // cudze ale nie draft/rejected
+                });
+            }
         } else{
             $query->where('user_id', $user->id);
         }
@@ -72,7 +81,7 @@ class DelegationController extends Controller
         $user = Auth::user();
 
         // razem z modelem user jeśli admin + dopisanie dat
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2) {
             $delegation->load('user');
         }
 
@@ -321,6 +330,62 @@ class DelegationController extends Controller
                 'id' => $delegation->id,
             ]);
         });
+    }
+
+    
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function change_status(Request $request, Delegation $delegation)
+    {
+        $status = $request->input('status');
+        $comment = $request->input('comment');
+        
+        // Pobieramy wszystkie statusy z enum
+        $allowedStatuses = DelegationStatus::options(); // zwraca array z 'value', 'label', 'required_level'
+
+        // Szukamy statusu, który odpowiada podanemu value
+        $statusObj = collect($allowedStatuses)->first(fn($s) => $s['value'] === $status);
+
+        // Jeśli nie istnieje error
+        if (!$statusObj) {
+            abort(500, 'Błąd: Nieprawidłowy status');
+        }
+
+        // Sprawdzamy poziom uprawnień użytkownika
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $userLevel = $user->getPermissionLevel('misc','delegations');
+
+        if ($userLevel < $statusObj['required_level'] && !$user->isAdmin()) {
+            abort(403, 'Brak uprawnień do zmiany statusu');
+        }
+
+        // Jeśli poprawny, aktualizujemy delegację
+        DB::transaction(function() use ($delegation, $status, $user, $comment) {
+            $oldStatus = $delegation->status;
+
+            // Aktualizacja delegacji
+            $delegation->status = $status;
+
+            $delegation->save();
+
+            // Zapis historii statusów
+            DelegationStatusHistory::create([
+                'delegation_id' => $delegation->id,
+                'changed_by'    => $user->id,
+                'from_status'   => $oldStatus,
+                'to_status'     => $status,
+                'comment'       => $comment,
+            ]);
+        });
+
+        return response()->json([
+            'text' => 'Poprawnie zmieniono status delegacji nr '.$delegation->number.'/'.$delegation->year.' na "'.$statusObj['label'].'".',
+            'type' => 'message',
+            'status' => 'success',
+        ]);
     }
 
     /**

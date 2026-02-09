@@ -15,6 +15,7 @@ enum DelegationStatus: string
         return array_map(fn($s) => [
             'value' => $s->value,   // np. "draft" → wysyłane w ?status=
             'label' => $s->label(), // np. "Szkic" → do selecta w React
+            'required_level' => $s->required_level(), // np. "Szkic" → do selecta w React
         ], self::cases());
     }
 
@@ -30,10 +31,20 @@ enum DelegationStatus: string
         };
     }
 
+    public function required_level(): string
+    {
+        return match ($this) {
+            self::DRAFT => 1,
+            self::SUBMITTED => 1,
+            self::APPROVED => 2,
+            self::REJECTED => 2,
+            self::PDF_READY => 9,
+        };
+    }
+
     public function color(): string
     {
         return match ($this) {
-            null => '-',
             self::DRAFT => 'red',
             self::SUBMITTED => 'yellow',
             self::APPROVED => 'green',

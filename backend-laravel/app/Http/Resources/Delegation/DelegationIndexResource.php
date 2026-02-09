@@ -24,6 +24,12 @@ class DelegationIndexResource extends JsonResource
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $canChangeStatus = true;
+
+        if($user->getPermissionLevel('misc','delegations') < 2 && !in_array($this->status, ['draft', 'rejected']) && !$user->isAdmin()) {
+            $canChangeStatus = false;
+        }
+
         return [
             'id' => $this->id,
             'numbers' => [
@@ -38,6 +44,7 @@ class DelegationIndexResource extends JsonResource
             'status_label' => DelegationStatus::from($this->status)->label(),
             'status_color' => DelegationStatus::from($this->status)->color(),
             'user_can_edit' => in_array($this->status, ['draft', 'rejected']),           
+            'user_can_change_status' => $canChangeStatus,
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,

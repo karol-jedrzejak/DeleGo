@@ -34,8 +34,10 @@ Route::prefix('v1')->group(function () {
         Route::delete('car/{id}/destroy', [CarController::class, 'forceDelete'])->middleware('permission:admin,admin,1');
 
         // Delegations
+        Route::get('delegation/status_list', [DelegationController::class, 'statusList'])->middleware('permission:misc,delegations,1');
+        Route::post('delegation/{id}/change_status', [DelegationController::class, 'change_status'])->middleware('permission:misc,delegations,1');
+       
         Route::get('delegation/options', [DelegationController::class, 'options'])->middleware('permission:misc,delegations,1');
-        Route::get('delegation/status-list', [DelegationController::class, 'statusList'])->middleware('permission:misc,delegations,1');
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
         Route::get('delegation/{id}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
         
