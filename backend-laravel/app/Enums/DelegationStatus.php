@@ -19,15 +19,22 @@ enum DelegationStatus: string
         ], self::cases());
     }
 
-    public function label(): string
+    public function allowedTransitionsForLevel(int $userLevel): array
+    {
+        return array_filter(
+            $this->allowedTransitions(),
+            fn (self $toStatus) => $userLevel >= $toStatus->required_level()
+        );
+    }
+
+    public function allowedTransitions(): array
     {
         return match ($this) {
-            null => '-',
-            self::DRAFT => 'Szkic',
-            self::SUBMITTED => 'Weryfikowana',
-            self::APPROVED => 'Zatwierdzona',
-            self::REJECTED => 'Odrzucona',
-            self::PDF_READY => 'Gotowa',
+            self::DRAFT => [self::SUBMITTED],
+            self::SUBMITTED => [self::APPROVED, self::REJECTED],
+            self::REJECTED => [self::SUBMITTED],
+            self::APPROVED => [],
+            self::PDF_READY => [],
         };
     }
 
@@ -42,14 +49,15 @@ enum DelegationStatus: string
         };
     }
 
-    public function allowedTransitions(): array
+    public function label(): string
     {
         return match ($this) {
-            self::DRAFT => [self::SUBMITTED],
-            self::SUBMITTED => [self::APPROVED, self::REJECTED],
-            self::REJECTED => [self::SUBMITTED],
-            self::APPROVED => [],
-            self::PDF_READY => [],
+            null => '-',
+            self::DRAFT => 'Szkic',
+            self::SUBMITTED => 'Wysłana',
+            self::APPROVED => 'Zatwierdzona',
+            self::REJECTED => 'Odrzucona',
+            self::PDF_READY => 'Gotowa',
         };
     }
 

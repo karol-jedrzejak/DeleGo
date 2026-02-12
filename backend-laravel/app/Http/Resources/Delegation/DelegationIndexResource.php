@@ -24,9 +24,11 @@ class DelegationIndexResource extends JsonResource
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $level = $user->getPermissionLevel('delegations','misc');
+
         $ChangeStatusArray = [];
 
-        foreach (DelegationStatus::from($this->status)->allowedTransitions() as $transition) {
+        foreach (DelegationStatus::from($this->status)->allowedTransitionsForLevel($level) as $transition) {
             $ChangeStatusArray[] = [
                 'value' => $transition->value,
                 'label' => $transition->label(),
@@ -56,7 +58,7 @@ class DelegationIndexResource extends JsonResource
             'total_amount' => $this->total_amount,
 
             // belongsTo
-            'user' => $user?->isAdmin()
+            'user' => $user?->isAdmin() || $user?->getPermissionLevel('delegations','misc') >= 2
                 ? new UserBasicResource($this->user)
                 : null,
 

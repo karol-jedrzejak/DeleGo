@@ -63,13 +63,18 @@ const Index = () => {
 
     const [changeStatusPopUp, setChangeStatusPopUp] = useState<number | undefined>(undefined);
 
-    const [changeStatusData, setChangeStatusData] = useState<FormStatusChangeDataType>(
-        {
-            new_status: "",
-            comment: "",
-        }
-    );
 
+    const EMPTY_CHANGE_STATUS_FORM:FormStatusChangeDataType = {
+        status: "",
+        comment: "",
+    };
+
+    type StatusListType = {
+        value: string,
+        label: string,
+    };
+
+    const [changeStatusForm, setChangeStatusForm] = useState<FormStatusChangeDataType>(EMPTY_CHANGE_STATUS_FORM);
 
     // -------------------------------------------------------------------------- //
     // Pobranie danych
@@ -80,17 +85,14 @@ const Index = () => {
         delegationService.paths.getAll
     );
 
-    type StatusListType = {
-        value: string,
-        label: string,
-        required_level: number,
-    };
-
     const { loading: loadingStatus, error: errorStatus, mutate: mutateStatus } = useBackend<StatusListType[]>(
         "get",
         delegationService.paths.getStatusList
     );
 
+    const { loading: loadingPut, validationErrors, error:errorPut, mutate:mutatePut } = useBackend("put", delegationService.paths.changeStatus("1"));
+
+    // Pobranie listy delegacji z backendu po zmianie strony, ilości elementów na stronie, wyszukiwania lub sortowania
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
         mutate({params: params}).then((res) => {
@@ -101,6 +103,7 @@ const Index = () => {
         });
     }, [page, perPage,search,sort]);
 
+    // Pobranie listy statusów do selecta
     useEffect(() => {
         mutateStatus().then((res) => {
             const options = [
@@ -114,8 +117,6 @@ const Index = () => {
                 })),
             ];
             setStatusOptions(options);
-            setStatusList(res.data);
-            console.log(res.data);
         });
     }, []);
 
@@ -124,18 +125,26 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
 
     const handleStatusChange = async () => {
-        console.log("test");
-        console.log(changeStatusData);
-        setChangeStatusPopUp(undefined);
-/*         let tripTypes = delegationOptions.tripTypes;
-        if(validate({formData,tripFormData,setFormErrors,tripTypes}))
-        {
-            // Add trip to delegation
-            setFormData((p) => ({ ...p, delegation_trips: [...p.delegation_trips, tripFormData] }));
+        // Jeśli nie id delegacja wyjdź
+        if(changeStatusPopUp === undefined) return; 
 
-            // Close pop-up
-            setPopUp(false);
-        } */
+        // Zaktualizuj status
+        try {
+            await mutatePut({url: delegationService.paths.changeStatus(String(changeStatusPopUp)), data: changeStatusForm});
+        } catch {}
+
+        // Zaktualizuj tabele
+        const params = buildPaginationParams({page,perPage,search,sort});
+        mutate({params: params}).then((res) => {
+            const { data, ...pagination } = res.data;
+            console.log(res.data);
+            setItems(data);
+            setPagination(pagination);
+        });
+        
+        // Zamknij pop-up i zresetuj formularz
+        setChangeStatusPopUp(undefined);
+        setChangeStatusForm(EMPTY_CHANGE_STATUS_FORM);
     };
 
     // -------------------------------------------------------------------------- //
@@ -157,15 +166,14 @@ const Index = () => {
                         <Card.Header>
                             <span>Zmiana statusu delegacji</span>
                         </Card.Header>
-                        <Card.Body>
-                            <div className='w-full grid grid-cols-4 xl:gap-x-4'>
+                        <Card.Body className="w-120"> 
+                            <div className='w-full'>
                                 <Select
                                     name="delegation_trip_type_id"
                                     label="Nowy Status"
-                                    classNameContainer='col-span-4 xl:col-span-1'
+                                    classNameContainer=''
                                     classNameInput='w-full'
-                                    defaultValue={changeStatusData.new_status}
-                                    onChange={(e) => setChangeStatusData({...changeStatusData, new_status: e.target.value})}
+                                    onChange={(e) => setChangeStatusForm({...changeStatusForm, status: e.target.value})}
                                 >
                                     {statusList.map((status,key) => (
                                         <option key={key} value={status.value}>{status.label}</option>
@@ -175,9 +183,9 @@ const Index = () => {
                                     label="Komentarz:"   
                                     type ="text"
                                     name="comment"
-                                    value={changeStatusData.comment}
-                                    onChange={(e) => setChangeStatusData({...changeStatusData, comment: e.target.value})}
-                                    classNameContainer='col-span-4 xl:col-span-3'
+                                    value={changeStatusForm.comment}
+                                    onChange={(e) => setChangeStatusForm({...changeStatusForm, comment: e.target.value})}
+                                    classNameContainer=''
                                     classNameInput="w-full"
                                     placeholder = "komentarz"
                                     required
@@ -230,9 +238,9 @@ const Index = () => {
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["description"]} text="Opis" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["settled"]} text="Rozliczone" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["status"]} text="Status" />
-                                    {authData.hasPermission('admin','admin') && (
+                                    {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
-                                    )}
+                                    ):(<></>)}
                                     <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
                                 </tr>
                                 <tr>
@@ -266,9 +274,9 @@ const Index = () => {
                                             ]
                                         }/>
                                     <HeaderSearchSelect disabled={loadingStatus} search={search} setSearch={setSearch} setPage={setPage} options={statusOptions}/>
-                                    {authData.hasPermission('admin','admin') && (
+                                    {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
                                     <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["user.name","user.surname"]}/>
-                                    )}
+                                    ):(<></>)}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -315,9 +323,9 @@ const Index = () => {
                                                 {item.status_label}
                                             </span>
                                         </td>
-                                        {authData.hasPermission('admin','admin') && (
+                                        {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
                                             <td className="p-2">{item.user?.names.name} {item.user?.names.surname}</td>
-                                        )}
+                                        ):(<></>)}
                                         <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                             <div className="flex flex-row justify-center gap-1">
                                                 <Link to={ROUTES.DELEGATION.PDF.LINK(item.id)}>
@@ -334,10 +342,11 @@ const Index = () => {
                                                     color="teal"
                                                     className="w-[38px]"
                                                     onClick={() =>{
-                                                        setChangeStatusData({...changeStatusData, new_status: item.status});
+                                                        setStatusList(item.new_status_options);
+                                                        setChangeStatusForm({...changeStatusForm, status: item.new_status_options[0].value});
                                                         setChangeStatusPopUp(item.id)
                                                     }}
-                                                    disabled={loadingStatus}
+                                                    disabled={loadingStatus || !item.user_can_change_status}
                                                     >
                                                     <BookCheck size={20}/>
                                                 </Button>

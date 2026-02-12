@@ -48,16 +48,16 @@ class DelegationController extends Controller
         ->withMax('delegationTrips as return', 'arrival');
 
         // razem z modelem user jeśli admin
-        if ($user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2) {
-            $query->with('user');
-
+        if ($user->isAdmin() || $user->getPermissionLevel('delegations','misc') >= 2) {
             // Dodatkowy warunek: poziom 2 nie widzi cudzych draft/rejected
-            if (!$user->isAdmin() && $user->getPermissionLevel('misc','delegations') == 2) {
+            if (!$user->isAdmin() && $user->getPermissionLevel('delegations','misc') == 2) {
                 $query->where(function($q) use ($user) {
                     $q->where('user_id', $user->id) // własne delegacje
                     ->orWhereNotIn('status', [DelegationStatus::DRAFT->value, DelegationStatus::REJECTED->value]); // cudze ale nie draft/rejected
                 });
             }
+
+            $query->with('user');
         } else{
             $query->where('user_id', $user->id);
         }
@@ -342,8 +342,9 @@ class DelegationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function change_status(Request $request, Delegation $delegation)
+    public function change_status(Request $request, $id)
     {
+        $delegation = Delegation::findOrFail($id); // Pobierz aktualny stan delegacji z bazy danych
         $status = $request->input('status');
         $comment = $request->input('comment');
         
@@ -362,12 +363,12 @@ class DelegationController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $userLevel = $user->getPermissionLevel('misc','delegations');
+/*         $userLevel = $user->getPermissionLevel('misc','delegations'); */
 
-        if ($userLevel < $statusObj['required_level'] && !$user->isAdmin()) {
+/*         if ($userLevel < $statusObj['required_level'] && !$user->isAdmin()) {
             abort(403, 'Brak uprawnień do zmiany statusu');
         }
-
+ */
         // Jeśli poprawny, aktualizujemy delegację
         DB::transaction(function() use ($delegation, $status, $user, $comment) {
             $oldStatus = $delegation->status;
@@ -375,7 +376,7 @@ class DelegationController extends Controller
             // Aktualizacja delegacji
             $delegation->status = $status;
 
-            $delegation->save();
+            $delegation->update();
 
             // Zapis historii statusów
             DelegationStatusHistory::create([

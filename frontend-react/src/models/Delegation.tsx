@@ -1,5 +1,5 @@
 import type { ItemBasicType as UserBasicType } from '@/models/User';
-import type { ItemWithAddressType as CompanyType, ItemNamesOnlyType as CompanyNamesOnlyType } from '@/models/Company';
+import type { ItemWithAddressType as CompanyType } from '@/models/Company';
 
 import type { ItemBasicType as DelegationBillType } from '@/models/DelegationBill';
 import type { ItemBasicType as DelegationTripType } from '@/models/DelegationTrip';
@@ -64,6 +64,11 @@ export type ItemBasicType = {
   status_label: string;
   status_color: string;
   user_can_edit: boolean;
+  user_can_change_status: boolean;
+  new_status_options: {
+    value: string,
+    label: string
+  }[];
   dates: Dates;
   custom_address: string | null;
   description: string;
@@ -123,6 +128,6 @@ export const DEFAULT_FORM_DATA = {
 // -------------------------------------------------------------------------- //
 
 export type FormStatusChangeDataType = {
-  new_status: string;
+  status: string;
   comment: string;
 }
