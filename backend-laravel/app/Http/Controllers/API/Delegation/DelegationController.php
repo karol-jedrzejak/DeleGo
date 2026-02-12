@@ -361,14 +361,14 @@ class DelegationController extends Controller
 
         // Sprawdzamy poziom uprawnień użytkownika
         /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = Auth::user();       
+        $userLevel = $user->getPermissionLevel('misc','delegations');
 
-/*         $userLevel = $user->getPermissionLevel('misc','delegations'); */
-
-/*         if ($userLevel < $statusObj['required_level'] && !$user->isAdmin()) {
+        // Jeśli pracownik nie ma uprawnień do zmiany na ten status, a nie jest adminem, zwracamy błąd
+        if ($userLevel < $statusObj['required_level'] && !$user->isAdmin()) {
             abort(403, 'Brak uprawnień do zmiany statusu');
         }
- */
+
         // Jeśli poprawny, aktualizujemy delegację
         DB::transaction(function() use ($delegation, $status, $user, $comment) {
             $oldStatus = $delegation->status;
@@ -387,6 +387,10 @@ class DelegationController extends Controller
                 'comment'       => $comment,
             ]);
         });
+
+        if($status === DelegationStatus::APPROVED->value) {
+            //create pdf
+        }
 
         return response()->json([
             'text' => 'Poprawnie zmieniono status delegacji nr '.$delegation->number.'/'.$delegation->year.' na "'.$statusObj['label'].'".',
