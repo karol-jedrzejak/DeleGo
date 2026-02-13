@@ -41,8 +41,10 @@ class CarController extends Controller
         } else{
             $query->where('user_id', $user->id);
         }
-        $cars = $query->paginate($request->query('perPage', 10));
-        return CarIndexResource::collection($cars)->withPath('');
+        $cars = $query->paginate($request->query('perPage', 10))->withPath('');
+
+        return CarIndexResource::collection($cars)
+            ->additional(['can_see_user_field' => $user->isAdmin()]);
     }
 
     /**

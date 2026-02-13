@@ -41,9 +41,9 @@ class EmployeeController extends Controller
 
         return EmployeeIndexResource::collection(
             $query
-                ->paginate($request->query('perPage', 10))
+                ->paginate($request->query('perPage', 10))->withPath('')
                 
-        )->withPath('');
+        );
     }
 
     /**

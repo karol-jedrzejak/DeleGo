@@ -81,9 +81,8 @@ const Index = () => {
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
         mutateItems({params: params}).then((res) => {
-            const { data, ...pagination } = res.data;
-            setItems(data);
-            setPagination(pagination);
+            setItems(res.data.data);
+            setPagination(res.data.meta);
         });
     }, [page, perPage,search,sort]);
 

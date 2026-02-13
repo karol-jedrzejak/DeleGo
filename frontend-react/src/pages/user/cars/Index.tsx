@@ -1,8 +1,7 @@
-import { useState,useEffect,useContext } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom"
 
 import { ROUTES } from "@/routes/Routes.tsx";
-import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
@@ -45,8 +44,6 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
-    const authData = useContext(AuthContext);
-
     const [items, setItems] = useState<ItemFullType[] | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
@@ -56,11 +53,13 @@ const Index = () => {
 
     const [pagination, setPagination] = useState<PaginationData | null>(null);
 
+    const [canSeeUserField, setCanSeeUserField] = useState<boolean>(false);
+
     // -------------------------------------------------------------------------- //
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemFullType[]>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemFullType[],{can_see_user_field: boolean;}>>(
         "get",
         carService.paths.getAll
     );
@@ -68,9 +67,9 @@ const Index = () => {
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
         mutate({params: params}).then((res) => {
-            const { data, ...pagination } = res.data;
-            setItems(data);
-            setPagination(pagination);
+            setItems(res.data.data);
+            setPagination(res.data.meta);
+            setCanSeeUserField(res.data.can_see_user_field);
         });
     }, [page, perPage,search,sort]);
 
@@ -108,7 +107,7 @@ const Index = () => {
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["registration_number"]} text="Nr. Rejestracyjny" />                                
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["brand"]} text="Marka" />
                                 <HeaderSorting sort={sort} setSort={setSort} variable_names={["model"]} text="Model" />
-                                {authData.hasPermission('admin','admin') && (
+                                {canSeeUserField && (
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
                                 )}
                                 <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
@@ -117,7 +116,7 @@ const Index = () => {
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["registration_number"]}/> 
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["brand"]}/>
                                 <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["model"]}/>
-                                {authData.hasPermission('admin','admin') && (
+                                {canSeeUserField && (
                                     <th></th>
                                 )}
                                 <th></th>
@@ -145,7 +144,7 @@ const Index = () => {
                                     </td>
                                     <td className="p-2">{item.brand}</td>
                                     <td className="p-2">{item.model}</td>
-                                    {authData.hasPermission('admin','admin') && (
+                                    {canSeeUserField && (
                                         <td className="p-2">{item.user ? `${item.user.names.name} ${item.user.names.surname}` : '-'}</td>
                                     )}
                                     <td className="p-2 whitespace-nowrap overflow-hidden text-right">

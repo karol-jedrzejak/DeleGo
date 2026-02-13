@@ -39,9 +39,9 @@ class CompanyController extends Controller
         }
 
         $companies = $query
-            ->paginate($request->query('perPage', 10));
+            ->paginate($request->query('perPage', 10))->withPath('');
 
-        return CompanyIndexResource::collection($companies)->withPath('');
+        return CompanyIndexResource::collection($companies);
     }
 
     /**
