@@ -8,22 +8,32 @@ export type ItemLinkType = {
 
 export type PaginationData = {
     current_page:   number,
-    first_page_url: string,
+    //first_page_url: string,
     from: number,
     last_page: number,
-    last_page_url: string,
+    //last_page_url: string,
     links: ItemLinkType[],
-    next_page_url: string,
+    //next_page_url: string,
     path: string,
     per_page: number,
-    prev_page_url: string,
+    //prev_page_url: string,
     to: number,
     total: number,   
 };
 
-export type PaginatedDataResponse<T> = PaginationData & {
+/* export type PaginatedDataResponse<T> = {
   data: T;
-};
+  meta: PaginationData;
+}; */
+
+export type PaginatedDataResponse<
+  T,
+  Extra extends object = {}
+> = {
+  data: T;
+  meta: PaginationData;
+} & Extra;
+
 
 /* export type BackendTsResponseType = {
     text: string;

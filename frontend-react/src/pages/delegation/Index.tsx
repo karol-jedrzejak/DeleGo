@@ -1,8 +1,8 @@
-import { useState,useEffect,useContext } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom"
 
 import { ROUTES } from "@/routes/Routes.tsx";
-import { AuthContext } from "@/providers/AuthProvider.js";
+
 
 // Komponenty UI //
 
@@ -21,10 +21,9 @@ import { useBackend } from "@/hooks/useLaravelBackend";
 import { delegationService } from "@/api/services/backend/user/delegation.service";
 
 import type { SearchType,SortType } from '@/api/queryParams/types'
-import type { PaginatedDataResponse,PaginationData } from "@/api/response/types";
+import type { PaginationData,PaginatedDataResponse } from "@/api/response/types";
 
 import { buildPaginationParams } from "@/api/queryParams/buildPaginationParams";
-
 
 
 const Index = () => {
@@ -47,8 +46,6 @@ const Index = () => {
     // -------------------------------------------------------------------------- //
     // Deklaracja stanów
     // -------------------------------------------------------------------------- //
-    const authData = useContext(AuthContext);
-
     const [items, setItems] = useState<ItemBasicType[] | null>(null);
 
     const [page, setPage] = useState<string>(DEFAULT_PAGE);
@@ -57,6 +54,8 @@ const Index = () => {
     const [sort, setSort] = useState<SortType>(DEFAULT_SORT);
 
     const [pagination, setPagination] = useState<PaginationData | null>(null);
+
+    const [canSeeUserField, setCanSeeUserField] = useState<boolean>(false);
 
     const [statusOptions, setStatusOptions] = useState<{ text: string; search: { variable: string[], value: string | null }[] }[]>([]);
     const [statusList, setStatusList] = useState<StatusListType[]>([]);
@@ -80,7 +79,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemBasicType[]>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemBasicType[],{can_see_user_field: boolean;}>>(
         "get",
         delegationService.paths.getAll
     );
@@ -96,10 +95,9 @@ const Index = () => {
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
         mutate({params: params}).then((res) => {
-            const { data, ...pagination } = res.data;
-            console.log(res.data);
-            setItems(data);
-            setPagination(pagination);
+            setItems(res.data.data);
+            setPagination(res.data.meta);
+            setCanSeeUserField(res.data.can_see_user_field);
         });
     }, [page, perPage,search,sort]);
 
@@ -136,10 +134,9 @@ const Index = () => {
         // Zaktualizuj tabele
         const params = buildPaginationParams({page,perPage,search,sort});
         mutate({params: params}).then((res) => {
-            const { data, ...pagination } = res.data;
-            console.log(res.data);
-            setItems(data);
-            setPagination(pagination);
+            setItems(res.data.data);
+            setPagination(res.data.meta);
+            setCanSeeUserField(res.data.can_see_user_field);
         });
         
         // Zamknij pop-up i zresetuj formularz
@@ -238,7 +235,7 @@ const Index = () => {
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["description"]} text="Opis" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["settled"]} text="Rozliczone" />
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["status"]} text="Status" />
-                                    {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
+                                    {canSeeUserField ? (
                                     <HeaderSorting sort={sort} setSort={setSort} variable_names={["user.name","user.surname"]} text="Użytkownik" />
                                     ):(<></>)}
                                     <HeaderSorting sort={sort} setSort={setSort} text="Przyciski" />  
@@ -274,7 +271,7 @@ const Index = () => {
                                             ]
                                         }/>
                                     <HeaderSearchSelect disabled={loadingStatus} search={search} setSearch={setSearch} setPage={setPage} options={statusOptions}/>
-                                    {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
+                                    {canSeeUserField ? (
                                     <HeaderSearch search={search} setSearch={setSearch} setPage={setPage} variable_names={["user.name","user.surname"]}/>
                                     ):(<></>)}
                                     <th></th>
@@ -323,7 +320,7 @@ const Index = () => {
                                                 {item.status_label}
                                             </span>
                                         </td>
-                                        {authData.hasPermission('admin','admin') || authData.hasPermission('misc','delegations',2) ? (
+                                        {canSeeUserField ? (
                                             <td className="p-2">{item.user?.names.name} {item.user?.names.surname}</td>
                                         ):(<></>)}
                                         <td className="p-2 whitespace-nowrap overflow-hidden text-right">

@@ -13,15 +13,15 @@ type Link = {
 
 type Response = {
     current_page: number,
-    first_page_url: string,
+    //first_page_url: string,
     from: number,
     last_page: number,
-    last_page_url: string,
+    //last_page_url: string,
     links: Link[],
-    next_page_url: string,
+    //next_page_url: string,
     path: string,
     per_page: number,
-    prev_page_url: string,
+    //prev_page_url: string,
     to: number,
     total: number,   
 };
@@ -82,11 +82,17 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
                 </div>
                 <div className="flex flex-row">
                     <div
+                        className={`rounded-s-md  `+( paginationData?.current_page != 1 ? `${active}` : `${inactive}`)}
+                        onClick={paginationData?.current_page != 1 ? () => setPage("1") : undefined}
+                        >
+                            <ChevronFirst size={20}/>
+                    </div>
+{/*                    OLD VERSION <div
                         className={`rounded-s-md  `+( paginationData?.first_page_url && paginationData?.current_page != 1 ? `${active}` : `${inactive}`)}
                         onClick={paginationData?.first_page_url && paginationData?.current_page != 1 ? () => setPage(paginationData.first_page_url.split('=')[1]) : undefined}
                         >
                             <ChevronFirst size={20}/>
-                    </div>
+                    </div> */}
                     <>{
                             
                     paginationData?.links.map( (link,key) => (
@@ -102,11 +108,17 @@ function Pagination({ setPage,setPerPage, paginationData }: Props) {
                     ))}
                     </>
                     <div
+                        className={`rounded-e-md  `+( paginationData?.current_page != paginationData?.last_page ? `${active}` : `${inactive}`)}
+                        onClick={paginationData?.current_page != paginationData?.last_page ? () => setPage(String(paginationData?.last_page)) : undefined}
+                        >
+                            <ChevronLast size={20}/>
+                    </div>
+{/*                  OLD VERSION   <div
                         className={`rounded-e-md  `+( paginationData?.last_page_url && paginationData?.current_page != paginationData?.last_page ? `${active}` : `${inactive}`)}
                         onClick={paginationData?.last_page_url && paginationData?.current_page != paginationData?.last_page ? () => setPage(paginationData.last_page_url.split('=')[1]) : undefined}
                         >
                             <ChevronLast size={20}/>
-                    </div>
+                    </div> */}
                 </div>  
             </div>
         </>

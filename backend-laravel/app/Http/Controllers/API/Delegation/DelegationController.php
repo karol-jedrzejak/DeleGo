@@ -67,9 +67,10 @@ class DelegationController extends Controller
             'company:id,name_short',
         ]);
 
-        $items = $query->paginate($request->query('perPage', 10));
+        $items = $query->paginate($request->query('perPage', 10))->withPath('');
 
-        return DelegationIndexResource::collection($items)->withPath('');
+        return DelegationIndexResource::collection($items)
+            ->additional(['can_see_user_field' => $user->isAdmin() || $user->getPermissionLevel('delegations','misc') >= 2,]);
     }
 
     /**
