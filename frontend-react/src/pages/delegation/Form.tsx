@@ -100,7 +100,6 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
             console.log(authData);
         })
 
-
         .catch(() => {});
     }, []);
 
