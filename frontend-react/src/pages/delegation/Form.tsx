@@ -72,9 +72,11 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     const [delegationOptions, setDelegationOptions] = useState<DelegationOptions>({
         billTypes: [],
         tripTypes: [],
-        can_select_user: false,
-        can_select_company: false,
-        can_delete: false,
+        permissions: {
+            can_select_user: false,
+            can_select_company: false,
+            can_delete: false,
+        }
     });
     const [currencyOptions, setCurrencyOptions] = useState<CurrencyType[]>([]);
 
@@ -223,7 +225,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
 
             <Line text="Dane Delegacji"/>
             <div className='w-full'>
-            {delegationOptions.can_select_user && (
+            {delegationOptions.permissions.can_select_user && (
                 <UserSelect
                     onSelect={handleUserChange}
                     initialValue={itemData ? itemData?.user?.names.name + " " + itemData?.user?.names.surname : ""}
@@ -231,7 +233,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                 />
             )}
             </div>
-        {delegationOptions.can_select_company ? (
+        {delegationOptions.permissions.can_select_company ? (
             <div className='w-full xl:flex xl:flex-row xl:items-end'>
                 <div>
                     <label className="inline-flex items-center cursor-pointer p-4">
@@ -320,7 +322,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
                         type="button"
                         color="green"
                         onClick={() => {setCreateDelegationTripPopUp(true)}}
-                        disabled={!delegationOptions.can_select_user && !formData.user_id}
+                        disabled={!delegationOptions.permissions.can_select_user && !formData.user_id}
                     >
                     <SquarePlus size={22} className="pe-1"/><span>Dodaj Przejazd</span>
                 </Button>

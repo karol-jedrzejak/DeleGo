@@ -217,9 +217,11 @@ class DelegationController extends Controller
                     ->orderBy('name')
                     ->get()
             ),
-            'can_select_user' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2,
-            'can_select_company' => $user->isAdmin() || $user->getPermissionLevel('sales','companies') >= 1,
-            'can_delete' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 3,
+            'permissions' => [
+                'can_select_user' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2,
+                'can_select_company' => $user->isAdmin() || $user->getPermissionLevel('sales','companies') >= 1,
+                'can_delete' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 3,
+            ],
         ]);
     }
 

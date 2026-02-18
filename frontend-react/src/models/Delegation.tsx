@@ -14,10 +14,14 @@ import type { ItemFullType as DelegationStatusHistoriesFullType } from '@/models
 import { apiToForm as apiToFormDelegationBill } from '@/models/DelegationBill';
 import { apiToForm as apiToFormDelegationTrip } from '@/models/DelegationTrip';
 
+export type PermissionsOptions = {
+  can_select_user: boolean;
+  can_select_company: boolean;
+  can_delete: boolean;
+}
+
 export type DelegationOptions = {
-    can_select_user: boolean;
-    can_select_company: boolean;
-    can_delete: boolean;
+    permissions: PermissionsOptions;
     billTypes: DelegationBillBasicType[];
     tripTypes: DelegationTripBasicType[];
 };
@@ -37,13 +41,18 @@ export type Dates = {
   departure: string;
 };
 
+export type PermissionsShow = {
+  user_can_delete: boolean;
+};
+
+
 // -------------------------------------------------------------------------- //
 // Typy odpowiedzi z backendu
 // -------------------------------------------------------------------------- //
 
 export type ItemFullType = {
   id: number;
-  user_can_delete: boolean;
+  permissions: PermissionsShow;
   number: NumberWithYear;
   settled: boolean;
   status: string;

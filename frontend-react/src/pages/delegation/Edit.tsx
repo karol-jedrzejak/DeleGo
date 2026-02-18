@@ -149,7 +149,7 @@ export default function Edit() {
                             <Form formData={formData} setFormData={setFormData} formError={validationErrors} itemData={itemData}/>
                             <div className='w-full flex justify-between items-center pt-4'>
 
-                                {itemData?.user_can_delete && (
+                                {itemData?.permissions.user_can_delete && (
                                 <div>
                                     <Button
                                         className='flex items-center'
