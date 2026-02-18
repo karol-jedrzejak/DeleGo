@@ -201,6 +201,9 @@ class DelegationController extends Controller
      */
     public function options()
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         return response()->json([
             'tripTypes' => DelegationTripTypeShowResource::collection(
                 DelegationTripType::query()
@@ -214,6 +217,9 @@ class DelegationController extends Controller
                     ->orderBy('name')
                     ->get()
             ),
+            'can_select_user' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 2,
+            'can_select_company' => $user->isAdmin() || $user->getPermissionLevel('sales','companies') >= 1,
+            'can_delete' => $user->isAdmin() || $user->getPermissionLevel('misc','delegations') >= 3,
         ]);
     }
 

@@ -55,6 +55,8 @@ class DelegationShowResource extends JsonResource
                 return null;
             }),
 
+            'user_can_delete' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 3,
+
             // hasMeany
 /*             'delegation_trips' => DelegationTripShowResource::collection(
                 $this->whenLoaded('delegationTrips')

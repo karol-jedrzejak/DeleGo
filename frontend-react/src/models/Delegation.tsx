@@ -15,6 +15,9 @@ import { apiToForm as apiToFormDelegationBill } from '@/models/DelegationBill';
 import { apiToForm as apiToFormDelegationTrip } from '@/models/DelegationTrip';
 
 export type DelegationOptions = {
+    can_select_user: boolean;
+    can_select_company: boolean;
+    can_delete: boolean;
     billTypes: DelegationBillBasicType[];
     tripTypes: DelegationTripBasicType[];
 };
@@ -40,6 +43,7 @@ export type Dates = {
 
 export type ItemFullType = {
   id: number;
+  user_can_delete: boolean;
   number: NumberWithYear;
   settled: boolean;
   status: string;

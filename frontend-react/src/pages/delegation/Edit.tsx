@@ -1,8 +1,7 @@
 
-import { useState,useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate,useParams } from "react-router-dom"
 import { ROUTES } from "@/routes/Routes.tsx";
-import { AuthContext } from "@/providers/AuthProvider.js";
 
 // Komponenty UI //
 
@@ -28,7 +27,6 @@ export default function Edit() {
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const authData = useContext(AuthContext);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [deletePopUp, setDeletePopUp] = useState<boolean>(false);
@@ -151,7 +149,7 @@ export default function Edit() {
                             <Form formData={formData} setFormData={setFormData} formError={validationErrors} itemData={itemData}/>
                             <div className='w-full flex justify-between items-center pt-4'>
 
-                                {authData.hasPermission('admin','admin') && (
+                                {itemData?.user_can_delete && (
                                 <div>
                                     <Button
                                         className='flex items-center'
