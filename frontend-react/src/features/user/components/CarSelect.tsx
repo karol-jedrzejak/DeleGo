@@ -40,7 +40,7 @@ export default function CarSelect({
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const isTyping = useRef(false);
 
-    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", carService.paths.getOptions);
+    const { loading:loadingGetSearch, error:errorGetSearch, mutate:mutateGetSearch } = useBackend<ItemLookupType []>("get", carService.paths.getSearch);
     
     // -------------------------------------------------------------------------- //
     // Use Effects

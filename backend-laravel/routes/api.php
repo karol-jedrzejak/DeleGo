@@ -28,7 +28,8 @@ Route::prefix('v1')->group(function () {
         Route::get('dictionaries/currencies', [CurrencyController::class, 'options']);
 
         // Car  
-        Route::get('car/options', [CarController::class, 'options'])->middleware('permission:misc,cars,1');
+        Route::get('car/search', [CarController::class, 'search'])->middleware('permission:misc,cars,1');
+        Route::get('car/create_options', [CarController::class, 'create_options'])->middleware('permission:misc,cars,1');
         Route::apiResource('car', CarController::class)->middleware('permission:misc,cars,1');
         Route::put('car/{id}/restore', [CarController::class, 'restore'])->middleware('permission:admin,admin,1');
         Route::delete('car/{id}/destroy', [CarController::class, 'forceDelete'])->middleware('permission:admin,admin,1');

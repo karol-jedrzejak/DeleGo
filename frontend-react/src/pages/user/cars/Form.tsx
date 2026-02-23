@@ -1,18 +1,20 @@
 
-import React, { useContext } from 'react';
-import { AuthContext } from "@/providers/AuthProvider.js";
+import React, { useEffect, useState  } from 'react';
 
 // Komponenty UI //
 
-import { Input } from '@/components';
+import { Input, Spinner } from '@/components';
+import { Error as ErrorComponent } from '@/components';
 
 // Model //
 
-import type { ItemFullType,FormDataType } from '@/models/Car.tsx';
+import type { ItemFullType,FormDataType,CreateOptions } from '@/models/Car.tsx';
 
 // USERS //
 
 import UserSelect from '@/features/user/components/UserSelect.tsx';
+import { carService } from '@/api/services/backend/user/car.service';
+import { useBackend } from '@/hooks/useLaravelBackend.ts';
 
 type FormProps = {
   itemData?: ItemFullType
@@ -27,7 +29,25 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     // Definicje standardowych stanów i kontekstów
     // -------------------------------------------------------------------------- //
 
-    const authData = useContext(AuthContext);
+    const [carOptions, setCarOptions] = useState<CreateOptions>({
+        permissions: {
+            can_select_user: false,
+        }
+    });
+
+    // -------------------------------------------------------------------------- //
+    // Pobranie opcji do formularza
+    // -------------------------------------------------------------------------- //
+
+    const { loading:loadingOptionsGet, error:errorOptionsGet, mutate:mutateOptionsGet } = useBackend<CreateOptions>("get", carService.paths.getCreateOptions,{ initialLoading: true });
+
+    useEffect(() => {
+        mutateOptionsGet()
+        .then((res) => {
+           setCarOptions(res.data);
+        })
+        .catch(() => {});
+    }, []);
 
     // -------------------------------------------------------------------------- //
     // Change Handler
@@ -48,6 +68,14 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
         setFormData((p) => ({ ...p, user_id: user_id ?? null}));
     };
 
+    if(loadingOptionsGet){
+        return <Spinner/>;
+    }
+
+    if(errorOptionsGet){
+        return <ErrorComponent><ErrorComponent.Text type={"standard"}>Błąd serwera</ErrorComponent.Text></ErrorComponent>;
+    }
+
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
     // -------------------------------------------------------------------------- //
@@ -55,7 +83,7 @@ export default function Form({formData,setFormData,formError,itemData}:FormProps
     return (
         <>
             <div className='w-full'>
-            {authData.hasPermission('admin','admin') && (
+            {carOptions.permissions.can_select_user && (
                 <UserSelect
                     onSelect={handleUserChange}
                     initialValue={itemData ? itemData?.user?.names.name+" "+itemData?.user?.names.surname : ""}

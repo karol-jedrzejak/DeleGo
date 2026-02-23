@@ -48,16 +48,31 @@ class CarController extends Controller
     }
 
     /**
+     * Get form options.
+     */
+    public function create_options()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        return response()->json([
+            'permissions' => [
+                'can_select_user' => $user->isAdmin(),
+            ],
+        ]);
+    }
+
+
+    /**
      * Return a list for select input.
      */
-    public function options(Request $request)
+    public function search(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $search = $request->query('search');
         
-
         $query = Car::query()
             ->select(['id','user_id','brand','model','registration_number','deleted_at']);
 

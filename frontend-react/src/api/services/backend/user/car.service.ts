@@ -2,7 +2,8 @@ export const carService = {
   paths: {
     getAll: "/car",
     getById: (id: string) => `/car/${id}`,
-    getOptions: `/car/options`,
+    getSearch: `/car/search`,
+    getCreateOptions: `/car/create_options`,
     create: "/car",
     update: (id: string) => `/car/${id}`,
     deactivate: (id: string) => `/car/${id}`,

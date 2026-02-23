@@ -4,6 +4,12 @@ import type { ItemBasicType as UserType } from "@/models/User"
 // Typy odpowiedzi z backendu
 // -------------------------------------------------------------------------- //
 
+export type CreateOptions = {
+    permissions: {
+        can_select_user: boolean,
+    }
+};
+
 export type ItemFullType = {
     id: number,
     brand: string,
