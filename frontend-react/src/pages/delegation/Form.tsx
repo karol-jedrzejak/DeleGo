@@ -59,7 +59,7 @@ type FormProps = {
 export default function Form({formData,setFormData,formError,itemData}:FormProps) {
 
     // -------------------------------------------------------------------------- //
-    // Definicje standardowych stanów i kontekstów
+    // Definicje standardowych stanów i kontekstów /
     // -------------------------------------------------------------------------- //
 
     const [isCompany, setIsCompany] = useState<boolean>(itemData?.company ? true : false);
