@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------- //
-// Typy danych Obektów i odpowiedzi z backendu
+// Typy danych Obektów i odpowiedzi z backendu //
 // -------------------------------------------------------------------------- //
 
 export type ItemFullType = {
