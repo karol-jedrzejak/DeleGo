@@ -54,7 +54,6 @@ class DelegationIndexResource extends JsonResource
                 'user_can_download_pdf' => in_array($this->status, ['approved', 'settled']),
             ],
             'new_status_options' => $ChangeStatusArray,
-
             'settled' => $this->settled,
             'custom_address' => $this->custom_address,
             'description' => $this->description,

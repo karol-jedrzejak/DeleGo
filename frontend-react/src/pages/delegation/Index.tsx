@@ -60,7 +60,6 @@ const Index = () => {
 
     const [statusOptions, setStatusOptions] = useState<{ text: string; search: { variable: string[], value: string | null }[] }[]>([]);
     const [statusList, setStatusList] = useState<StatusListType[]>([]);
-
     const [changeStatusPopUp, setChangeStatusPopUp] = useState<number | undefined>(undefined);
 
 

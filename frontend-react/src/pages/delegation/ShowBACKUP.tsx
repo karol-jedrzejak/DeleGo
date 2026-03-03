@@ -9,12 +9,12 @@ import { formatCurrency, formatDateTime } from "@/utils/formatters";
 
 import { SquarePlus,SquarePen,Search,BookCheck,Undo2 } from "lucide-react";
 import pdf_icon from "@/assets/icons/pdf_icon.svg"
-import { Button, Card, Loading , Error,PopUp,Select,Input } from '@/components';
+import { Button, Card, Loading , Error } from '@/components';
 import { CompanyButtons } from "@/features/company/components/CompanyButtons";
 
 // Model //
 
-import type { ItemFullType,FormStatusChangeDataType } from '@/models/Delegation';
+import type { ItemFullType } from '@/models/Delegation';
 
 // API //
 
@@ -32,33 +32,11 @@ const Show = () => {
     const { id } = useParams<{ id: string }>();
     const [item, setItem] = useState<ItemFullType | null>(null);
 
-    type StatusListType = {
-        value: string,
-        label: string,
-    };
-    const EMPTY_CHANGE_STATUS_FORM:FormStatusChangeDataType = {
-        status: "",
-        comment: "",
-    };
-
-    const [statusOptions, setStatusOptions] = useState<{ text: string; search: { variable: string[], value: string | null }[] }[]>([]);
-    const [statusList, setStatusList] = useState<StatusListType[]>([]);
-    const [changeStatusPopUp, setChangeStatusPopUp] = useState<boolean>(false);
-    const [changeStatusForm, setChangeStatusForm] = useState<FormStatusChangeDataType>(EMPTY_CHANGE_STATUS_FORM);
-
     // -------------------------------------------------------------------------- //
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
     const { loading, error, mutate } = useBackend<ItemFullType>("get", delegationService.paths.getById(id ?? ""));
-
-
-    const { loading: loadingStatus, error: errorStatus, mutate: mutateStatus } = useBackend<StatusListType[]>(
-        "get",
-        delegationService.paths.getStatusList
-    );
-    const { loading: loadingPut, validationErrors, error:errorPut, mutate:mutatePut } = useBackend("put", delegationService.paths.changeStatus("1"));
-
 
     useEffect(() => {
         mutate()
@@ -67,42 +45,7 @@ const Show = () => {
             console.log(res.data);
         })
         .catch(() => {});
-        mutateStatus().then((res) => {
-            const options = [
-                {
-                    text: "-",
-                    search: [{ variable: ["status"], value: null }],
-                },
-                ...res.data.map(s => ({
-                    text: s.label,
-                    search: [{ variable: ["status"], value: s.value }],
-                })),
-            ];
-            setStatusOptions(options);
-        });
     }, []);
-
-    // -------------------------------------------------------------------------- //
-    // Zmiana statusu delegacji
-    // -------------------------------------------------------------------------- //
-
-    const handleStatusChange = async () => {
-        // Zaktualizuj status
-        try {
-            await mutatePut({url: delegationService.paths.changeStatus(String(id)), data: changeStatusForm});
-        } catch {}
-
-        // Zaktualizuj formularz
-        mutate()
-        .then((res) => {
-            setItem(res.data);
-            console.log(res.data);
-        })
-        
-        // Zamknij pop-up i zresetuj formularz
-        setChangeStatusPopUp(false);
-        setChangeStatusForm(EMPTY_CHANGE_STATUS_FORM);
-    };
 
     // -------------------------------------------------------------------------- //
     // Wyświetlanie błędu i Loading
@@ -110,7 +53,6 @@ const Show = () => {
 
     if(loading) { return <Loading/>; }
     if(error) { return <Error><Error.Text type={error.type}>{error.text}</Error.Text></Error>; }
-    if(errorStatus) { return <Error><Error.Text type={errorStatus.type}>{errorStatus.text}</Error.Text></Error>; }
 
     // -------------------------------------------------------------------------- //
     // Renderowanie danych
@@ -118,60 +60,6 @@ const Show = () => {
 
     return (
         <>
-            {changeStatusPopUp && !loadingStatus && (
-                <PopUp>
-                    <Card className="max-h-[95vh] overflow-y-auto">
-                        <Card.Header>
-                            <span>Zmiana statusu delegacji</span>
-                        </Card.Header>
-                        <Card.Body className="w-120"> 
-                            <div className='w-full'>
-                                <Select
-                                    name="delegation_trip_type_id"
-                                    label="Nowy Status"
-                                    classNameContainer=''
-                                    classNameInput='w-full'
-                                    onChange={(e) => setChangeStatusForm({...changeStatusForm, status: e.target.value})}
-                                >
-                                    {statusList.map((status,key) => (
-                                        <option key={key} value={status.value}>{status.label}</option>
-                                    ))}
-                                </Select>
-                                <Input
-                                    label="Komentarz:"   
-                                    type ="text"
-                                    name="comment"
-                                    value={changeStatusForm.comment}
-                                    onChange={(e) => setChangeStatusForm({...changeStatusForm, comment: e.target.value})}
-                                    classNameContainer=''
-                                    classNameInput="w-full"
-                                    placeholder = "komentarz"
-                                    required
-                                ></Input>
-                            </div>
-                            <div className='w-full flex justify-end items-center pt-4 gap-2'>
-                                <Button
-                                    className='flex items-center'
-                                    color="yellow"
-                                    onClick={() => {handleStatusChange()}}
-                                >
-                                    <SquarePen size={24} className="pe-1"/>
-                                    Aktualizuj
-                                </Button>
-                                <Button
-                                    className='flex items-center'
-                                    color="sky"
-                                    onClick={() => {setChangeStatusPopUp(false)}}
-                                >
-                                    <Undo2 size={24} className="pe-1"/>
-                                    Anuluj
-                                </Button>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                </PopUp>
-            )}
-
         {item && (
             <div>
                 <div className="flex flex-col">
@@ -205,21 +93,6 @@ const Show = () => {
                                                     <div className="ps-1">Edytuj</div>
                                                 </Button>
                                             }</div>
-                                            <div className="me-2">
-                                                <Button 
-                                                    color="teal"
-                                                    size={1} className="flex flex-row items-center"
-                                                    onClick={() =>{
-                                                        setStatusList(item.new_status_options);
-                                                        setChangeStatusForm({...changeStatusForm, status: item.new_status_options[0].value});
-                                                        setChangeStatusPopUp(true)
-                                                    }}
-                                                    disabled={loadingStatus || !item.permissions.user_can_change_status}
-                                                    >
-                                                    <BookCheck size={14}/>
-                                                    <div className="ps-1">Zmień status</div>
-                                                </Button>
-                                            </div>
                                             {item.permissions.user_can_see_pdf_button && (
                                                 <>
                                                 {item.permissions.user_can_download_pdf ? (

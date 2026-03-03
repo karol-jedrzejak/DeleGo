@@ -60,6 +60,10 @@ export type PermissionsShow = PermissionsIndex&{
 export type ItemFullType = {
   id: number;
   permissions: PermissionsShow;
+  new_status_options: {
+    value: string,
+    label: string
+  }[];
   number: NumberWithYear;
   settled: boolean;
   status: string;

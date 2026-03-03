@@ -65,7 +65,7 @@ class DelegationShowResource extends JsonResource
                 }
                 return null;
             }),
-
+            'new_status_options' => $ChangeStatusArray,
             'permissions' => [
                 'user_can_delete' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 3,
                 'user_can_see_pdf_button' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 2,
