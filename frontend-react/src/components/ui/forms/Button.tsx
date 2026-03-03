@@ -184,13 +184,13 @@ const Button = ({
 
                 // white
                 +( color=="white" && disabled==false ? `
-                border-neutral-300 bg-neutral-100
+                border-neutral-800 bg-neutral-100
                 text-gray-900 hover:bg-neutral-400
                 dark:border-neutral-300 dark:bg-neutral-200
                 dark:text-gray-900 dark:hover:bg-neutral-400
                 cursor-pointer` : '')
                 +( color=="white" && disabled==true ? `
-                text-gray-500 border-neutral-500
+                text-gray-500 border-neutral-400
                 bg-neutral-100 dark:bg-neutral-900
                 dark:text-neutral-500 dark:border-neutral-500`: '')
             }

@@ -1,12 +1,15 @@
 import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom"
-
+import { Link } from "react-router-dom"
+import { ROUTES } from "@/routes/Routes.tsx";
 
 import { formatCurrency, formatDateTime } from "@/utils/formatters";
 
 // Komponenty UI //
 
-import { Card, Loading , Error } from '@/components';
+import { SquarePlus,SquarePen,Search,BookCheck,Undo2 } from "lucide-react";
+import pdf_icon from "@/assets/icons/pdf_icon.svg"
+import { Button, Card, Loading , Error } from '@/components';
 import { CompanyButtons } from "@/features/company/components/CompanyButtons";
 
 // Model //
@@ -76,7 +79,35 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Numer:</td>
                                         <td className="p-2 flex items-center">
-                                            {item.number.year}/{item.number.number}
+                                            <span className="me-2">{item.number.year}/{item.number.number}</span>
+                                            <div className="me-2">{item.permissions.user_can_edit ? 
+                                                <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)}>
+                                                    <Button color="yellow" size={1} className="flex flex-row items-center">
+                                                        <SquarePen size={14}/>
+                                                        <div className="ps-1">Edytuj</div>
+                                                    </Button>
+                                                </Link>
+                                                : 
+                                                <Button color="yellow" size={1} className="flex flex-row items-center" disabled>
+                                                    <SquarePen size={14}/>
+                                                    <div className="ps-1">Edytuj</div>
+                                                </Button>
+                                            }</div>
+                                            {item.permissions.user_can_see_pdf_button && (
+                                                <>
+                                                {item.permissions.user_can_download_pdf ? (
+                                                    <Link to={ROUTES.DELEGATION.PDF.LINK(item.id)}>
+                                                        <Button color="white" size={1} className="flex flex-row items-center">
+                                                            <img src={pdf_icon} className="w-5"/>
+                                                        </Button>
+                                                    </Link>
+                                                ):(
+                                                    <Button color="white" size={1} className="flex flex-row items-center" disabled>
+                                                        <img src={pdf_icon} className="w-5 opacity-40" />
+                                                    </Button>
+                                                )}
+                                                </>
+                                            )}
                                         </td>
                                     </tr>
                                     {item.user ?

@@ -338,7 +338,7 @@ const Index = () => {
                                                         </Link>
                                                     ):(
                                                         <Button color="white" className="w-[38px]" disabled>
-                                                            <img src={pdf_icon} className="w-10 "/>
+                                                            <img src={pdf_icon} className="w-10 opacity-40" />
                                                         </Button>
                                                     )}
                                                     </>

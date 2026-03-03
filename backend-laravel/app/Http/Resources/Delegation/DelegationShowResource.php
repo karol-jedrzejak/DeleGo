@@ -26,6 +26,17 @@ class DelegationShowResource extends JsonResource
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $level = $user->getPermissionLevel('delegations','misc');
+
+        $ChangeStatusArray = [];
+
+        foreach (DelegationStatus::from($this->status)->allowedTransitionsForLevel($level) as $transition) {
+            $ChangeStatusArray[] = [
+                'value' => $transition->value,
+                'label' => $transition->label(),
+            ];
+        }
+
         return [
             'id' => $this->id,
             'number' => [
@@ -57,6 +68,10 @@ class DelegationShowResource extends JsonResource
 
             'permissions' => [
                 'user_can_delete' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 3,
+                'user_can_see_pdf_button' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 2,
+                'user_can_edit' => in_array($this->status, ['draft', 'rejected']),   
+                'user_can_change_status' => !empty($ChangeStatusArray),
+                'user_can_download_pdf' => in_array($this->status, ['approved', 'settled']),
             ],
 
             // hasMeany

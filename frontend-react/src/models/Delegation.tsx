@@ -41,8 +41,15 @@ export type Dates = {
   departure: string;
 };
 
-export type PermissionsShow = {
+export type PermissionsIndex = {
+  user_can_edit: boolean;
+  user_can_change_status: boolean;
+  user_can_download_pdf: boolean;
+};
+
+export type PermissionsShow = PermissionsIndex&{
   user_can_delete: boolean;
+  user_can_see_pdf_button: boolean;
 };
 
 
@@ -76,12 +83,7 @@ export type ItemBasicType = {
   status: string;
   status_label: string;
   status_color: string;
-  permissions:
-  {
-    user_can_edit: boolean;
-    user_can_change_status: boolean;
-    user_can_download_pdf: boolean;
-  };
+  permissions: PermissionsIndex;
   new_status_options: {
     value: string,
     label: string
