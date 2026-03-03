@@ -15,7 +15,7 @@ import EditTrip from '@/pages/delegation/delegation_trip/Edit.tsx';
 import CreateBill from '@/pages/delegation/delegation_bill/Create.tsx';
 import EditBill from '@/pages/delegation/delegation_bill/Edit.tsx';
 
-// Model //
+// Model ///
 
 import type { ItemFullType,FormDataType,DelegationOptions } from '@/models/Delegation';
 import type { ItemFullType as CurrencyType } from '@/models/Currency';
