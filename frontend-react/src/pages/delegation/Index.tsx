@@ -56,6 +56,7 @@ const Index = () => {
     const [pagination, setPagination] = useState<PaginationData | null>(null);
 
     const [canSeeUserField, setCanSeeUserField] = useState<boolean>(false);
+    const [canSeePdfButton, setCanSeePdfButton] = useState<boolean>(false);
 
     const [statusOptions, setStatusOptions] = useState<{ text: string; search: { variable: string[], value: string | null }[] }[]>([]);
     const [statusList, setStatusList] = useState<StatusListType[]>([]);
@@ -79,7 +80,7 @@ const Index = () => {
     // Pobranie danych
     // -------------------------------------------------------------------------- //
 
-    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemBasicType[],{can_see_user_field: boolean;}>>(
+    const { loading, error, mutate } = useBackend<PaginatedDataResponse<ItemBasicType[],{can_see_user_field: boolean, can_see_pdf_button: boolean}>>(
         "get",
         delegationService.paths.getAll
     );
@@ -95,9 +96,11 @@ const Index = () => {
     useEffect(() => {
         const params = buildPaginationParams({page,perPage,search,sort});
         mutate({params: params}).then((res) => {
+            console.log(res.data);
             setItems(res.data.data);
             setPagination(res.data.meta);
             setCanSeeUserField(res.data.can_see_user_field);
+            setCanSeePdfButton(res.data.can_see_pdf_button);
         });
     }, [page, perPage,search,sort]);
 
@@ -325,11 +328,21 @@ const Index = () => {
                                         ):(<></>)}
                                         <td className="p-2 whitespace-nowrap overflow-hidden text-right">
                                             <div className="flex flex-row justify-center gap-1">
-                                                <Link to={ROUTES.DELEGATION.PDF.LINK(item.id)}>
-                                                    <Button color="white" className="w-[38px]">
-                                                        <img src={pdf_icon} className="w-10 "/>
-                                                    </Button>
-                                                </Link>
+                                                {canSeePdfButton && (
+                                                    <>
+                                                    {item.permissions.user_can_download_pdf ? (
+                                                        <Link to={ROUTES.DELEGATION.PDF.LINK(item.id)}>
+                                                            <Button color="white" className="w-[38px]">
+                                                                <img src={pdf_icon} className="w-10 "/>
+                                                            </Button>
+                                                        </Link>
+                                                    ):(
+                                                        <Button color="white" className="w-[38px]" disabled>
+                                                            <img src={pdf_icon} className="w-10 "/>
+                                                        </Button>
+                                                    )}
+                                                    </>
+                                                )}
                                                 <Link to={ROUTES.DELEGATION.SHOW.LINK(item.id)}>
                                                     <Button color="sky" className="w-[38px]">
                                                         <Search size={20}/>
@@ -343,11 +356,11 @@ const Index = () => {
                                                         setChangeStatusForm({...changeStatusForm, status: item.new_status_options[0].value});
                                                         setChangeStatusPopUp(item.id)
                                                     }}
-                                                    disabled={loadingStatus || !item.user_can_change_status}
+                                                    disabled={loadingStatus || !item.permissions.user_can_change_status}
                                                     >
                                                     <BookCheck size={20}/>
                                                 </Button>
-                                                {item.user_can_edit ? 
+                                                {item.permissions.user_can_edit ? 
                                                     <Link to={ROUTES.DELEGATION.EDIT.LINK(item.id)}>
                                                         <Button color="yellow">
                                                             <SquarePen size={20}/>

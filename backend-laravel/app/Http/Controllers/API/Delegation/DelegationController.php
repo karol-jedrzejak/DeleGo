@@ -70,7 +70,11 @@ class DelegationController extends Controller
         $items = $query->paginate($request->query('perPage', 10))->withPath('');
 
         return DelegationIndexResource::collection($items)
-            ->additional(['can_see_user_field' => $user->isAdmin() || $user->getPermissionLevel('delegations','misc') >= 2,]);
+            ->additional(
+                [
+                    'can_see_user_field' => $user->isAdmin() || $user->getPermissionLevel('delegations','misc') >= 2,
+                    'can_see_pdf_button' => $user->isAdmin() || $user->getPermissionLevel('delegations','misc') >= 2,
+                ]);
     }
 
     /**

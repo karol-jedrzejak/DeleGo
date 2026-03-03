@@ -76,8 +76,12 @@ export type ItemBasicType = {
   status: string;
   status_label: string;
   status_color: string;
-  user_can_edit: boolean;
-  user_can_change_status: boolean;
+  permissions:
+  {
+    user_can_edit: boolean;
+    user_can_change_status: boolean;
+    user_can_download_pdf: boolean;
+  };
   new_status_options: {
     value: string,
     label: string
