@@ -7,7 +7,7 @@ use App\Models\Currency;
 
 class DelegationCostCalculator
 {
-/*     public function calculate(
+    public function calculate(
         Delegation $delegation,
         string $targetCurrencyCode
     ): array {
@@ -29,5 +29,5 @@ class DelegationCostCalculator
             'currency' => $targetCurrency->code,
             'total' => round($total, 2),
         ];
-    } */
+    }
 }

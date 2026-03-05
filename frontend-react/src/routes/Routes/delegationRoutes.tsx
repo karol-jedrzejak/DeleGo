@@ -1,6 +1,7 @@
 // Companies
 import DelegationIndex from "@/pages/delegation/Index";
 import DelegationShow from "@/pages/delegation/Show";
+import DelegationPdf from "@/pages/delegation/Pdf";
 import DelegationCreate from "@/pages/delegation/Create";
 import DelegationEdit from "@/pages/delegation/Edit";
 
@@ -26,7 +27,7 @@ export const DELEGATION = {
     PDF: {
         PATH:  '/delegation/:id/pdf',
         LINK:  (id: number) => `/delegation/${id}/pdf`,
-        COMPONENT: DelegationShow,
+        COMPONENT: DelegationPdf,
         PERMISSIONS: {misc:{delegations: 1}}
     },
     EDIT: {

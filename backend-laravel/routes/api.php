@@ -40,7 +40,7 @@ Route::prefix('v1')->group(function () {
        
         Route::get('delegation/options', [DelegationController::class, 'options'])->middleware('permission:misc,delegations,1');
         Route::apiResource('delegation', DelegationController::class)->middleware('permission:misc,delegations,1');
-        Route::get('delegation/{id}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
+        Route::get('delegation/{delegation}/pdf', [DelegationController::class, 'pdf'])->middleware('permission:misc,delegations,1');
         
         // Admin
         Route::get('admin/user/{user}', [AuthenticationController::class, 'user_info'])->middleware('permission:admin,admin,1');

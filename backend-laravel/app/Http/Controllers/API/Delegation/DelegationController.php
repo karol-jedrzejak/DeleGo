@@ -189,14 +189,106 @@ class DelegationController extends Controller
     public function pdf(Delegation $delegation)
     {
         //
-/* 
-        $currencyCode = $request->get('currency', 'PLN');
+    
+        //$currencyCode = $request->get('currency', 'PLN');
+
+        $delegation
+        ->loadMin('delegationTrips as departure', 'departure')
+        ->loadMax('delegationTrips as return', 'arrival');
+
+        $delegation->loadMissing([
+            'company:id,name_short,name_complete,street,house_number,city,postal_code,postal_city,region,country',
+        ]);
+
+        $delegation->loadMissing([
+            'delegationTrips' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'arrival',
+                    'description',
+                    'delegation_trip_type_id',
+                    'departure',
+                    'destination',
+                    'distance',
+                    'starting_point',
+                    'car_id',
+                    'custom_transport',
+                ])->orderBy('departure','asc');
+            },
+            'delegationTrips.delegationTripType' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                    'requires_car',
+                    'requires_description',
+                ]);
+            },
+            'delegationTrips.car' => function ($q) {
+                $q->select([
+                    'id',
+                    'registration_number',
+                    'brand',
+                    'model',
+                ]);
+            },
+        ]);
+
+        $delegation->loadMissing([
+            'delegationBills' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'date',
+                    'amount',
+                    'currency_code',
+                    'description',
+                    'delegation_bill_type_id',
+                ])->orderBy('date','asc');
+            },
+            'delegationBills.delegationBillType' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                ]);
+            },
+            'delegationBills.currency' => function ($q) {
+                $q->select([
+                    'code',
+                    'name',
+                    'symbol',
+                ]);
+            },
+        ]);
+
+        $delegation->loadMissing([
+            'delegationStatusHistories' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'changed_by',
+                    'from_status',
+                    'to_status',
+                    'comment',
+                    'created_at'
+                ])->orderBy('created_at','asc');
+            },
+            'delegationStatusHistories.changer' => function ($q) {
+                $q->select([
+                    'id',
+                    'name',
+                    'surname',
+                ]);
+            },
+        ]);
+
+        return  $delegation;
 
         $calculator = app(DelegationCostCalculator::class);
 
-        $summary = $calculator->calculate($delegation, $currencyCode);
+        $summary = $calculator->calculate($delegation, 'USD');
 
-        return new DelegationResource($delegation, $summary); */
+        return $summary;
 
     }
 
