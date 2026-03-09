@@ -293,7 +293,7 @@ class DelegationController extends Controller
     }
 
     /**
-     * Get form options. //
+     * Get form options. ////
      */
     public function options()
     {
