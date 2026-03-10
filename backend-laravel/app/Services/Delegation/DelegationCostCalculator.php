@@ -13,9 +13,11 @@ class DelegationCostCalculator
     ): array {
         $targetCurrency = Currency::where('code', $targetCurrencyCode)->firstOrFail();
 
+        return  [$targetCurrency];
+
         $total = 0;
 
-        foreach ($delegation->bills as $bill) {
+        foreach ($delegation->delegationBills as $bill) {
             $billCurrency = $bill->currency;
 
             // przeliczenie: bill → waluta bazowa → target

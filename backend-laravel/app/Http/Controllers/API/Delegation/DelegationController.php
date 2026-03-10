@@ -282,13 +282,11 @@ class DelegationController extends Controller
             },
         ]);
 
-        return  $delegation;
-
         $calculator = app(DelegationCostCalculator::class);
 
         $summary = $calculator->calculate($delegation, 'USD');
 
-        return $summary;
+        return [$delegation,$summary];
 
     }
 
