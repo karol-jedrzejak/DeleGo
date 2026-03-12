@@ -19,6 +19,8 @@ return new class extends Migration
 
             $table->foreignId('user_id')->constrained('users');
 
+            $table->foreignId('region_id')->constrained('regions');
+
             $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->string('custom_address')->nullable();
             $table->decimal('total_amount', 10, 2)->nullable();

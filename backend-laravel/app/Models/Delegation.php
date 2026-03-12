@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use App\Models\Traits\Filterable;
@@ -19,6 +20,7 @@ class Delegation extends Model
         'year',
         'user_id',
         'company_id',
+        'region_id',
         'custom_address',
         'description',
         'status',
@@ -38,6 +40,11 @@ class Delegation extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class)->withDefault();
+    }
+
+    public function region(): HasOne
+    {
+        return $this->hasOne(Region::class);
     }
 
     public function delegationBills(): HasMany

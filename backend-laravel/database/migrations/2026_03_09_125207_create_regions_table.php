@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('region_name');
             $table->string('country_name');
-            $table->char('country_code', 3);
             $table->char('currency_code', 3);
-
             $table->foreign('currency_code')
                 ->references('code')
                 ->on('currencies');

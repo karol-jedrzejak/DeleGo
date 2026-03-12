@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             CarSeeder::class,
             CurrencySeeder::class,
+            RegionSeeder::class,
+            PerDiemRegionRateSeeder::class,
             DelegationBillTypeSeeder::class,
             DelegationTripTypeSeeder::class,
             DelegationSeeder::class,

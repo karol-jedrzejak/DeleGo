@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Car;
 use App\Models\Company;
+use App\Models\Region;
 use App\Models\User;
 
 /**
@@ -24,6 +24,11 @@ class DelegationFactory extends Factory
     {
         // Wybór losowego usera
         $user_id = User::inRandomOrder()->first()->id ?? 1;
+
+        // Wybór losowego regionu
+        $poland = Region::where('country_name', 'Polska')->first()->id ?? 1;
+        $random_region_not_poland = Region::inRandomOrder()->first()->id ?? 1;
+        $region_id = fake()->boolean(70) ? $poland : $random_region_not_poland;
 
         $status_types = [
             'draft',
@@ -66,6 +71,7 @@ class DelegationFactory extends Factory
             'year' => $year,
             'user_id' => $user_id,
             'company_id' => $company_id,
+            'region_id' => $region_id,
             'custom_address' => $custom_address,
             'description' => fake()->sentence(),
             'status' => $status,
