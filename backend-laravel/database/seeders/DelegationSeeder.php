@@ -40,7 +40,7 @@ class DelegationSeeder extends Seeder
 
                 // Zakres dat dla tripów
                 $dates_array = [];
-                $min_date = fake()->dateTimeBetween('-2 years', 'now');
+                $min_date = fake()->dateTimeBetween('-2 years', '-30 days');
                 $max_date = fake()->dateTimeBetween($min_date, '+14 days');
 
                 // Wybór typu transportu

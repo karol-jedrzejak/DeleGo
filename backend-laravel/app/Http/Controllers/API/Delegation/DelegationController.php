@@ -180,6 +180,19 @@ class DelegationController extends Controller
             },
         ]);
 
+        $delegation->load([
+            'region' => function ($q) {
+                $q->select([
+                    'id',
+                    'delegation_id',
+                    'changed_by',
+                    'from_status',
+                    'to_status',
+                    'comment',
+                ])->orderBy('created_at','asc');
+            },
+        ]);
+
         return new DelegationShowResource($delegation);
     }
 
