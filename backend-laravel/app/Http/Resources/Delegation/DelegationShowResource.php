@@ -59,12 +59,18 @@ class DelegationShowResource extends JsonResource
             'user' => $user?->isAdmin()
                 ? new UserBasicResource($this->user)
                 : null,
+                
             'company' => $this->whenLoaded('company', function () {
                 if ($this->company && $this->company->id) {
                     return new CompanyIndexResource($this->company);
                 }
                 return null;
             }),
+
+            'region_id' => $this->region_id,
+
+
+
             'new_status_options' => $ChangeStatusArray,
             'permissions' => [
                 'user_can_delete' => $user?->isAdmin() || $user?->getPermissionLevel('misc','delegations') >= 3,
