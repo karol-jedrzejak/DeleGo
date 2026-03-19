@@ -277,6 +277,14 @@ const Show = () => {
                                         <td className="p-2 flex items-center">{item.status_label}</td>
                                     </tr>
                                     <tr className="custom-table-row">
+                                        <td className="p-2">Region:</td>
+                                        <td className="p-2 flex items-center">
+                                            {item.region.region_name === item.region.country_name
+                                            ? item.region.region_name
+                                            : `${item.region.region_name} (${item.region.country_name})`}
+                                        </td>
+                                    </tr>
+                                    <tr className="custom-table-row">
                                         <td className="p-2">Address/Firma:</td>
                                         <td className="p-2 flex items-center">
                                             {item.company?.id ? <><CompanyButtons size={1}company={item.company}/></> : ""}

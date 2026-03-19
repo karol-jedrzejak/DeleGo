@@ -78,6 +78,11 @@ export type ItemFullType = {
   delegation_bills: DelegationBillType[];
   delegation_trips: DelegationTripType[];
   delegation_status_histories: DelegationStatusHistoriesFullType[];
+  region: {
+    country_name: string;
+    region_name: string;
+  }
+
 };
 
 export type ItemBasicType = {
