@@ -42,9 +42,9 @@ class Delegation extends Model
         return $this->belongsTo(Company::class)->withDefault();
     }
 
-    public function region(): HasOne
+    public function region(): BelongsTo
     {
-        return $this->hasOne(Region::class);
+        return $this->belongsTo(Region::class);
     }
 
     public function delegationBills(): HasMany

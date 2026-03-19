@@ -184,12 +184,20 @@ class DelegationController extends Controller
             'region' => function ($q) {
                 $q->select([
                     'id',
-                    'delegation_id',
-                    'changed_by',
-                    'from_status',
-                    'to_status',
-                    'comment',
-                ])->orderBy('created_at','asc');
+                    'region_name',
+                    'country_name',
+                    'currency_code',
+                ])->orderBy('region_name','asc');
+            },
+            'region.perDiemRegionRates' => function ($q) {
+                $q->select([
+                    'id',
+                    'region_id',
+                    'daily_allowance',
+                    'accommodation_limit',
+                    'valid_from',
+                    'valid_to',
+                ])->orderBy('valid_from', 'desc');
             },
         ]);
 
@@ -292,6 +300,27 @@ class DelegationController extends Controller
                     'name',
                     'surname',
                 ]);
+            },
+        ]);
+
+        $delegation->load([
+            'region' => function ($q) {
+                $q->select([
+                    'id',
+                    'region_name',
+                    'country_name',
+                    'currency_code',
+                ])->orderBy('region_name','asc');
+            },
+            'region.perDiemRegionRates' => function ($q) {
+                $q->select([
+                    'id',
+                    'region_id',
+                    'daily_allowance',
+                    'accommodation_limit',
+                    'valid_from',
+                    'valid_to',
+                ])->orderBy('valid_from', 'desc');
             },
         ]);
 

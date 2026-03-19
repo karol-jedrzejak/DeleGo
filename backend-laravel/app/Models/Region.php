@@ -22,9 +22,9 @@ class Region extends Model
     // Relacje
     // --------------------------------------------------------- //
 
-    public function delegation(): BelongsTo
+    public function delegations(): HasMany
     {
-        return $this->belongsTo(Delegation::class);
+        return $this->hasMany(Delegation::class);
     }
 
     public function perDiemRegionRates(): HasMany

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Resources\Region\RegionShowResource;
 use App\Http\Resources\Company\CompanyIndexResource;
 use App\Http\Resources\User\UserBasicResource;
 use App\Http\Resources\Delegation\DelegationBillShowResource;
@@ -13,6 +14,7 @@ use App\Http\Resources\Delegation\DelegationTripShowResource;
 use App\Http\Resources\Delegation\DelegationStatusHistoryShowResource;
 
 use App\Enums\DelegationStatus;
+
 
 class DelegationShowResource extends JsonResource
 {
@@ -69,6 +71,12 @@ class DelegationShowResource extends JsonResource
 
             'region_id' => $this->region_id,
 
+            'region' => $this->whenLoaded('region', function () {
+                if ($this->region && $this->region->id) {
+                    return new RegionShowResource($this->region);
+                }
+                return null;
+            }),
 
 
             'new_status_options' => $ChangeStatusArray,
