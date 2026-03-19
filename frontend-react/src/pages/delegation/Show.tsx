@@ -279,9 +279,7 @@ const Show = () => {
                                     <tr className="custom-table-row">
                                         <td className="p-2">Region:</td>
                                         <td className="p-2 flex items-center">
-                                            {item.region.region_name === item.region.country_name
-                                            ? item.region.region_name
-                                            : `${item.region.region_name} (${item.region.country_name})`}
+                                            {item.region.region_name}
                                         </td>
                                     </tr>
                                     <tr className="custom-table-row">
