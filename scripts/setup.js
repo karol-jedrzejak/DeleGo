@@ -67,8 +67,7 @@ async function main() {
     await new Promise((resolve) => setTimeout(resolve, 10000));
 
     console.log('🗄️ Wykonywanie migracji i seedów...');
-    run('docker exec -it laravel_app php artisan migrate --force', backendDir);
-    run('docker exec -it laravel_app php artisan db:seed --force', backendDir);
+    run('docker exec -it laravel_app php artisan migrate:fresh --seed --force', backendDir);
   }
 
   // --- FAZA 5: URUCHOMIENIE FRONTENDU ---
