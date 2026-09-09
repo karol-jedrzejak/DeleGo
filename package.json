@@ -1,0 +1,8 @@
+{
+  "name": "my-app-root",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/setup.js"
+  }
+}
