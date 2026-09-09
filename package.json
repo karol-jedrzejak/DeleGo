@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node scripts/setup.js"
+    "build": "docker compose up --build",
+    "setup": "docker exec -it dele_go_backend composer install && docker exec -it dele_go_backend npm install && docker exec -it dele_go_frontend npm install && docker exec -it dele_go_backend php artisan migrate:fresh --seed --force",
+    "start": "docker compose up",
+    "stop": "docker compose down",
+    "backend": "docker exec -it platforma_ts_backend",
+    "frontend": "docker exec -it platforma_ts_frontend"
   }
 }

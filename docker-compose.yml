@@ -1,0 +1,67 @@
+version: "3.9"
+name: dele_go
+
+services:
+
+  backend:
+    build:
+      context: ./backend-laravel
+    container_name: dele_go_backend
+    volumes:
+      - ./backend-laravel:/var/www
+      - backend-laravel_vendor:/var/www/vendor
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend-react
+    container_name: dele_go_frontend
+    volumes:
+      - ./frontend-react:/app
+      - frontend-react_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    container_name: dele_go_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: delego
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: dele_go_phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: dele_go_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  backend-laravel_vendor:
+  backend-laravel_node_modules:
+  frontend-react_node_modules:

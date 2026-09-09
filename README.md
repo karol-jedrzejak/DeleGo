@@ -8,32 +8,28 @@
 ## Description
 Full-stack application with a separate backend built in Laravel 12 API with MySQL, Redis and Docker, and a frontend developed in React, TypeScript, and Tailwind CSS. Application designed to simplify and automate the calculation of business trip expenses. The app ensures accurate reimbursement amounts and saves time for employees and finance teams. Each employee can have different permissions and use selected application modules.
 
-## Installation & Run
+## Running the application
 
-To be updated..
+### Prerequisites
+Before launching the project, make sure you have installed:
+* **Docker** (and the Docker Desktop service / daemon running)
 
-To Setup backend:
-```
-cd backend-laravel
-cp .env.example .env
-php artisan key:generate
-composer install
-npm install
-docker compose up -d --build  
-```
-To enter tinker and seed database:
-```
-docker exec -it laravel_app php artisan tinker
-php artisan migrate
-php artisan db:seed
+###  Installation
+After download please startup docker and then run below commands in order. First one builds the application and prepares the Docker containers required by the project. Second one installs the required dependencies, runs database migrations, and seeds the database with the initial data.
+
+```bash
+npm run build
+npm run setup
 ```
 
-To start Server:
+### Startup
+To launch the application, run the command in the terminal.:
+
+```bash
+npm run start
 ```
-cd frontend-react
-npm install
-npm run dev  
-```
+
+
 
 
 
