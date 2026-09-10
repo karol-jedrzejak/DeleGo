@@ -3,10 +3,23 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "docker compose up --build",
-    "setup": "docker exec -it dele_go_backend composer install && docker exec -it dele_go_backend npm install && docker exec -it dele_go_frontend npm install && docker exec -it dele_go_backend php artisan migrate:fresh --seed --force",
+    "build:windows": "if not exist .env (copy .env.example .env) && docker compose up --build",
+    "build:other": "([ -f .env ] || cp .env.example .env) && docker compose up --build",
+    
+    "old:build:windows": "if not exist .env copy .env.example .env && if not exist backend-laravel\\.env copy backend-laravel\\.env.example backend-laravel\\.env && docker compose up --build",
+    "old:build:other": "([ -f .env ] || cp .env.example .env) && ([ -f backend-laravel/.env ] || cp backend-laravel/.env.example backend-laravel/.env) && docker compose up --build",
+    
+    "setup:composer": "docker exec -it dele_go_backend composer install",
+    "setup:backend-npm": "docker exec -it dele_go_backend npm install",
+    "setup:frontend-npm": "docker exec -it dele_go_frontend npm install",
+    "setup:key": "docker exec -it dele_go_backend php artisan key:generate",
+    "setup:migrate": "docker exec -it dele_go_backend php artisan migrate:fresh --seed --force",
+
+    "setup": "npm run setup:composer && npm run setup:backend-npm && npm run setup:frontend-npm && npm run setup:key && npm run setup:migrate",
+
     "start": "docker compose up",
     "stop": "docker compose down",
+
     "backend": "docker exec -it platforma_ts_backend",
     "frontend": "docker exec -it platforma_ts_frontend"
   }

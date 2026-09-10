@@ -7,8 +7,11 @@ services:
     build:
       context: ./backend-laravel
     container_name: dele_go_backend
+    env_file:
+    - .env
     volumes:
       - ./backend-laravel:/var/www
+      - ./.env:/var/www/.env # <-- Montuje główny .env jako .env wewnątrz Laravela
       - backend-laravel_vendor:/var/www/vendor
     ports:
       - "8000:8000"
@@ -35,8 +38,10 @@ services:
     container_name: dele_go_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: delego
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -48,7 +53,7 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
       - "8080:80"
     restart: unless-stopped

@@ -12,6 +12,18 @@ use App\Http\Controllers\API\User\CarController;
 use App\Http\Controllers\API\Delegation\DelegationController;
 use App\Http\Controllers\API\Dictionaries\CurrencyController;
 
+Route::get('/debug-db', function () {
+    return response()->json([
+        'env_username' => env('DB_USERNAME'),
+        'env_password_set' => env('DB_PASSWORD') !== null,
+        'config_username' => config('database.connections.mysql.username'),
+        'config_password_set' => config('database.connections.mysql.password') !== null,
+        'config_host' => config('database.connections.mysql.host'),
+        'config_database' => config('database.connections.mysql.database'),
+    ]);
+});
+
+
 // Authentication
 Route::prefix('v1')->group(function () {
 

@@ -17,8 +17,15 @@ Before launching the project, make sure you have installed:
 ###  Installation
 After download please startup docker and then run below commands in order. First one builds the application and prepares the Docker containers required by the project. Second one installs the required dependencies, runs database migrations, and seeds the database with the initial data.
 
+Windows:
 ```bash
-npm run build
+npm run build:windows
+npm run setup
+```
+
+Linux\OS
+```bash
+npm run build:other
 npm run setup
 ```
 
